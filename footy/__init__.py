@@ -14,39 +14,39 @@ class Footy:
     --------
     >>> import footy
     >>> widget = footy.Footy()
-    >>> footy.add_team('Arsenal', 64, 36, 18, 19)
-    >>> footy.add_team('Aston Villa', 53, 48, 18, 19)
-    >>> footy.add_team('Blackburn', 40, 60, 18, 19)
-    >>> footy.add_team('Bolton', 41, 52, 19, 18)
-    >>> footy.add_team('Chelsea', 65, 22, 19, 18)
-    >>> footy.add_team('Everton', 53, 37, 19, 18)
-    >>> footy.add_team('Fulham', 39, 32, 18, 19)
-    >>> footy.add_team('Hull', 39, 63, 18, 19)
-    >>> footy.add_team('Liverpool', 74, 26, 18, 19)
-    >>> footy.add_team('Man City', 57, 50, 18, 19)
-    >>> footy.add_team('Man United', 67, 24, 19, 18)
-    >>> footy.add_team('Middlesbrough', 27, 55, 19, 18)
-    >>> footy.add_team('Newcastle', 40, 58, 19, 18)
-    >>> footy.add_team('Portsmouth', 38, 56, 19, 18)
-    >>> footy.add_team('Stoke', 37, 51, 19, 18)
-    >>> footy.add_team('Sunderland', 32, 51, 18, 19)
-    >>> footy.add_team('Tottenham', 44, 42, 19, 18)
-    >>> footy.add_team('West Brom', 36, 67, 19, 18)
-    >>> footy.add_team('West Ham', 40, 44, 18, 19)
-    >>> footy.add_team('Wigan', 33, 45, 18, 19)
+    >>> widget.add_team('Arsenal', 64, 36, 18, 19)
+    >>> widget.add_team('Aston Villa', 53, 48, 18, 19)
+    >>> widget.add_team('Blackburn', 40, 60, 18, 19)
+    >>> widget.add_team('Bolton', 41, 52, 19, 18)
+    >>> widget.add_team('Chelsea', 65, 22, 19, 18)
+    >>> widget.add_team('Everton', 53, 37, 19, 18)
+    >>> widget.add_team('Fulham', 39, 32, 18, 19)
+    >>> widget.add_team('Hull', 39, 63, 18, 19)
+    >>> widget.add_team('Liverpool', 74, 26, 18, 19)
+    >>> widget.add_team('Man City', 57, 50, 18, 19)
+    >>> widget.add_team('Man United', 67, 24, 19, 18)
+    >>> widget.add_team('Middlesbrough', 27, 55, 19, 18)
+    >>> widget.add_team('Newcastle', 40, 58, 19, 18)
+    >>> widget.add_team('Portsmouth', 38, 56, 19, 18)
+    >>> widget.add_team('Stoke', 37, 51, 19, 18)
+    >>> widget.add_team('Sunderland', 32, 51, 18, 19)
+    >>> widget.add_team('Tottenham', 44, 42, 19, 18)
+    >>> widget.add_team('West Brom', 36, 67, 19, 18)
+    >>> widget.add_team('West Ham', 40, 44, 18, 19)
+    >>> widget.add_team('Wigan', 33, 45, 18, 19)
 
     Get the data contained by the object as a Pandas dataframe.
 
-    >>> footy.dataframe()
+    >>> widget.dataframe()
 
     Setting the number of average goals scored.
 
-    >>> footy.average_goals_scored((1.36, 1.06))
-    >>> footy.score_probability('Arsenal', 'Stoke').head()
+    >>> widget.average_goals_scored((1.36, 1.06))
+    >>> widget.score_probability('Arsenal', 'Stoke').head()
 
     Plot the outcome probability
 
-    >>> footy.outcome_probability('Arsenal', 'Stoke')
+    >>> widget.outcome_probability('Arsenal', 'Stoke')
     """
 
     def __init__(self):
