@@ -36,13 +36,16 @@ class Footy:
     >>> footy.add_team('Wigan', 33, 45, 18, 19)
 
     Get the data contained by the object as a Pandas dataframe.
+
     >>> footy.dataframe()
 
     Setting the number of average goals scored.
+
     >>> footy.average_goals_scored((1.36, 1.06))
     >>> footy.score_probability('Arsenal', 'Stoke').head()
 
     Plot the outcome probability
+
     >>> footy.outcome_probability('Arsenal', 'Stoke')
     """
 

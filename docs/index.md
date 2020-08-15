@@ -40,14 +40,23 @@ Main class of the footy module.
 ```
 
 Get the data contained by the object as a Pandas dataframe.
+
+```python
 >>> footy.dataframe()
+```
 
 Setting the number of average goals scored.
+
+```python
 >>> footy.average_goals_scored((1.36, 1.06))
->>> footy.score_probability(‘Arsenal’, ‘Stoke’).head()
+>>> footy.score_probability('Arsenal', 'Stoke').head()
+```
 
 Plot the outcome probability
->>> footy.outcome_probability(‘Arsenal’, ‘Stoke’)
+
+```python
+>>> footy.outcome_probability('Arsenal', 'Stoke')
+```
 
 
 #### add_team(team_name, goals_for, goals_against, home_games, away_games)
