@@ -306,13 +306,16 @@ class Footy:
 
     def plot_goal_probability(self, goals, probability_mass, title):
         """
-        Plot the probability of goals being scored.
+        Plot the probability of goals being scored by a team.
 
         Parameters
         ----------
-        goals
-        probability_mass
-        title
+        goals : List of int
+            Number of goals from 0 to 6.
+        probability_mass : List of float
+            The probability of the team, scoring a number of goals.
+        title : str
+            The title of the plot.
         """
         plt.bar(goals, probability_mass * 100.0)
         plt.title(title)
@@ -337,7 +340,6 @@ class Footy:
         -------
         pandas.DataFrame
             The probability of the games score.
-
         """
         (home_expected_goals,
          away_expected_goals) = self.average_goals_scored()

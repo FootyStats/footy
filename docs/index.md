@@ -268,19 +268,19 @@ Return the probability of a home win, a draw or an away win.
 
 
 #### plot_goal_probability(goals, probability_mass, title)
-Plot the probability of goals being scored.
+Plot the probability of goals being scored by a team.
 
 
 * **Parameters**
 
     
-    * **goals** – 
+    * **goals** (*List of int*) – Number of goals from 0 to 6.
 
 
-    * **probability_mass** – 
+    * **probability_mass** (*List of float*) – The probability of the team, scoring a number of goals.
 
 
-    * **title** – 
+    * **title** (*str*) – The title of the plot.
 
 
 
