@@ -105,24 +105,26 @@ Get the attack strength of a team.
 
 
 #### average_goals_scored(average_goals_scored=None)
-Get or set the average goals scored for a team.
+Get or set the average goals scored by home and away teams.
 
 
 * **Parameters**
 
-    **average_goals_scored** (*float**, **optional*) – The average goals scored by a team.
+    **average_goals_scored** (*Tuple of two floats**, **optional*) – The average goals scored by a home team and the average goals
+    scored by an away team.
 
 
 
 * **Returns**
 
-    The average goals scored by a team.
+    The average goals scored by a home team and the average goals
+    scored by an away team.
 
 
 
 * **Return type**
 
-    float
+    Tuple of two floats
 
 
 
