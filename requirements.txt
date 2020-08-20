@@ -1,4 +1,5 @@
 alabaster==0.7.12
+appnope==0.1.0
 argon2-cffi==20.1.0
 attrs==19.3.0
 Babel==2.8.0
@@ -25,6 +26,7 @@ ipython-genutils==0.2.0
 ipywidgets==7.5.1
 jedi==0.17.2
 Jinja2==2.11.2
+joblib==0.16.0
 jsonschema==3.2.0
 jupyter==1.0.0
 jupyter-client==6.1.6
@@ -50,6 +52,7 @@ prometheus-client==0.8.0
 prompt-toolkit==3.0.6
 ptyprocess==0.6.0
 pycodestyle==2.6.0
+pycodestyle-magic==0.5
 pycparser==2.20
 pydash==4.8.0
 pydocstyle==5.0.2
@@ -64,9 +67,11 @@ qtconsole==4.7.5
 QtPy==1.9.0
 recommonmark==0.6.0
 requests==2.24.0
+scikit-learn==0.23.2
 scipy==1.5.2
 Send2Trash==1.5.0
 six==1.15.0
+sklearn==0.0
 snowballstemmer==2.0.0
 Sphinx==3.2.1
 sphinx-markdown-builder==0.5.4
@@ -78,6 +83,7 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
 terminado==0.8.3
 testpath==0.4.4
+threadpoolctl==2.1.0
 tornado==6.0.4
 traitlets==4.3.3
 unify==0.5
