@@ -12,6 +12,10 @@ Footy - A statistics module for football (soccer).
 ### class footy.Footy()
 Main class of the footy module.
 
+Please note that methods that accept a team name parameter that the team
+name must match exactly (including case sensitivity).  Use the
+get_teams method to get a list of valid team names.
+
 ### Examples
 
 ```python
@@ -110,6 +114,12 @@ Get the attack strength of a team.
 
 
 
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
 #### average_goals_scored(average_goals_scored=None)
 Get or set the average goals scored by home and away teams.
 
@@ -191,6 +201,12 @@ Get the defence factor for a team.
 * **Return type**
 
     float
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
 
 
 
@@ -305,6 +321,12 @@ all teams is returned.
 
 
 
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
 #### goals_scored(team_name=None)
 Get the number of goals scored.
 
@@ -328,6 +350,12 @@ goals scored by all teams is returned.
 * **Return type**
 
     int
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
 
 
 
@@ -360,6 +388,12 @@ Return the probability of a home win, a draw or an away win.
 
 
 
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
 #### plot_goal_probability(goals, probability_mass, title)
 Plot the probability of goals being scored by a team.
 
@@ -374,6 +408,12 @@ Plot the probability of goals being scored by a team.
 
 
     * **title** (*str*) – The title of the plot.
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
 
 
 
@@ -403,3 +443,9 @@ Return a dataframe of the score probability.
 * **Return type**
 
     pandas.DataFrame
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.

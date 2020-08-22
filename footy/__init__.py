@@ -10,6 +10,10 @@ class Footy:
     """
     Main class of the footy module.
 
+    Please note that methods that accept a team name parameter that the team
+    name must match exactly (including case sensitivity).  Use the
+    get_teams method to get a list of valid team names.
+
     Examples
     --------
     >>> import footy
@@ -71,12 +75,16 @@ class Footy:
         ----------
         team_name : str
             The name of the team to add.
+
         goals_for : int
             The number of goals scored by the team.
+
         goals_against : int
             The number of goals conceded by the team.
+
         home_games : int
             The number of home games played by the team.
+
         away_games : int
             The number of away games played by the team.
         """
@@ -103,6 +111,11 @@ class Footy:
         -------
         float
             The attack strength of the team.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         team_average_goals_scored = self.goals_scored(team_name)
         league_average_goals_scored = self.goals_scored()
@@ -198,6 +211,11 @@ class Footy:
         -------
         float
             The defence factor for a specific team.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         team_average_goals_conceded = self.goals_conceded(team_name)
         league_average_goals_conceded = self.goals_conceded()
@@ -292,6 +310,11 @@ class Footy:
         -------
         int
             The number of goals conceded by the team or the league.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         data = self.data()
 
@@ -323,6 +346,11 @@ class Footy:
         -------
         int
             The number of goals scored by a team or in the league.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         data = self.data()
 
@@ -345,8 +373,10 @@ class Footy:
         ----------
         home_team : str
             The name of the home team.
+
         away_team : str
             The name of the away team.
+
         show_plot : bool, optional
             Should a plot be shown (default is true).
 
@@ -354,6 +384,11 @@ class Footy:
         -------
         tuple
             (home win probability, draw probability, away win probability).
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         df = self.score_probability(home_team, away_team, False)
         df = df[df.home > df.away]
@@ -392,6 +427,11 @@ class Footy:
             The probability of the team, scoring a number of goals.
         title : str
             The title of the plot.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         plt.bar(goals, probability_mass * 100.0)
         plt.title(title)
@@ -416,6 +456,11 @@ class Footy:
         -------
         pandas.DataFrame
             The probability of the games score.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
         """
         (home_expected_goals,
          away_expected_goals) = self.average_goals_scored()
