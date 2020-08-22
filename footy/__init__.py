@@ -47,6 +47,10 @@ class Footy:
     Plot the outcome probability
 
     >>> widget.outcome_probability('Arsenal', 'Stoke')
+
+    Get a list of all the teams from the dataset.
+
+    >>> widget.get_teams()
     """
 
     def __init__(self):
@@ -126,6 +130,61 @@ class Footy:
             self._average_goals_scored = average_goals_scored
         return self._average_goals_scored
 
+    def data(self, data=None):
+        """
+        Get or set the object data.
+
+        Parameters
+        ----------
+        data : dict, optional
+            A new dictionary to replace the objects data.
+
+        Returns
+        -------
+        dict
+            The object data.
+        """
+        if data is not None:
+            self._data = data
+        return self._data
+
+    def dataframe(self):
+        """
+        Return the object data as a Pandas dataframe.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The object datq as a Pandas datafrome.
+        """
+        a = []
+        data = self.data()
+        attack_strengths = []
+        defence_factors = []
+
+        for team_name in data.keys():
+            team_dict = data[team_name]
+            attack_strength = self.attack_strength(team_name)
+            attack_strengths.append(attack_strength)
+            defence_factor = self.defence_factor(team_name)
+            defence_factors.append(defence_factor)
+            team_list = [team_name]
+
+            for value in list(team_dict.values()):
+                team_list.append(value)
+
+            a.append(team_list)
+
+        columns = ['team_name']
+
+        for key in list(team_dict.keys()):
+            columns.append(key)
+
+        df = pd.DataFrame(a, columns=columns)
+        df['attack_strength'] = attack_strengths
+        df['defence_factor'] = defence_factors
+        return df
+
     def defence_factor(self, team_name):
         """
         Get the defence factor for a team.
@@ -145,6 +204,76 @@ class Footy:
         defence_factor = team_average_goals_conceded
         defence_factor /= league_average_goals_conceded
         return round(defence_factor, 2)
+
+    def get_team(self, team_name):
+        """
+        Get the details of a specific team from the dataset.
+
+        Parameters
+        ----------
+        team_name : str
+            The name of the team that the details are to be returned for.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
+
+        Returns
+        -------
+        dict
+            The elements of the returned dictionary are goals_for (the number
+            of goals scored), goals_against (the number of goals conceded),
+            home_games (number of games played at home), away_games (number of
+            games played away).
+
+        Examples
+        --------
+        Get the data specific to Arsenal.
+
+        >>> widget.get_team('Arsenal')
+        {'goals_for': 64, 'goals_against': 36, 'home_games': 18,
+         'away_games': 19}
+        """
+        data = self.data()
+        return data[team_name]
+
+    def get_teams(self):
+        """
+        Get a list of the team names held in the dataset.
+
+        Returns
+        -------
+        List of str
+            A list of the team names.
+
+        Examples
+        --------
+        Get a list of all the teams from the dataset.
+
+        >>> widget.get_teams()
+        ['Arsenal',
+         'Aston Villa',
+         'Blackburn',
+         'Bolton',
+         'Chelsea',
+         'Everton',
+         'Fulham',
+         'Hull',
+         'Liverpool',
+         'Man City',
+         'Man United',
+         'Middlesbrough',
+         'Newcastle',
+         'Portsmouth',
+         'Stoke',
+         'Sunderland',
+         'Tottenham',
+         'West Brom',
+         'West Ham',
+         'Wigan']
+        """
+        return list(self.data().keys())
 
     def goals_conceded(self, team_name=None):
         """
@@ -207,61 +336,6 @@ class Footy:
                 goals_for += data[team_name]['goals_for']
 
             return int(round(goals_for / len(data.keys())))
-
-    def data(self, data=None):
-        """
-        Get or set the object data.
-
-        Parameters
-        ----------
-        data : dict, optional
-            A new dictionary to replace the objects data.
-
-        Returns
-        -------
-        dict
-            The object data.
-        """
-        if data is not None:
-            self._data = data
-        return self._data
-
-    def dataframe(self):
-        """
-        Return the object data as a Pandas dataframe.
-
-        Returns
-        -------
-        pandas.DataFrame
-            The object datq as a Pandas datafrome.
-        """
-        a = []
-        data = self.data()
-        attack_strengths = []
-        defence_factors = []
-
-        for team_name in data.keys():
-            team_dict = data[team_name]
-            attack_strength = self.attack_strength(team_name)
-            attack_strengths.append(attack_strength)
-            defence_factor = self.defence_factor(team_name)
-            defence_factors.append(defence_factor)
-            team_list = [team_name]
-
-            for value in list(team_dict.values()):
-                team_list.append(value)
-
-            a.append(team_list)
-
-        columns = ['team_name']
-
-        for key in list(team_dict.keys()):
-            columns.append(key)
-
-        df = pd.DataFrame(a, columns=columns)
-        df['attack_strength'] = attack_strengths
-        df['defence_factor'] = defence_factors
-        return df
 
     def outcome_probability(self, home_team, away_team, show_plot=True):
         """

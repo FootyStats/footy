@@ -58,6 +58,12 @@ Plot the outcome probability
 >>> widget.outcome_probability('Arsenal', 'Stoke')
 ```
 
+Get a list of all the teams from the dataset.
+
+```python
+>>> widget.get_teams()
+```
+
 
 #### add_team(team_name, goals_for, goals_against, home_games, away_games)
 Add a team to the table.
@@ -186,6 +192,91 @@ Get the defence factor for a team.
 
     float
 
+
+
+#### get_team(team_name)
+Get the details of a specific team from the dataset.
+
+
+* **Parameters**
+
+    **team_name** (*str*) – The name of the team that the details are to be returned for.
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
+* **Returns**
+
+    The elements of the returned dictionary are goals_for (the number
+    of goals scored), goals_against (the number of goals conceded),
+    home_games (number of games played at home), away_games (number of
+    games played away).
+
+
+
+* **Return type**
+
+    dict
+
+
+### Examples
+
+Get the data specific to Arsenal.
+
+```python
+>>> widget.get_team('Arsenal')
+{'goals_for': 64, 'goals_against': 36, 'home_games': 18,
+ 'away_games': 19}
+```
+
+
+#### get_teams()
+Get a list of the team names held in the dataset.
+
+
+* **Returns**
+
+    A list of the team names.
+
+
+
+* **Return type**
+
+    List of str
+
+
+### Examples
+
+Get a list of all the teams from the dataset.
+
+```python
+>>> widget.get_teams()
+['Arsenal',
+ 'Aston Villa',
+ 'Blackburn',
+ 'Bolton',
+ 'Chelsea',
+ 'Everton',
+ 'Fulham',
+ 'Hull',
+ 'Liverpool',
+ 'Man City',
+ 'Man United',
+ 'Middlesbrough',
+ 'Newcastle',
+ 'Portsmouth',
+ 'Stoke',
+ 'Sunderland',
+ 'Tottenham',
+ 'West Brom',
+ 'West Ham',
+ 'Wigan']
+```
 
 
 #### goals_conceded(team_name=None)
