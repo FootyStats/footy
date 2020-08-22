@@ -45,7 +45,8 @@ class Footy:
 
     Setting the number of average goals scored.
 
-    >>> widget.average_goals_scored((1.36, 1.06))
+    >>> widget.average_goals_scored_by_a_home_team(1.36)
+    >>> widget.average_goals_scored_by_an_away_team(1.06)
     >>> widget.score_probability('Arsenal', 'Stoke').head()
 
     Plot the outcome probability
@@ -60,7 +61,8 @@ class Footy:
     def __init__(self):
         """Construct a Footy object."""
         self._data = {}
-        self._average_goals_scored = (-1)
+        self._average_goals_scored_by_a_home_team = (-1)
+        self._average_goals_scored_by_an_away_team = (-1)
 
     def add_team(self,
                  team_name,
@@ -123,25 +125,45 @@ class Footy:
         attack_strength /= league_average_goals_scored
         return round(attack_strength, 2)
 
-    def average_goals_scored(self, average_goals_scored=None):
+    def average_goals_scored_by_a_home_team(self, goals=None):
         """
-        Get or set the average goals scored by home and away teams.
+        Get or set the average goals scored by a home team.
 
         Parameters
         ----------
-        average_goals_scored : Tuple of two floats, optional
-            The average goals scored by a home team and the average goals
-            scored by an away team.
+        goals : float
+             The average number of goals scored by any team playing at home
+             over the duration of the season.
 
         Returns
         -------
-        Tuple of two floats
-            The average goals scored by a home team and the average goals
-            scored by an away team.
+        float
+             The average number of goals scored by any team playing at home
+             over the duration of the season.
         """
-        if average_goals_scored is not None:
-            self._average_goals_scored = average_goals_scored
-        return self._average_goals_scored
+        if goals is not None:
+            self._average_goals_scored_by_a_home_team = goals
+        return self._average_goals_scored_by_a_home_team
+
+    def average_goals_scored_by_an_away_team(self, goals=None):
+        """
+        Get or set the average goals scored by an away team.
+
+        Parameters
+        ----------
+        goals : float
+             The average number of goals scored by any team playing away
+             over the duration of the season.
+
+        Returns
+        -------
+        float
+             The average number of goals scored by any team playing away
+             over the duration of the season.
+        """
+        if goals is not None:
+            self._average_goals_scored_by_an_away_team = goals
+        return self._average_goals_scored_by_an_away_team
 
     def data(self, data=None):
         """
@@ -462,8 +484,8 @@ class Footy:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        (home_expected_goals,
-         away_expected_goals) = self.average_goals_scored()
+        home_expected_goals = self.average_goals_scored_by_a_home_team()
+        away_expected_goals = self.average_goals_scored_by_an_away_team()
         home_expected_goals *= self.attack_strength(home_team)
         home_expected_goals *= self.defence_factor(away_team)
         home_expected_goals = round(home_expected_goals, 2)

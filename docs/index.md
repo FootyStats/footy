@@ -52,7 +52,8 @@ Get the data contained by the object as a Pandas dataframe.
 Setting the number of average goals scored.
 
 ```python
->>> widget.average_goals_scored((1.36, 1.06))
+>>> widget.average_goals_scored_by_a_home_team(1.36)
+>>> widget.average_goals_scored_by_an_away_team(1.06)
 >>> widget.score_probability('Arsenal', 'Stoke').head()
 ```
 
@@ -120,27 +121,51 @@ Get the attack strength of a team.
 
 
 
-#### average_goals_scored(average_goals_scored=None)
-Get or set the average goals scored by home and away teams.
+#### average_goals_scored_by_a_home_team(goals=None)
+Get or set the average goals scored by a home team.
 
 
 * **Parameters**
 
-    **average_goals_scored** (*Tuple of two floats**, **optional*) – The average goals scored by a home team and the average goals
-    scored by an away team.
+    **goals** (*float*) – The average number of goals scored by any team playing at home
+    over the duration of the season.
 
 
 
 * **Returns**
 
-    The average goals scored by a home team and the average goals
-    scored by an away team.
+    The average number of goals scored by any team playing at home
+    over the duration of the season.
 
 
 
 * **Return type**
 
-    Tuple of two floats
+    float
+
+
+
+#### average_goals_scored_by_an_away_team(goals=None)
+Get or set the average goals scored by an away team.
+
+
+* **Parameters**
+
+    **goals** (*float*) – The average number of goals scored by any team playing away
+    over the duration of the season.
+
+
+
+* **Returns**
+
+    The average number of goals scored by any team playing away
+    over the duration of the season.
+
+
+
+* **Return type**
+
+    float
 
 
 
