@@ -1,4 +1,4 @@
-all: lint sphinx
+all: lint test sphinx
 
 lint:
 	flake8 .
@@ -6,3 +6,7 @@ lint:
 
 sphinx:
 	sphinx-build -b markdown . docs
+
+test:
+	PYTHONPATH=.. coverage run -m pytest -v --durations=3 tests
+	coverage report
