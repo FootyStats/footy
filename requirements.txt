@@ -45,6 +45,7 @@ packaging==20.4
 pandas==1.1.0
 pandocfilters==1.4.2
 parso==0.7.1
+pathspec==0.8.0
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==7.2.0
@@ -62,6 +63,7 @@ pyparsing==2.4.7
 pyrsistent==0.16.0
 python-dateutil==2.8.1
 pytz==2020.1
+PyYAML==5.3.1
 pyzmq==19.0.2
 qtconsole==4.7.5
 QtPy==1.9.0
@@ -92,5 +94,6 @@ urllib3==1.25.10
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.5.1
+yamllint==1.24.2
 yapf==0.30.0
 zipp==3.1.0
