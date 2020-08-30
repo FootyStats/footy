@@ -1,6 +1,7 @@
 all: lint test sphinx
 
 lint:
+	yamllint -s .
 	flake8 .
 	pydocstyle footy
 
