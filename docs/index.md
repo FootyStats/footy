@@ -197,7 +197,7 @@ Return the object data as a Pandas dataframe.
 
 * **Returns**
 
-    The object datq as a Pandas datafrome.
+    The object data as a Pandas DataFrame.
 
 
 
