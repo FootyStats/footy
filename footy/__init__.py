@@ -4,6 +4,15 @@ import numpy as np
 import pandas as pd
 
 from scipy.stats import poisson
+from sklearn.metrics import brier_score_loss
+
+# Set match outcome constants.
+OUTCOME_HOME_WIN = [1, 0, 0]
+"""List of int : The notation of a home win outcome."""
+OUTCOME_SCORE_DRAW = [0, 1, 0]
+"""List of int : The notation of a score draw outcome."""
+OUTCOME_AWAY_WIN = [0, 0, 1]
+"""List of int : The notation of an away outcome."""
 
 
 class Footy:
@@ -164,6 +173,45 @@ class Footy:
         if goals is not None:
             self._average_goals_scored_by_an_away_team = goals
         return self._average_goals_scored_by_an_away_team
+
+    def brier_score(self, y_true, y_prob):
+        """
+        Return a Brier Score of the probability against the actuality.
+
+        Parameters
+        ----------
+        y_true : np.array
+            What actually happened.  Should be a value for each predicted
+            category (e.g. home win, score draw or away win).
+
+        y_prob : np.array
+            The predicted probability of each category.  The number of
+            elements in this parameter must match the number of parameters
+            given in y_true. The sum of all the values of this list cannot
+            exceed 1.0.
+
+        Returns
+        -------
+        float
+            A value between 0.0 and 2.0 where a value closer to 0.0 indicates
+            that a predicted probability was more accurate that a value
+            closer to 2.0.  This result will be rounded to the nearest two
+            decimal places.
+
+        References
+        ----------
+        Brier, G.W. (1950): "Verification of Forecasts Expressed in Terms of
+        Probability", Monthly Weather Review, volume 79, number 1.
+
+        Examples
+        --------
+        >>> import footy
+        >>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
+        0.0
+        """
+        bs = brier_score_loss(y_true, y_prob)
+        n = len(y_prob)
+        return round(bs * n, 2)
 
     def data(self, data=None):
         """

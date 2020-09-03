@@ -169,6 +169,52 @@ Get or set the average goals scored by an away team.
 
 
 
+#### brier_score(y_true, y_prob)
+Return a Brier Score of the probability against the actuality.
+
+
+* **Parameters**
+
+    
+    * **y_true** (*np.array*) – What actually happened.  Should be a value for each predicted
+    category (e.g. home win, score draw or away win).
+
+
+    * **y_prob** (*np.array*) – The predicted probability of each category.  The number of
+    elements in this parameter must match the number of parameters
+    given in y_true. The sum of all the values of this list cannot
+    exceed 1.0.
+
+
+
+* **Returns**
+
+    A value between 0.0 and 2.0 where a value closer to 0.0 indicates
+    that a predicted probability was more accurate that a value
+    closer to 2.0.  This result will be rounded to the nearest two
+    decimal places.
+
+
+
+* **Return type**
+
+    float
+
+
+### References
+
+Brier, G.W. (1950): “Verification of Forecasts Expressed in Terms of
+Probability”, Monthly Weather Review, volume 79, number 1.
+
+### Examples
+
+```python
+>>> import footy
+>>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
+0.0
+```
+
+
 #### data(data=None)
 Get or set the object data.
 
@@ -474,3 +520,33 @@ Return a dataframe of the score probability.
 * **Raises**
 
     **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
+### footy.OUTCOME_AWAY_WIN( = [0, 0, 1])
+The notation of an away outcome.
+
+
+* **Type**
+
+    List of int
+
+
+
+### footy.OUTCOME_HOME_WIN( = [1, 0, 0])
+The notation of a home win outcome.
+
+
+* **Type**
+
+    List of int
+
+
+
+### footy.OUTCOME_SCORE_DRAW( = [0, 1, 0])
+The notation of a score draw outcome.
+
+
+* **Type**
+
+    List of int

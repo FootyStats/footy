@@ -1,3 +1,4 @@
+import numpy as np
 import unittest
 
 from parameterized import parameterized
@@ -46,6 +47,21 @@ class TestFootyClass(unittest.TestCase):
         footy.average_goals_scored_by_a_home_team(1.36)
         footy.average_goals_scored_by_an_away_team(1.06)
         cls.footy = footy
+
+    @parameterized.expand([
+        ([1, 0, 0], [100.0, 0.0, 0.0], 0.0),
+        ([0, 1, 0], [100.0, 0.0, 0.0], 2.0),
+        ([0, 0, 1], [100.0, 0.0, 0.0], 2.0),
+        ([1, 0, 0], [70.02, 18.43, 9.56], 0.13),
+        ([0, 1, 0], [70.02, 18.43, 9.56], 1.16),
+        ([0, 0, 1], [70.02, 18.43, 9.56], 1.34)
+    ])
+    def test_brier_score(self, y_true, y_prob, expected_answer):
+        footy = self.footy
+        y_true = np.array(y_true) / 100.0
+        y_prob = np.array(y_prob) / 100.0
+        bs = footy.brier_score(y_true, y_prob)
+        self.assertEqual(bs, expected_answer)
 
     @parameterized.expand([
         ('Arsenal', 'Stoke', [72.0, 19.0, 10.0]),
