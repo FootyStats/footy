@@ -190,7 +190,7 @@ class Footy:
         Returns
         -------
         pandas.DataFrame
-            The object datq as a Pandas datafrome.
+            The object data as a Pandas dataframe.
         """
         a = []
         data = self.data()
