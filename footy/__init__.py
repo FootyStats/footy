@@ -27,26 +27,26 @@ class Footy:
     --------
     >>> import footy
     >>> widget = footy.Footy()
-    >>> widget.add_team('Arsenal', 64, 36, 18, 19)
-    >>> widget.add_team('Aston Villa', 53, 48, 18, 19)
-    >>> widget.add_team('Blackburn', 40, 60, 18, 19)
-    >>> widget.add_team('Bolton', 41, 52, 19, 18)
-    >>> widget.add_team('Chelsea', 65, 22, 19, 18)
-    >>> widget.add_team('Everton', 53, 37, 19, 18)
-    >>> widget.add_team('Fulham', 39, 32, 18, 19)
-    >>> widget.add_team('Hull', 39, 63, 18, 19)
-    >>> widget.add_team('Liverpool', 74, 26, 18, 19)
-    >>> widget.add_team('Man City', 57, 50, 18, 19)
-    >>> widget.add_team('Man United', 67, 24, 19, 18)
-    >>> widget.add_team('Middlesbrough', 27, 55, 19, 18)
-    >>> widget.add_team('Newcastle', 40, 58, 19, 18)
-    >>> widget.add_team('Portsmouth', 38, 56, 19, 18)
-    >>> widget.add_team('Stoke', 37, 51, 19, 18)
-    >>> widget.add_team('Sunderland', 32, 51, 18, 19)
-    >>> widget.add_team('Tottenham', 44, 42, 19, 18)
-    >>> widget.add_team('West Brom', 36, 67, 19, 18)
-    >>> widget.add_team('West Ham', 40, 44, 18, 19)
-    >>> widget.add_team('Wigan', 33, 45, 18, 19)
+    >>> widget.add_team('Arsenal', 64, 36, 18, 19, 69)
+    >>> widget.add_team('Aston Villa', 53, 48, 18, 19, 59)
+    >>> widget.add_team('Blackburn', 40, 60, 18, 19, 40)
+    >>> widget.add_team('Bolton', 41, 52, 19, 18, 41)
+    >>> widget.add_team('Chelsea', 65, 22, 19, 18, 80)
+    >>> widget.add_team('Everton', 53, 37, 19, 18, 60)
+    >>> widget.add_team('Fulham', 39, 32, 18, 19, 53)
+    >>> widget.add_team('Hull', 39, 63, 18, 19, 35)
+    >>> widget.add_team('Liverpool', 74, 26, 18, 19, 83)
+    >>> widget.add_team('Man City', 57, 50, 18, 19, 47)
+    >>> widget.add_team('Man United', 67, 24, 19, 18, 87)
+    >>> widget.add_team('Middlesbrough', 27, 55, 19, 18, 32)
+    >>> widget.add_team('Newcastle', 40, 58, 19, 18, 34)
+    >>> widget.add_team('Portsmouth', 38, 56, 19, 18, 41)
+    >>> widget.add_team('Stoke', 37, 51, 19, 18, 45)
+    >>> widget.add_team('Sunderland', 32, 51, 18, 19, 36)
+    >>> widget.add_team('Tottenham', 44, 42, 19, 18, 51)
+    >>> widget.add_team('West Brom', 36, 67, 19, 18, 31)
+    >>> widget.add_team('West Ham', 40, 44, 18, 19, 48)
+    >>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
 
     Get the data contained by the object as a Pandas dataframe.
 
@@ -78,7 +78,8 @@ class Footy:
                  goals_for,
                  goals_against,
                  home_games,
-                 away_games):
+                 away_games,
+                 points):
         """
         Add a team to the table.
 
@@ -98,13 +99,18 @@ class Footy:
 
         away_games : int
             The number of away games played by the team.
+
+        points : int
+            The number of points in the table that the team has.
         """
         data = self.data()
         team_stats = {
             'goals_for': goals_for,
             'goals_against': goals_against,
             'home_games': home_games,
-            'away_games': away_games
+            'away_games': away_games,
+            'goal_difference': (goals_for - goals_against),
+            'points': points
         }
         data[team_name] = team_stats
         self.data(data)
@@ -235,6 +241,9 @@ class Footy:
         """
         Return the object data as a Pandas dataframe.
 
+        The dataframe will be sorted on the number of points and goal
+        difference.
+
         Returns
         -------
         pandas.DataFrame
@@ -266,6 +275,17 @@ class Footy:
         df = pd.DataFrame(a, columns=columns)
         df['attack_strength'] = attack_strengths
         df['defence_factor'] = defence_factors
+        df = df.sort_values(
+            [
+                'points',
+                'goal_difference'
+            ],
+            ascending=[
+                False,
+                False
+            ]
+        )
+        df = df.reset_index(drop=True)
         return df
 
     def defence_factor(self, team_name):
@@ -485,30 +505,6 @@ class Footy:
 
         return (home_win_probability, draw_probability, away_win_probability)
 
-    def plot_goal_probability(self, goals, probability_mass, title):
-        """
-        Plot the probability of goals being scored by a team.
-
-        Parameters
-        ----------
-        goals : List of int
-            Number of goals from 0 to 6.
-        probability_mass : List of float
-            The probability of the team, scoring a number of goals.
-        title : str
-            The title of the plot.
-
-        Raises
-        ------
-        KeyError
-            When a team name is provided that is not in the dataset.
-        """
-        plt.bar(goals, probability_mass * 100.0)
-        plt.title(title)
-        plt.xlabel('Probable Goals')
-        plt.ylabel('Percentage (%)')
-        plt.show()
-
     def score_probability(self, home_team, away_team, show_plots=True):
         """
         Return a dataframe of the score probability.
@@ -557,12 +553,22 @@ class Footy:
                                       probability])
 
         if show_plots:
-            self.plot_goal_probability(goals,
-                                       home_probability_mass,
-                                       f"{home_team} Goal Probability")
-            self.plot_goal_probability(goals,
-                                       away_probability_mass,
-                                       f"{away_team} Goal Probability")
+            fig, ax = plt.subplots()
+            width = 0.3
+            ax.bar(np.arange(len(goals)),
+                   home_probability_mass * 100.0,
+                   width=width,
+                   label=home_team)
+            ax.bar(np.arange(len(goals)) + width,
+                   away_probability_mass * 100.0,
+                   width=width,
+                   label=away_team)
+            ax.set_title(f'{home_team} v. {away_team}')
+            ax.set_xlabel('Probable Goals')
+            ax.set_ylabel('Percentage (%)')
+            ax.legend()
+            fig.tight_layout()
+            plt.show()
 
         df = pd.DataFrame(probabilities, columns=['home',
                                                   'away',

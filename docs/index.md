@@ -21,26 +21,26 @@ get_teams method to get a list of valid team names.
 ```python
 >>> import footy
 >>> widget = footy.Footy()
->>> widget.add_team('Arsenal', 64, 36, 18, 19)
->>> widget.add_team('Aston Villa', 53, 48, 18, 19)
->>> widget.add_team('Blackburn', 40, 60, 18, 19)
->>> widget.add_team('Bolton', 41, 52, 19, 18)
->>> widget.add_team('Chelsea', 65, 22, 19, 18)
->>> widget.add_team('Everton', 53, 37, 19, 18)
->>> widget.add_team('Fulham', 39, 32, 18, 19)
->>> widget.add_team('Hull', 39, 63, 18, 19)
->>> widget.add_team('Liverpool', 74, 26, 18, 19)
->>> widget.add_team('Man City', 57, 50, 18, 19)
->>> widget.add_team('Man United', 67, 24, 19, 18)
->>> widget.add_team('Middlesbrough', 27, 55, 19, 18)
->>> widget.add_team('Newcastle', 40, 58, 19, 18)
->>> widget.add_team('Portsmouth', 38, 56, 19, 18)
->>> widget.add_team('Stoke', 37, 51, 19, 18)
->>> widget.add_team('Sunderland', 32, 51, 18, 19)
->>> widget.add_team('Tottenham', 44, 42, 19, 18)
->>> widget.add_team('West Brom', 36, 67, 19, 18)
->>> widget.add_team('West Ham', 40, 44, 18, 19)
->>> widget.add_team('Wigan', 33, 45, 18, 19)
+>>> widget.add_team('Arsenal', 64, 36, 18, 19, 69)
+>>> widget.add_team('Aston Villa', 53, 48, 18, 19, 59)
+>>> widget.add_team('Blackburn', 40, 60, 18, 19, 40)
+>>> widget.add_team('Bolton', 41, 52, 19, 18, 41)
+>>> widget.add_team('Chelsea', 65, 22, 19, 18, 80)
+>>> widget.add_team('Everton', 53, 37, 19, 18, 60)
+>>> widget.add_team('Fulham', 39, 32, 18, 19, 53)
+>>> widget.add_team('Hull', 39, 63, 18, 19, 35)
+>>> widget.add_team('Liverpool', 74, 26, 18, 19, 83)
+>>> widget.add_team('Man City', 57, 50, 18, 19, 47)
+>>> widget.add_team('Man United', 67, 24, 19, 18, 87)
+>>> widget.add_team('Middlesbrough', 27, 55, 19, 18, 32)
+>>> widget.add_team('Newcastle', 40, 58, 19, 18, 34)
+>>> widget.add_team('Portsmouth', 38, 56, 19, 18, 41)
+>>> widget.add_team('Stoke', 37, 51, 19, 18, 45)
+>>> widget.add_team('Sunderland', 32, 51, 18, 19, 36)
+>>> widget.add_team('Tottenham', 44, 42, 19, 18, 51)
+>>> widget.add_team('West Brom', 36, 67, 19, 18, 31)
+>>> widget.add_team('West Ham', 40, 44, 18, 19, 48)
+>>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
 ```
 
 Get the data contained by the object as a Pandas dataframe.
@@ -70,7 +70,7 @@ Get a list of all the teams from the dataset.
 ```
 
 
-#### add_team(team_name, goals_for, goals_against, home_games, away_games)
+#### add_team(team_name, goals_for, goals_against, home_games, away_games, points)
 Add a team to the table.
 
 
@@ -90,6 +90,9 @@ Add a team to the table.
 
 
     * **away_games** (*int*) – The number of away games played by the team.
+
+
+    * **points** (*int*) – The number of points in the table that the team has.
 
 
 
@@ -239,6 +242,9 @@ Get or set the object data.
 
 #### dataframe()
 Return the object data as a Pandas dataframe.
+
+The dataframe will be sorted on the number of points and goal
+difference.
 
 
 * **Returns**
@@ -456,29 +462,6 @@ Return the probability of a home win, a draw or an away win.
 * **Return type**
 
     tuple
-
-
-
-* **Raises**
-
-    **KeyError** – When a team name is provided that is not in the dataset.
-
-
-
-#### plot_goal_probability(goals, probability_mass, title)
-Plot the probability of goals being scored by a team.
-
-
-* **Parameters**
-
-    
-    * **goals** (*List of int*) – Number of goals from 0 to 6.
-
-
-    * **probability_mass** (*List of float*) – The probability of the team, scoring a number of goals.
-
-
-    * **title** (*str*) – The title of the plot.
 
 
 
