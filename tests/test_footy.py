@@ -1,3 +1,4 @@
+import numpy as np
 import unittest
 
 from parameterized import parameterized
@@ -23,29 +24,44 @@ class TestFootyClass(unittest.TestCase):
         [Accessed 29 Aug. 2020].
         """
         footy = Footy()
-        footy.add_team('Arsenal', 64, 36, 18, 19)
-        footy.add_team('Aston Villa', 53, 48, 18, 19)
-        footy.add_team('Blackburn', 40, 60, 18, 19)
-        footy.add_team('Bolton', 41, 52, 19, 18)
-        footy.add_team('Chelsea', 65, 22, 19, 18)
-        footy.add_team('Everton', 53, 37, 19, 18)
-        footy.add_team('Fulham', 39, 32, 18, 19)
-        footy.add_team('Hull', 39, 63, 18, 19)
-        footy.add_team('Liverpool', 74, 26, 18, 19)
-        footy.add_team('Man City', 57, 50, 18, 19)
-        footy.add_team('Man United', 67, 24, 19, 18)
-        footy.add_team('Middlesbrough', 27, 55, 19, 18)
-        footy.add_team('Newcastle', 40, 58, 19, 18)
-        footy.add_team('Portsmouth', 38, 56, 19, 18)
-        footy.add_team('Stoke', 37, 51, 19, 18)
-        footy.add_team('Sunderland', 32, 51, 18, 19)
-        footy.add_team('Tottenham', 44, 42, 19, 18)
-        footy.add_team('West Brom', 36, 67, 19, 18)
-        footy.add_team('West Ham', 40, 44, 18, 19)
-        footy.add_team('Wigan', 33, 45, 18, 19)
+        footy.add_team('Arsenal', 64, 36, 18, 19, 69)
+        footy.add_team('Aston Villa', 53, 48, 18, 19, 59)
+        footy.add_team('Blackburn', 40, 60, 18, 19, 40)
+        footy.add_team('Bolton', 41, 52, 19, 18, 41)
+        footy.add_team('Chelsea', 65, 22, 19, 18, 80)
+        footy.add_team('Everton', 53, 37, 19, 18, 60)
+        footy.add_team('Fulham', 39, 32, 18, 19, 53)
+        footy.add_team('Hull', 39, 63, 18, 19, 35)
+        footy.add_team('Liverpool', 74, 26, 18, 19, 83)
+        footy.add_team('Man City', 57, 50, 18, 19, 47)
+        footy.add_team('Man United', 67, 24, 19, 18, 87)
+        footy.add_team('Middlesbrough', 27, 55, 19, 18, 32)
+        footy.add_team('Newcastle', 40, 58, 19, 18, 34)
+        footy.add_team('Portsmouth', 38, 56, 19, 18, 41)
+        footy.add_team('Stoke', 37, 51, 19, 18, 45)
+        footy.add_team('Sunderland', 32, 51, 18, 19, 36)
+        footy.add_team('Tottenham', 44, 42, 19, 18, 51)
+        footy.add_team('West Brom', 36, 67, 19, 18, 31)
+        footy.add_team('West Ham', 40, 44, 18, 19, 48)
+        footy.add_team('Wigan', 33, 45, 18, 19, 42)
         footy.average_goals_scored_by_a_home_team(1.36)
         footy.average_goals_scored_by_an_away_team(1.06)
         cls.footy = footy
+
+    @parameterized.expand([
+        ([1, 0, 0], [100.0, 0.0, 0.0], 0.0),
+        ([0, 1, 0], [100.0, 0.0, 0.0], 2.0),
+        ([0, 0, 1], [100.0, 0.0, 0.0], 2.0),
+        ([1, 0, 0], [70.02, 18.43, 9.56], 0.13),
+        ([0, 1, 0], [70.02, 18.43, 9.56], 1.16),
+        ([0, 0, 1], [70.02, 18.43, 9.56], 1.34)
+    ])
+    def test_brier_score(self, y_true, y_prob, expected_answer):
+        footy = self.footy
+        y_true = np.array(y_true) / 100.0
+        y_prob = np.array(y_prob) / 100.0
+        bs = footy.brier_score(y_true, y_prob)
+        self.assertEqual(bs, expected_answer)
 
     @parameterized.expand([
         ('Arsenal', 'Stoke', [72.0, 19.0, 10.0]),

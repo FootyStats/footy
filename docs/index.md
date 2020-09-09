@@ -21,26 +21,26 @@ get_teams method to get a list of valid team names.
 ```python
 >>> import footy
 >>> widget = footy.Footy()
->>> widget.add_team('Arsenal', 64, 36, 18, 19)
->>> widget.add_team('Aston Villa', 53, 48, 18, 19)
->>> widget.add_team('Blackburn', 40, 60, 18, 19)
->>> widget.add_team('Bolton', 41, 52, 19, 18)
->>> widget.add_team('Chelsea', 65, 22, 19, 18)
->>> widget.add_team('Everton', 53, 37, 19, 18)
->>> widget.add_team('Fulham', 39, 32, 18, 19)
->>> widget.add_team('Hull', 39, 63, 18, 19)
->>> widget.add_team('Liverpool', 74, 26, 18, 19)
->>> widget.add_team('Man City', 57, 50, 18, 19)
->>> widget.add_team('Man United', 67, 24, 19, 18)
->>> widget.add_team('Middlesbrough', 27, 55, 19, 18)
->>> widget.add_team('Newcastle', 40, 58, 19, 18)
->>> widget.add_team('Portsmouth', 38, 56, 19, 18)
->>> widget.add_team('Stoke', 37, 51, 19, 18)
->>> widget.add_team('Sunderland', 32, 51, 18, 19)
->>> widget.add_team('Tottenham', 44, 42, 19, 18)
->>> widget.add_team('West Brom', 36, 67, 19, 18)
->>> widget.add_team('West Ham', 40, 44, 18, 19)
->>> widget.add_team('Wigan', 33, 45, 18, 19)
+>>> widget.add_team('Arsenal', 64, 36, 18, 19, 69)
+>>> widget.add_team('Aston Villa', 53, 48, 18, 19, 59)
+>>> widget.add_team('Blackburn', 40, 60, 18, 19, 40)
+>>> widget.add_team('Bolton', 41, 52, 19, 18, 41)
+>>> widget.add_team('Chelsea', 65, 22, 19, 18, 80)
+>>> widget.add_team('Everton', 53, 37, 19, 18, 60)
+>>> widget.add_team('Fulham', 39, 32, 18, 19, 53)
+>>> widget.add_team('Hull', 39, 63, 18, 19, 35)
+>>> widget.add_team('Liverpool', 74, 26, 18, 19, 83)
+>>> widget.add_team('Man City', 57, 50, 18, 19, 47)
+>>> widget.add_team('Man United', 67, 24, 19, 18, 87)
+>>> widget.add_team('Middlesbrough', 27, 55, 19, 18, 32)
+>>> widget.add_team('Newcastle', 40, 58, 19, 18, 34)
+>>> widget.add_team('Portsmouth', 38, 56, 19, 18, 41)
+>>> widget.add_team('Stoke', 37, 51, 19, 18, 45)
+>>> widget.add_team('Sunderland', 32, 51, 18, 19, 36)
+>>> widget.add_team('Tottenham', 44, 42, 19, 18, 51)
+>>> widget.add_team('West Brom', 36, 67, 19, 18, 31)
+>>> widget.add_team('West Ham', 40, 44, 18, 19, 48)
+>>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
 ```
 
 Get the data contained by the object as a Pandas dataframe.
@@ -70,7 +70,7 @@ Get a list of all the teams from the dataset.
 ```
 
 
-#### add_team(team_name, goals_for, goals_against, home_games, away_games)
+#### add_team(team_name, goals_for, goals_against, home_games, away_games, points)
 Add a team to the table.
 
 
@@ -90,6 +90,9 @@ Add a team to the table.
 
 
     * **away_games** (*int*) – The number of away games played by the team.
+
+
+    * **points** (*int*) – The number of points in the table that the team has.
 
 
 
@@ -169,6 +172,52 @@ Get or set the average goals scored by an away team.
 
 
 
+#### brier_score(y_true, y_prob)
+Return a Brier Score of the probability against the actuality.
+
+
+* **Parameters**
+
+    
+    * **y_true** (*np.array*) – What actually happened.  Should be a value for each predicted
+    category (e.g. home win, score draw or away win).
+
+
+    * **y_prob** (*np.array*) – The predicted probability of each category.  The number of
+    elements in this parameter must match the number of parameters
+    given in y_true. The sum of all the values of this list cannot
+    exceed 1.0.
+
+
+
+* **Returns**
+
+    A value between 0.0 and 2.0 where a value closer to 0.0 indicates
+    that a predicted probability was more accurate that a value
+    closer to 2.0.  This result will be rounded to the nearest two
+    decimal places.
+
+
+
+* **Return type**
+
+    float
+
+
+### References
+
+Brier, G.W. (1950): “Verification of Forecasts Expressed in Terms of
+Probability”, Monthly Weather Review, volume 79, number 1.
+
+### Examples
+
+```python
+>>> import footy
+>>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
+0.0
+```
+
+
 #### data(data=None)
 Get or set the object data.
 
@@ -194,10 +243,13 @@ Get or set the object data.
 #### dataframe()
 Return the object data as a Pandas dataframe.
 
+The dataframe will be sorted on the number of points and goal
+difference.
+
 
 * **Returns**
 
-    The object datq as a Pandas datafrome.
+    The object data as a Pandas DataFrame.
 
 
 
@@ -419,29 +471,6 @@ Return the probability of a home win, a draw or an away win.
 
 
 
-#### plot_goal_probability(goals, probability_mass, title)
-Plot the probability of goals being scored by a team.
-
-
-* **Parameters**
-
-    
-    * **goals** (*List of int*) – Number of goals from 0 to 6.
-
-
-    * **probability_mass** (*List of float*) – The probability of the team, scoring a number of goals.
-
-
-    * **title** (*str*) – The title of the plot.
-
-
-
-* **Raises**
-
-    **KeyError** – When a team name is provided that is not in the dataset.
-
-
-
 #### score_probability(home_team, away_team, show_plots=True)
 Return a dataframe of the score probability.
 
@@ -474,3 +503,33 @@ Return a dataframe of the score probability.
 * **Raises**
 
     **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
+### footy.OUTCOME_AWAY_WIN( = [0, 0, 1])
+The notation of an away outcome.
+
+
+* **Type**
+
+    List of int
+
+
+
+### footy.OUTCOME_HOME_WIN( = [1, 0, 0])
+The notation of a home win outcome.
+
+
+* **Type**
+
+    List of int
+
+
+
+### footy.OUTCOME_SCORE_DRAW( = [0, 1, 0])
+The notation of a score draw outcome.
+
+
+* **Type**
+
+    List of int
