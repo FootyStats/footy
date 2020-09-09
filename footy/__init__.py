@@ -87,19 +87,14 @@ class Footy:
         ----------
         team_name : str
             The name of the team to add.
-
         goals_for : int
             The number of goals scored by the team.
-
         goals_against : int
             The number of goals conceded by the team.
-
         home_games : int
             The number of home games played by the team.
-
         away_games : int
             The number of away games played by the team.
-
         points : int
             The number of points in the table that the team has.
         """
@@ -189,7 +184,6 @@ class Footy:
         y_true : np.array
             What actually happened.  Should be a value for each predicted
             category (e.g. home win, score draw or away win).
-
         y_prob : np.array
             The predicted probability of each category.  The number of
             elements in this parameter must match the number of parameters
@@ -312,6 +306,47 @@ class Footy:
         defence_factor = team_average_goals_conceded
         defence_factor /= league_average_goals_conceded
         return round(defence_factor, 2)
+
+    def fixture(self, home_team, away_team):
+        """
+        Calculate the probabilities of a fixture between two teams.
+
+        Parameters
+        ----------
+        home_team : str
+            The name of the home team.
+        away_team : str
+            The name of the away team.
+
+        Returns
+        -------
+        dict
+            If there is enough data for any probabilities to be calculated,
+            the dictionary will contain elements called:
+
+            outcome_probability: A list of three floats indicating (with
+            values between 0.0 and 1.0) the probability of a home win, a
+            score draw or an away win respectively.
+
+            home_team_goals_probability: A list of seven floats indicating
+            (with values between 0.0 and 1.0) the probability of the home team
+            scoring between 0 and 6 goals.
+
+            away_team_goals_probability: A list of seven floats indicating
+            (with values between 0.0 and 1.0) the probability of the away team
+            scoring between 0 and 6 goals.
+
+            final_score_probabilities:  A Pandas DataFrame with each row
+            containing the number of goals scored by the home team, the number
+            of goals scored by the away team and the probability of that final
+            score.  The table will be sorted with the most probable results
+            descending.
+
+            If there is not enough data to calculate the probabilities, the
+            dictionary returned by this function will be empty.
+        """
+        fixture_probabilities = {}
+        return fixture_probabilities
 
     def get_team(self, team_name):
         """
