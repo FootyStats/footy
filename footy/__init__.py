@@ -1,5 +1,4 @@
 """Footy - A statistics module for football (soccer)."""
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -87,19 +86,14 @@ class Footy:
         ----------
         team_name : str
             The name of the team to add.
-
         goals_for : int
             The number of goals scored by the team.
-
         goals_against : int
             The number of goals conceded by the team.
-
         home_games : int
             The number of home games played by the team.
-
         away_games : int
             The number of away games played by the team.
-
         points : int
             The number of points in the table that the team has.
         """
@@ -189,7 +183,6 @@ class Footy:
         y_true : np.array
             What actually happened.  Should be a value for each predicted
             category (e.g. home win, score draw or away win).
-
         y_prob : np.array
             The predicted probability of each category.  The number of
             elements in this parameter must match the number of parameters
@@ -312,6 +305,100 @@ class Footy:
         defence_factor = team_average_goals_conceded
         defence_factor /= league_average_goals_conceded
         return round(defence_factor, 2)
+
+    def fixture(self, home_team, away_team):
+        """
+        Calculate the probabilities of a fixture between two teams.
+
+        Parameters
+        ----------
+        home_team : str
+            The name of the home team.
+        away_team : str
+            The name of the away team.
+
+        Returns
+        -------
+        dict
+            If there is enough data for any probabilities to be calculated,
+            the dictionary will contain elements called:
+
+            outcome_probabilities: A list of three floats indicating (with
+            values between 0.0 and 1.0) the probability of a home win, a
+            score draw or an away win respectively.
+
+            home_team_goals_probability: A list of seven floats indicating
+            (with values between 0.0 and 1.0) the probability of the home team
+            scoring between 0 and 6 goals.
+
+            away_team_goals_probability: A list of seven floats indicating
+            (with values between 0.0 and 1.0) the probability of the away team
+            scoring between 0 and 6 goals.
+
+            final_score_probabilities:  A Pandas DataFrame with each row
+            containing the number of goals scored by the home team, the number
+            of goals scored by the away team and the probability of that final
+            score.  The table will be sorted with the most probable results
+            descending.
+
+            If there is not enough data to calculate the probabilities, the
+            dictionary returned by this function will be empty.
+
+        Raises
+        ------
+        KeyError
+            When a team name is provided that is not in the dataset.
+        """
+        response = {}
+
+        home_expected_goals = self.average_goals_scored_by_a_home_team()
+        away_expected_goals = self.average_goals_scored_by_an_away_team()
+        home_expected_goals *= self.attack_strength(home_team)
+        home_expected_goals *= self.defence_factor(away_team)
+        home_expected_goals = round(home_expected_goals, 2)
+        goals = [0, 1, 2, 3, 4, 5, 6]
+        probability_mass = poisson.pmf(goals, home_expected_goals)
+        home_probability_mass = np.round(probability_mass, 2)
+        away_expected_goals *= self.attack_strength(away_team)
+        away_expected_goals *= self.defence_factor(home_team)
+        away_expected_goals = round(away_expected_goals, 2)
+        probability_mass = poisson.pmf(goals, away_expected_goals)
+        away_probability_mass = np.round(probability_mass, 2)
+
+        probabilities = []
+
+        for home_team_goal in range(len(goals)):
+            for away_team_goal in range(len(goals)):
+                probability = home_probability_mass[home_team_goal]
+                probability *= away_probability_mass[away_team_goal]
+                probability = round(probability * 100.0, 2)
+                probabilities.append([home_team_goal, away_team_goal,
+                                      probability])
+
+        df = pd.DataFrame(probabilities, columns=['home',
+                                                  'away',
+                                                  'probability'])
+        df = df[df.probability != 0]
+        df = df.sort_values('probability', ascending=False)
+        df = df.reset_index(drop=True)
+        response['final_score_probabilities'] = df
+
+        df2 = df[df.home > df.away]
+        home_win_probability = round(sum(df2.probability.values), 4)
+        df2 = df[df.home == df.away]
+        draw_probability = round(sum(df2.probability.values), 4)
+        df2 = df[df.home < df.away]
+        away_win_probability = round(sum(df2.probability.values), 4)
+
+        response['outcome_probabilities'] = [
+            home_win_probability,
+            draw_probability,
+            away_win_probability
+        ]
+
+        response['home_team_goals_probability'] = list(home_probability_mass)
+        response['away_team_goals_probability'] = list(away_probability_mass)
+        return response
 
     def get_team(self, team_name):
         """
@@ -454,126 +541,3 @@ class Footy:
                 goals_for += data[team_name]['goals_for']
 
             return int(round(goals_for / len(data.keys())))
-
-    def outcome_probability(self, home_team, away_team, show_plot=True):
-        """
-        Return the probability of a home win, a draw or an away win.
-
-        Parameters
-        ----------
-        home_team : str
-            The name of the home team.
-
-        away_team : str
-            The name of the away team.
-
-        show_plot : bool, optional
-            Should a plot be shown (default is true).
-
-        Returns
-        -------
-        tuple
-            (home win probability, draw probability, away win probability).
-
-        Raises
-        ------
-        KeyError
-            When a team name is provided that is not in the dataset.
-        """
-        df = self.score_probability(home_team, away_team, False)
-        df = df[df.home > df.away]
-        home_win_probability = round(sum(df.probability.values), 2)
-        df = self.score_probability(home_team, away_team, False)
-        df = df[df.home == df.away]
-        draw_probability = round(sum(df.probability.values), 2)
-        df = self.score_probability(home_team, away_team, False)
-        df = df[df.home < df.away]
-        away_win_probability = round(sum(df.probability.values), 2)
-
-        if show_plot:
-            labels = [f'{home_team} Win', 'Draw', f'{away_team} Win']
-            sizes = [home_win_probability, draw_probability,
-                     away_win_probability]
-
-            fig1, ax1 = plt.subplots()
-            ax1.pie(sizes, labels=labels, autopct='%1.1f%%',
-                    shadow=True, startangle=90)
-            # Equal aspect ratio ensures that pie is drawn as a circle.
-            ax1.axis('equal')
-
-            plt.show()
-
-        return (home_win_probability, draw_probability, away_win_probability)
-
-    def score_probability(self, home_team, away_team, show_plots=True):
-        """
-        Return a dataframe of the score probability.
-
-        Parameters
-        ----------
-        home_team : str
-            The name of the home team.
-        away_team : str
-            The name of the away team.
-        show_plots: bool, optional
-            Should the probability be plotted (default True).
-
-        Returns
-        -------
-        pandas.DataFrame
-            The probability of the games score.
-
-        Raises
-        ------
-        KeyError
-            When a team name is provided that is not in the dataset.
-        """
-        home_expected_goals = self.average_goals_scored_by_a_home_team()
-        away_expected_goals = self.average_goals_scored_by_an_away_team()
-        home_expected_goals *= self.attack_strength(home_team)
-        home_expected_goals *= self.defence_factor(away_team)
-        home_expected_goals = round(home_expected_goals, 2)
-        goals = [0, 1, 2, 3, 4, 5, 6]
-        probability_mass = poisson.pmf(goals, home_expected_goals)
-        home_probability_mass = np.round(probability_mass, 2)
-        away_expected_goals *= self.attack_strength(away_team)
-        away_expected_goals *= self.defence_factor(home_team)
-        away_expected_goals = round(away_expected_goals, 2)
-        probability_mass = poisson.pmf(goals, away_expected_goals)
-        away_probability_mass = np.round(probability_mass, 2)
-
-        probabilities = []
-
-        for home_team_goal in range(len(goals)):
-            for away_team_goal in range(len(goals)):
-                probability = home_probability_mass[home_team_goal]
-                probability *= away_probability_mass[away_team_goal]
-                probability = round(probability * 100.0, 2)
-                probabilities.append([home_team_goal, away_team_goal,
-                                      probability])
-
-        if show_plots:
-            fig, ax = plt.subplots()
-            width = 0.3
-            ax.bar(np.arange(len(goals)),
-                   home_probability_mass * 100.0,
-                   width=width,
-                   label=home_team)
-            ax.bar(np.arange(len(goals)) + width,
-                   away_probability_mass * 100.0,
-                   width=width,
-                   label=away_team)
-            ax.set_title(f'{home_team} v. {away_team}')
-            ax.set_xlabel('Probable Goals')
-            ax.set_ylabel('Percentage (%)')
-            ax.legend()
-            fig.tight_layout()
-            plt.show()
-
-        df = pd.DataFrame(probabilities, columns=['home',
-                                                  'away',
-                                                  'probability'])
-        df = df[df.probability != 0]
-        df = df.sort_values('probability', ascending=False)
-        df = df.reset_index(drop=True)
-        return df

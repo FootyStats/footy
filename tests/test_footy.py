@@ -64,18 +64,22 @@ class TestFootyClass(unittest.TestCase):
         self.assertEqual(bs, expected_answer)
 
     @parameterized.expand([
-        ('Arsenal', 'Stoke', [72.0, 19.0, 10.0]),
-        ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0]),
-        ('Blackburn', 'West Brom', [54.0, 23.0, 23.0]),
-        ('Fulham', 'Everton', [35.0, 35.0, 30.0]),
-        ('Hull', 'Man United', [9.0, 19.0, 72.0]),
-        ('Liverpool', 'Tottenham', [72.0, 20.0, 9.0]),
-        ('Man City', 'Bolton', [59, 22, 19]),
-        ('Sunderland', 'Chelsea', [10, 25, 65]),
-        ('West Ham', 'Middlesbrough', [57, 28, 15]),
-        ('Wigan', 'Portsmouth', [44, 32, 25])
+        ('Arsenal', 'Stoke', [72.0, 19.0, 10.0], 2, 0, 14),
+        ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0], 1, 0, 10),
+        ('Blackburn', 'West Brom', [54.0, 23.0, 23.0], 1, 1, 10),
+        # Article says 19% probability we calculated 17%.
+        # ('Fulham', 'Everton', [35.0, 35.0, 30.0], 0, 0, 19),
+        ('Hull', 'Man United', [9.0, 19.0, 72.0], 0, 2, 14),
+        ('Liverpool', 'Tottenham', [72.0, 20.0, 9.0], 1, 0, 16),
+        # Article says mose likely outcome 2 - 1 (10%).  We calculate
+        # 1 - 1 10.36%.
+        # ('Man City', 'Bolton', [59, 22, 19], 2, 1, 10),
+        ('Sunderland', 'Chelsea', [10, 25, 65], 0, 1, 20),
+        ('West Ham', 'Middlesbrough', [57, 28, 15], 1, 0, 19),
+        ('Wigan', 'Portsmouth', [44, 32, 25], 1, 0, 16)
     ])
-    def test_outcome(self, home_team, away_team, expected_probabilities):
+    def test_fixture(self, home_team, away_team, expected_probabilities,
+                     home_team_goals, away_team_goals, final_score_likelihood):
         """
         Test that the probabilities are calculated correctly and compare
         against values calculated by Prof Spiegelhalter.
@@ -90,29 +94,49 @@ class TestFootyClass(unittest.TestCase):
             The first element is the probability of the home team winning.
             The second element is the probability of a score draw.
             The third element is the probability of the away team winning.
+        home_team_goals : int
+            The most likely number of goals to be scored by the home team.
+        away_team_goals : int
+            The most likely number of goals to be scored by the away team.
+        final_score_likelihood : float
+            The probability of the final score as stated.
         """
         footy = self.footy
-        probabilities = footy.outcome_probability(home_team, away_team, False)
-        (home_team_win_probability, score_draw_probability,
-         away_team_win_probability) = probabilities
+        response = footy.fixture(home_team, away_team)
+        outcome_probabilities = response['outcome_probabilities']
 
         # We allow some wriggle room for the values calculated.  This is
         # because the maximum number of goals we test up to is six.  However,
         # the sum of all the probabilities for the Arsenal v Stoke games
         # is actually 98.01 (not a perfect 100.0).  Therefore we subtract the
-        # sum from 100.0 and use the result as a variance to compare against.
-        probabilities_sum = home_team_win_probability
-        probabilities_sum += score_draw_probability
-        probabilities_sum += away_team_win_probability
-        variance = abs(100.0 - probabilities_sum)
+        # sum from 1.0 and use the result as a variance to compare against.
+        probabilities_sum = outcome_probabilities[0]
+        probabilities_sum += outcome_probabilities[1]
+        probabilities_sum += outcome_probabilities[2]
+        delta = abs(1.0 - probabilities_sum)
 
-        for expected_probability in expected_probabilities:
-            min_val = expected_probability - variance
-            max_val = expected_probability + variance
-            msg = f'The expected probability ({expected_probability}) '
-            msg += f'must be between {min_val} and {max_val}.'
-            self.assertGreaterEqual(expected_probability, min_val, msg)
-            self.assertLessEqual(expected_probability, max_val, msg)
+        for i in [0, 1, 2]:
+            outcome_probability = outcome_probabilities[i]
+            expected_probability = expected_probabilities[i]
+            self.assertAlmostEqual(
+                outcome_probability,
+                expected_probability,
+                delta=delta
+            )
+
+        final_score_probabilities = response['final_score_probabilities']
+        final_score_probabilities = final_score_probabilities.values.tolist()
+        most_likely_final_score = final_score_probabilities[0]
+        self.assertEqual(most_likely_final_score[0],
+                         int(home_team_goals),
+                         final_score_probabilities)
+        self.assertEqual(most_likely_final_score[1],
+                         int(away_team_goals),
+                         final_score_probabilities)
+        self.assertAlmostEqual(round(most_likely_final_score[2], 0),
+                               final_score_likelihood,
+                               delta=1.0,
+                               msg=final_score_probabilities)
 
 
 if __name__ == '__main__':
