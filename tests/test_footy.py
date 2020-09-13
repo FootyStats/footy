@@ -63,6 +63,120 @@ class TestFootyClass(unittest.TestCase):
         bs = footy.brier_score(y_true, y_prob)
         self.assertEqual(bs, expected_answer)
 
+    def test_dummy_league(self):
+        """Test a dummy league through various stages of progression."""
+        footy_obj = Footy()
+
+        # The league has not yet started so zero  values.
+        footy_obj.add_team('Team A', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team B', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team C', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team D', 0, 0, 0, 0, 0)
+        footy_obj.average_goals_scored_by_a_home_team(0)
+        footy_obj.average_goals_scored_by_an_away_team(0)
+
+        # Our micro league should contain four teams.
+        self.assertEqual(len(footy_obj.get_teams()), 4)
+
+        # No games played, so we don't expect any probability data to
+        # be available.
+        response = footy_obj.fixture('Team A', 'Team B')
+        self.assertIsNone(response)
+
+        # Team D beats A 2 - 0 away.
+        footy_obj.add_team('Team A', 0, 2, 1, 0, 0)
+        footy_obj.add_team('Team D', 2, 0, 0, 1, 3)
+
+        # Team B plays Team C at home and the final score is a
+        # 1 - 1 score draw.
+        footy_obj.add_team('Team B', 1, 1, 1, 0, 1)
+        footy_obj.add_team('Team C', 1, 1, 0, 1, 1)
+
+        # Teams D and C played away and between them scored three
+        # goals.  Set the average for these two games.
+        footy_obj.average_goals_scored_by_an_away_team(round(3 / 2, 2))
+
+        # Teams A and B played at home but only team B scored a single goal.
+        # Set the average for these two games.
+        footy_obj.average_goals_scored_by_a_home_team(round(1 / 2, 2))
+
+        # At this point, teams D and C have not played at home and teams
+        # B and A have not played away.  Therefore still expecting not
+        # to have enough data to track probabilities.
+        response = footy_obj.fixture('Team A', 'Team B')
+        self.assertIsNone(response)
+
+        # Team D hosts B and beats them 2 - 0.
+        goals_for = footy_obj.get_team('Team B')['goals_for'] + 0
+        goals_against = footy_obj.get_team('Team B')['goals_against'] + 2
+        home_games = 1
+        away_games = 1
+        points = 1 + 0
+        footy_obj.add_team('Team B', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        goals_for = footy_obj.get_team('Team D')['goals_for'] + 2
+        goals_against = footy_obj.get_team('Team D')['goals_against'] + 0
+        points = 3 + 3
+        footy_obj.add_team('Team D', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        # Team C hosts Team A and beats them 1 - 0.
+        goals_for = footy_obj.get_team('Team A')['goals_for'] + 0
+        goals_against = footy_obj.get_team('Team B')['goals_against'] + 1
+        home_games = 1
+        away_games = 1
+        points = 0 + 0
+        footy_obj.add_team('Team A', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        goals_for = footy_obj.get_team('Team C')['goals_for'] + 1
+        goals_against = footy_obj.get_team('Team D')['goals_against'] + 0
+        points = 1 + 3
+        footy_obj.add_team('Team C', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        # Now all teams have played one home game and one away game.  A recap
+        # of the table at the moment:
+        #
+        # Team GF GA GD PTS Form
+        # D    4  0   4   6 WW
+        # C    2  0   2   4 DW
+        # B    1  3  -2   1 DL
+        # A    0  4  -4   0 LL
+
+        # Let's confirm the goal differences.
+        self.assertEqual(footy_obj.get_team('Team A')['goal_difference'], -4)
+        self.assertEqual(footy_obj.get_team('Team B')['goal_difference'], -2)
+        self.assertEqual(footy_obj.get_team('Team C')['goal_difference'], 2)
+        self.assertEqual(footy_obj.get_team('Team D')['goal_difference'], 4)
+
+        # Now let's calculate and set the averages.
+        games_played_by_home_teams = 2
+        games_played_by_away_teams = games_played_by_home_teams
+        goals_scored_by_home_teams = 0 + 1 + 2 + 1
+        goals_scored_by_away_teams = 2 + 1 + 0 + 0
+        footy_obj.average_goals_scored_by_a_home_team(
+            round(
+                goals_scored_by_home_teams / games_played_by_home_teams,
+                2
+            )
+        )
+        footy_obj.average_goals_scored_by_an_away_team(
+            round(
+                goals_scored_by_away_teams / games_played_by_away_teams,
+                2
+            )
+        )
+
+        # Now we do have enough data to predict fixtures.  In this case we
+        # expect Team D to beat A at home.
+        response = footy_obj.fixture('Team D', 'Team A')
+        self.assertIsNotNone(response)
+        outcome_probabilities = response['outcome_probabilities']
+        self.assertGreater(outcome_probabilities[0], outcome_probabilities[1])
+        self.assertGreater(outcome_probabilities[0], outcome_probabilities[2])
+
     @parameterized.expand([
         ('Arsenal', 'Stoke', [72.0, 19.0, 10.0], 2, 0, 14),
         ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0], 1, 0, 10),

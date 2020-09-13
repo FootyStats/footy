@@ -108,7 +108,8 @@ Get the attack strength of a team.
 
 * **Returns**
 
-    The attack strength of the team.
+    The attack strength of the team.  If there is not enough data to
+    calculate this correctly, return None.
 
 
 
@@ -271,7 +272,8 @@ Get the defence factor for a team.
 
 * **Returns**
 
-    The defence factor for a specific team.
+    The defence factor for a specific team.  If there is not enough
+    data to calculate correctly, return None.
 
 
 

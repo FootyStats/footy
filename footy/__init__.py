@@ -121,17 +121,22 @@ class Footy:
         Returns
         -------
         float
-            The attack strength of the team.
+            The attack strength of the team.  If there is not enough data to
+            calculate this correctly, return None.
 
         Raises
         ------
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        team_average_goals_scored = self.goals_scored(team_name)
-        league_average_goals_scored = self.goals_scored()
-        attack_strength = team_average_goals_scored
-        attack_strength /= league_average_goals_scored
+        try:
+            team_average_goals_scored = self.goals_scored(team_name)
+            league_average_goals_scored = self.goals_scored()
+            attack_strength = team_average_goals_scored
+            attack_strength /= league_average_goals_scored
+        except ZeroDivisionError:
+            return None
+
         return round(attack_strength, 2)
 
     def average_goals_scored_by_a_home_team(self, goals=None):
@@ -293,17 +298,22 @@ class Footy:
         Returns
         -------
         float
-            The defence factor for a specific team.
+            The defence factor for a specific team.  If there is not enough
+            data to calculate correctly, return None.
 
         Raises
         ------
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        team_average_goals_conceded = self.goals_conceded(team_name)
-        league_average_goals_conceded = self.goals_conceded()
-        defence_factor = team_average_goals_conceded
-        defence_factor /= league_average_goals_conceded
+        try:
+            team_average_goals_conceded = self.goals_conceded(team_name)
+            league_average_goals_conceded = self.goals_conceded()
+            defence_factor = team_average_goals_conceded
+            defence_factor /= league_average_goals_conceded
+        except ZeroDivisionError:
+            return None
+
         return round(defence_factor, 2)
 
     def fixture(self, home_team, away_team):
@@ -350,6 +360,23 @@ class Footy:
             When a team name is provided that is not in the dataset.
         """
         response = {}
+
+        # Check that all teams have played more than zero home games.
+        # If the check fails, return None as we do not have enough data
+        # to calculate probabilities.
+        df = self.dataframe()
+        home_games = df['home_games'].values
+
+        if 0 in home_games:
+            return None
+
+        # Check that all teams have played more than zero away games.
+        # If the check fails, return None as we do not have enough data
+        # to calculate probabilities.
+        away_games = df['away_games'].values
+
+        if 0 in away_games:
+            return None
 
         home_expected_goals = self.average_goals_scored_by_a_home_team()
         away_expected_goals = self.average_goals_scored_by_an_away_team()
