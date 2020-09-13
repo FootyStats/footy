@@ -13,15 +13,12 @@ class TestFootyClass(unittest.TestCase):
         """
         Setup the class for testing.
 
-        This sets the data as it was with one game to go at the end of the
-        English Premier League in May 2009.
+        This sets the data as it was with one game to go at the end of the English Premier League in May 2009.
 
         References
         ----------
-        Spiegelhalter, D. (2009). The professor’s Premiership probabilities.
-        [online] BBC News. Available
-        at: http://news.bbc.co.uk/1/hi/programmes/more_or_less/8062277.stm
-        [Accessed 29 Aug. 2020].
+        Spiegelhalter, D. (2009). The professor’s Premiership probabilities. [online] BBC News. Available
+        at: http://news.bbc.co.uk/1/hi/programmes/more_or_less/8062277.stm [Accessed 29 Aug. 2020].
         """
         footy = Footy()
         footy.add_team('Arsenal', 64, 36, 18, 19, 69)
@@ -77,8 +74,8 @@ class TestFootyClass(unittest.TestCase):
     ])
     def test_outcome(self, home_team, away_team, expected_probabilities):
         """
-        Test that the probabilities are calculated correctly and compare
-        against values calculated by Prof Spiegelhalter.
+        Test that the probabilities are calculated correctly and compare against values calculated by Prof
+        Spiegelhalter.
 
         Parameters
         ----------
