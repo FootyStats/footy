@@ -43,7 +43,8 @@ get_teams method to get a list of valid team names.
 >>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
 ```
 
-Get the data contained by the object as a Pandas dataframe.
+Get the data contained by the object as a Pandas dataframe (sorted by
+league position and goal difference).
 
 ```python
 >>> widget.dataframe()
@@ -54,13 +55,14 @@ Setting the number of average goals scored.
 ```python
 >>> widget.average_goals_scored_by_a_home_team(1.36)
 >>> widget.average_goals_scored_by_an_away_team(1.06)
->>> widget.score_probability('Arsenal', 'Stoke').head()
 ```
 
-Plot the outcome probability
+Now get the prediction of game (will return None if not enough data is
+available).  For the full details of the response returned, see the
+fixture method.
 
 ```python
->>> widget.outcome_probability('Arsenal', 'Stoke')
+>>> response = widget.fixture('Arsenal', 'Stoke')
 ```
 
 Get a list of all the teams from the dataset.
