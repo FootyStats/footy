@@ -18,9 +18,8 @@ class Footy:
     """
     Main class of the footy module.
 
-    Please note that methods that accept a team name parameter that the team
-    name must match exactly (including case sensitivity).  Use the
-    get_teams method to get a list of valid team names.
+    Please note that methods that accept a team name parameter that the team name must match exactly (including case
+    sensitivity).  Use the get_teams method to get a list of valid team names.
 
     Examples
     --------
@@ -146,14 +145,12 @@ class Footy:
         Parameters
         ----------
         goals : float
-             The average number of goals scored by any team playing at home
-             over the duration of the season.
+             The average number of goals scored by any team playing at home over the duration of the season.
 
         Returns
         -------
         float
-             The average number of goals scored by any team playing at home
-             over the duration of the season.
+             The average number of goals scored by any team playing at home over the duration of the season.
         """
         if goals is not None:
             self._average_goals_scored_by_a_home_team = goals
@@ -166,14 +163,12 @@ class Footy:
         Parameters
         ----------
         goals : float
-             The average number of goals scored by any team playing away
-             over the duration of the season.
+             The average number of goals scored by any team playing away over the duration of the season.
 
         Returns
         -------
         float
-             The average number of goals scored by any team playing away
-             over the duration of the season.
+             The average number of goals scored by any team playing away over the duration of the season.
         """
         if goals is not None:
             self._average_goals_scored_by_an_away_team = goals
@@ -186,26 +181,22 @@ class Footy:
         Parameters
         ----------
         y_true : np.array
-            What actually happened.  Should be a value for each predicted
-            category (e.g. home win, score draw or away win).
+            What actually happened.  Should be a value for each predicted category (e.g. home win, score draw or away
+            win).
         y_prob : np.array
-            The predicted probability of each category.  The number of
-            elements in this parameter must match the number of parameters
-            given in y_true. The sum of all the values of this list cannot
-            exceed 1.0.
+            The predicted probability of each category.  The number of elements in this parameter must match the number
+            of parameters given in y_true. The sum of all the values of this list cannot exceed 1.0.
 
         Returns
         -------
         float
-            A value between 0.0 and 2.0 where a value closer to 0.0 indicates
-            that a predicted probability was more accurate that a value
-            closer to 2.0.  This result will be rounded to the nearest two
-            decimal places.
+            A value between 0.0 and 2.0 where a value closer to 0.0 indicates that a predicted probability was more
+            accurate that a value closer to 2.0.  This result will be rounded to the nearest two decimal places.
 
         References
         ----------
-        Brier, G.W. (1950): "Verification of Forecasts Expressed in Terms of
-        Probability", Monthly Weather Review, volume 79, number 1.
+        Brier, G.W. (1950): "Verification of Forecasts Expressed in Terms of Probability", Monthly Weather Review,
+        volume 79, number 1.
 
         Examples
         --------
@@ -239,8 +230,7 @@ class Footy:
         """
         Return the object data as a Pandas dataframe.
 
-        The dataframe will be sorted on the number of points and goal
-        difference.
+        The dataframe will be sorted on the number of points and goal difference.
 
         Returns
         -------
@@ -444,18 +434,16 @@ class Footy:
         Returns
         -------
         dict
-            The elements of the returned dictionary are goals_for (the number
-            of goals scored), goals_against (the number of goals conceded),
-            home_games (number of games played at home), away_games (number of
-            games played away).
+            The elements of the returned dictionary are goals_for (the number of goals scored), goals_against (the
+            number of goals conceded), home_games (number of games played at home), away_games (number of games played
+            away).
 
         Examples
         --------
         Get the data specific to Arsenal.
 
         >>> widget.get_team('Arsenal')
-        {'goals_for': 64, 'goals_against': 36, 'home_games': 18,
-         'away_games': 19}
+        {'goals_for': 64, 'goals_against': 36, 'home_games': 18, 'away_games': 19}
         """
         data = self.data()
         return data[team_name]
@@ -501,9 +489,8 @@ class Footy:
         """
         Get the number of goals conceded.
 
-        If the team name is provided then the number of goals conceded by
-        that team is returned.  Otherwise the number of goals conceded by
-        all teams is returned.
+        If the team name is provided then the number of goals conceded by that team is returned.  Otherwise the number
+        of goals conceded by all teams is returned.
 
         Parameters
         ----------
@@ -537,8 +524,7 @@ class Footy:
         """
         Get the number of goals scored.
 
-        If team_name is provided, the number of goals scored by
-        that team is returned.  If not, the average number of
+        If team_name is provided, the number of goals scored by that team is returned.  If not, the average number of
         goals scored by all teams is returned.
 
         Parameters
