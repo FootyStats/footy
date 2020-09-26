@@ -28,7 +28,7 @@ The `xz` package is required to avoid the following message when using the
 
 ```
 UserWarning: Could not import the lzma module. Your installed Python is
-incomplete. Attempting to use lzma compression will result in a RuntimeError. 
+incomplete. Attempting to use lzma compression will result in a RuntimeError.
 ```
 
 Then follow the links above to ensure that your virtual environment is setup
@@ -39,3 +39,23 @@ Once that has been setup, install the Python packages required with:
 ```
 pip install -r requirements.txt
 ```
+
+To be able to integrate with the www.football-data.org you will need to obtain
+an API token from https://www.football-data.org/client/register and set that
+value in an environment variable called `FOOTBALL_DATA_API`.  To avoid this
+inadvertently ending up in Git, do the following:
+
+```shell
+mkdir -p .env
+echo "export FOOTBALL_DATA_API='PLACE_YOUR_TOKEN_HERE'" \
+  > .env/football-data.sh
+```
+
+Then to use the environment variable, use the following command:
+
+```shell
+source .env/football-data.sh
+```
+
+The `.env` directory has been added to `.gitignore` in this project so this
+will not appear when running `git status`.
