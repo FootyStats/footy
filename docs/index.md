@@ -508,3 +508,74 @@ The notation of a score draw outcome.
 * **Type**
 
     List of int
+
+
+competition.py:  The Competition class of the footy package.
+
+
+### class footy.competition.Competition(football_data_api)
+The competition class.
+
+### Examples
+
+```python
+>>> import football_data_api
+>>>
+>>> football_data = football_data_api.CompetitionData()
+>>> football_data.competition = 'premier league'
+>>> competition = Competition(football_data)
+```
+
+
+#### get_model_data()
+Return the modelled data as a dictionary.
+
+
+* **Returns**
+
+    
+    * *dict*
+
+
+    * *The data.*
+
+
+
+
+#### set_result(home_team_name, home_team_goals, away_team_name, away_team_goals)
+Post result processing to aggregate Briers scores.
+
+
+* **Parameters**
+
+    
+    * **home_team_name** (*str*) – The name of the home team.
+
+
+    * **home_team_goals** (*int*) – The number of goals scored by the home team.
+
+
+    * **away_team_name** (*str*) – The name of the away team.
+
+
+    * **away_team_goals** – The number of goals scored by the away team.
+
+
+
+#### upcoming_fixtures()
+Return the upcoming fixtures for this competition.
+
+The plan is to ensure that at least each team in the upcoming games in the league are returned with
+the data (if available) on the game probabilities.
+
+
+* **Returns**
+
+    The details of the fixture (home_team_name, away_team_name, utc_timestamp) and if available (depending
+    on if enough games have been played) the details from the footy.fixture method.
+
+
+
+* **Return type**
+
+    List of dict

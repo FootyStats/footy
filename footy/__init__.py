@@ -268,11 +268,15 @@ class Footy:
         df = df.sort_values(
             [
                 'points',
-                'goal_difference'
+                'goal_difference',
+                'goals_for',
+                'goals_against'
             ],
             ascending=[
                 False,
-                False
+                False,
+                False,
+                True
             ]
         )
         df = df.reset_index(drop=True)

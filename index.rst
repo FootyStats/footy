@@ -8,5 +8,8 @@ Welcome to Footy's documentation!
 
 Footy
 =====
+
 .. automodule:: footy
+   :members:
+.. automodule:: footy.competition
    :members:
