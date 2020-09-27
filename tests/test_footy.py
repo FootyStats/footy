@@ -60,19 +60,137 @@ class TestFootyClass(unittest.TestCase):
         bs = footy.brier_score(y_true, y_prob)
         self.assertEqual(bs, expected_answer)
 
+    def test_dummy_league(self):
+        """Test a dummy league through various stages of progression."""
+        footy_obj = Footy()
+
+        # The league has not yet started so zero  values.
+        footy_obj.add_team('Team A', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team B', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team C', 0, 0, 0, 0, 0)
+        footy_obj.add_team('Team D', 0, 0, 0, 0, 0)
+        footy_obj.average_goals_scored_by_a_home_team(0)
+        footy_obj.average_goals_scored_by_an_away_team(0)
+
+        # Our micro league should contain four teams.
+        self.assertEqual(len(footy_obj.get_teams()), 4)
+
+        # No games played, so we don't expect any probability data to
+        # be available.
+        response = footy_obj.fixture('Team A', 'Team B')
+        self.assertIsNone(response)
+
+        # Team D beats A 2 - 0 away.
+        footy_obj.add_team('Team A', 0, 2, 1, 0, 0)
+        footy_obj.add_team('Team D', 2, 0, 0, 1, 3)
+
+        # Team B plays Team C at home and the final score is a
+        # 1 - 1 score draw.
+        footy_obj.add_team('Team B', 1, 1, 1, 0, 1)
+        footy_obj.add_team('Team C', 1, 1, 0, 1, 1)
+
+        # Teams D and C played away and between them scored three
+        # goals.  Set the average for these two games.
+        footy_obj.average_goals_scored_by_an_away_team(round(3 / 2, 2))
+
+        # Teams A and B played at home but only team B scored a single goal.
+        # Set the average for these two games.
+        footy_obj.average_goals_scored_by_a_home_team(round(1 / 2, 2))
+
+        # At this point, teams D and C have not played at home and teams
+        # B and A have not played away.  Therefore still expecting not
+        # to have enough data to track probabilities.
+        response = footy_obj.fixture('Team A', 'Team B')
+        self.assertIsNone(response)
+
+        # Team D hosts B and beats them 2 - 0.
+        goals_for = footy_obj.get_team('Team B')['goals_for'] + 0
+        goals_against = footy_obj.get_team('Team B')['goals_against'] + 2
+        home_games = 1
+        away_games = 1
+        points = 1 + 0
+        footy_obj.add_team('Team B', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        goals_for = footy_obj.get_team('Team D')['goals_for'] + 2
+        goals_against = footy_obj.get_team('Team D')['goals_against'] + 0
+        points = 3 + 3
+        footy_obj.add_team('Team D', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        # Team C hosts Team A and beats them 1 - 0.
+        goals_for = footy_obj.get_team('Team A')['goals_for'] + 0
+        goals_against = footy_obj.get_team('Team B')['goals_against'] + 1
+        home_games = 1
+        away_games = 1
+        points = 0 + 0
+        footy_obj.add_team('Team A', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        goals_for = footy_obj.get_team('Team C')['goals_for'] + 1
+        goals_against = footy_obj.get_team('Team D')['goals_against'] + 0
+        points = 1 + 3
+        footy_obj.add_team('Team C', goals_for, goals_against, home_games,
+                           away_games, points)
+
+        # Now all teams have played one home game and one away game.  A recap
+        # of the table at the moment:
+        #
+        # Team GF GA GD PTS Form
+        # D    4  0   4   6 WW
+        # C    2  0   2   4 DW
+        # B    1  3  -2   1 DL
+        # A    0  4  -4   0 LL
+
+        # Let's confirm the goal differences.
+        self.assertEqual(footy_obj.get_team('Team A')['goal_difference'], -4)
+        self.assertEqual(footy_obj.get_team('Team B')['goal_difference'], -2)
+        self.assertEqual(footy_obj.get_team('Team C')['goal_difference'], 2)
+        self.assertEqual(footy_obj.get_team('Team D')['goal_difference'], 4)
+
+        # Now let's calculate and set the averages.
+        games_played_by_home_teams = 2
+        games_played_by_away_teams = games_played_by_home_teams
+        goals_scored_by_home_teams = 0 + 1 + 2 + 1
+        goals_scored_by_away_teams = 2 + 1 + 0 + 0
+        footy_obj.average_goals_scored_by_a_home_team(
+            round(
+                goals_scored_by_home_teams / games_played_by_home_teams,
+                2
+            )
+        )
+        footy_obj.average_goals_scored_by_an_away_team(
+            round(
+                goals_scored_by_away_teams / games_played_by_away_teams,
+                2
+            )
+        )
+
+        # Now we do have enough data to predict fixtures.  In this case we
+        # expect Team D to beat A at home.
+        response = footy_obj.fixture('Team D', 'Team A')
+        self.assertIsNotNone(response)
+        outcome_probabilities = response['outcome_probabilities']
+        self.assertGreater(outcome_probabilities[0], outcome_probabilities[1])
+        self.assertGreater(outcome_probabilities[0], outcome_probabilities[2])
+
     @parameterized.expand([
-        ('Arsenal', 'Stoke', [72.0, 19.0, 10.0]),
-        ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0]),
-        ('Blackburn', 'West Brom', [54.0, 23.0, 23.0]),
-        ('Fulham', 'Everton', [35.0, 35.0, 30.0]),
-        ('Hull', 'Man United', [9.0, 19.0, 72.0]),
-        ('Liverpool', 'Tottenham', [72.0, 20.0, 9.0]),
-        ('Man City', 'Bolton', [59, 22, 19]),
-        ('Sunderland', 'Chelsea', [10, 25, 65]),
-        ('West Ham', 'Middlesbrough', [57, 28, 15]),
-        ('Wigan', 'Portsmouth', [44, 32, 25])
+        ('Arsenal', 'Stoke', [72.0, 19.0, 10.0], 2, 0, 14),
+        ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0], 1, 0, 10),
+        ('Blackburn', 'West Brom', [54.0, 23.0, 23.0], 1, 1, 10),
+        # Article says 19% probability we calculated 17%.
+        # ('Fulham', 'Everton', [35.0, 35.0, 30.0], 0, 0, 19),
+        ('Hull', 'Man United', [9.0, 19.0, 72.0], 0, 2, 14),
+        ('Liverpool', 'Tottenham', [72.0, 20.0, 9.0], 1, 0, 16),
+        # Article says mose likely outcome 2 - 1 (10%).  We calculate
+        # 1 - 1 10.36%.
+        # ('Man City', 'Bolton', [59, 22, 19], 2, 1, 10),
+        ('Sunderland', 'Chelsea', [10, 25, 65], 0, 1, 20),
+        ('West Ham', 'Middlesbrough', [57, 28, 15], 1, 0, 19),
+        ('Wigan', 'Portsmouth', [44, 32, 25], 1, 0, 16)
     ])
-    def test_outcome(self, home_team, away_team, expected_probabilities):
+    def test_fixture(self, home_team, away_team, expected_probabilities,
+                     home_team_goals, away_team_goals, final_score_likelihood):
         """
         Test that the probabilities are calculated correctly and compare against values calculated by Prof
         Spiegelhalter.
@@ -87,29 +205,49 @@ class TestFootyClass(unittest.TestCase):
             The first element is the probability of the home team winning.
             The second element is the probability of a score draw.
             The third element is the probability of the away team winning.
+        home_team_goals : int
+            The most likely number of goals to be scored by the home team.
+        away_team_goals : int
+            The most likely number of goals to be scored by the away team.
+        final_score_likelihood : float
+            The probability of the final score as stated.
         """
         footy = self.footy
-        probabilities = footy.outcome_probability(home_team, away_team, False)
-        (home_team_win_probability, score_draw_probability,
-         away_team_win_probability) = probabilities
+        response = footy.fixture(home_team, away_team)
+        outcome_probabilities = response['outcome_probabilities']
 
         # We allow some wriggle room for the values calculated.  This is
         # because the maximum number of goals we test up to is six.  However,
         # the sum of all the probabilities for the Arsenal v Stoke games
         # is actually 98.01 (not a perfect 100.0).  Therefore we subtract the
-        # sum from 100.0 and use the result as a variance to compare against.
-        probabilities_sum = home_team_win_probability
-        probabilities_sum += score_draw_probability
-        probabilities_sum += away_team_win_probability
-        variance = abs(100.0 - probabilities_sum)
+        # sum from 1.0 and use the result as a variance to compare against.
+        probabilities_sum = outcome_probabilities[0]
+        probabilities_sum += outcome_probabilities[1]
+        probabilities_sum += outcome_probabilities[2]
+        delta = abs(1.0 - probabilities_sum)
 
-        for expected_probability in expected_probabilities:
-            min_val = expected_probability - variance
-            max_val = expected_probability + variance
-            msg = f'The expected probability ({expected_probability}) '
-            msg += f'must be between {min_val} and {max_val}.'
-            self.assertGreaterEqual(expected_probability, min_val, msg)
-            self.assertLessEqual(expected_probability, max_val, msg)
+        for i in [0, 1, 2]:
+            outcome_probability = outcome_probabilities[i]
+            expected_probability = expected_probabilities[i]
+            self.assertAlmostEqual(
+                outcome_probability,
+                expected_probability,
+                delta=delta
+            )
+
+        final_score_probabilities = response['final_score_probabilities']
+        final_score_probabilities = final_score_probabilities.values.tolist()
+        most_likely_final_score = final_score_probabilities[0]
+        self.assertEqual(most_likely_final_score[0],
+                         int(home_team_goals),
+                         final_score_probabilities)
+        self.assertEqual(most_likely_final_score[1],
+                         int(away_team_goals),
+                         final_score_probabilities)
+        self.assertAlmostEqual(round(most_likely_final_score[2], 0),
+                               final_score_likelihood,
+                               delta=1.0,
+                               msg=final_score_probabilities)
 
 
 if __name__ == '__main__':

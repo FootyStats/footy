@@ -42,7 +42,8 @@ sensitivity).  Use the get_teams method to get a list of valid team names.
 >>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
 ```
 
-Get the data contained by the object as a Pandas dataframe.
+Get the data contained by the object as a Pandas dataframe (sorted by
+league position and goal difference).
 
 ```python
 >>> widget.dataframe()
@@ -53,13 +54,14 @@ Setting the number of average goals scored.
 ```python
 >>> widget.average_goals_scored_by_a_home_team(1.36)
 >>> widget.average_goals_scored_by_an_away_team(1.06)
->>> widget.score_probability('Arsenal', 'Stoke').head()
 ```
 
-Plot the outcome probability
+Now get the prediction of game (will return None if not enough data is
+available).  For the full details of the response returned, see the
+fixture method.
 
 ```python
->>> widget.outcome_probability('Arsenal', 'Stoke')
+>>> response = widget.fixture('Arsenal', 'Stoke')
 ```
 
 Get a list of all the teams from the dataset.
@@ -107,7 +109,8 @@ Get the attack strength of a team.
 
 * **Returns**
 
-    The attack strength of the team.
+    The attack strength of the team.  If there is not enough data to
+    calculate this correctly, return None.
 
 
 
@@ -261,13 +264,69 @@ Get the defence factor for a team.
 
 * **Returns**
 
-    The defence factor for a specific team.
+    The defence factor for a specific team.  If there is not enough
+    data to calculate correctly, return None.
 
 
 
 * **Return type**
 
     float
+
+
+
+* **Raises**
+
+    **KeyError** – When a team name is provided that is not in the dataset.
+
+
+
+#### fixture(home_team, away_team)
+Calculate the probabilities of a fixture between two teams.
+
+
+* **Parameters**
+
+    
+    * **home_team** (*str*) – The name of the home team.
+
+
+    * **away_team** (*str*) – The name of the away team.
+
+
+
+* **Returns**
+
+    If there is enough data for any probabilities to be calculated,
+    the dictionary will contain elements called:
+
+    outcome_probabilities: A list of three floats indicating (with
+    values between 0.0 and 1.0) the probability of a home win, a
+    score draw or an away win respectively.
+
+    home_team_goals_probability: A list of seven floats indicating
+    (with values between 0.0 and 1.0) the probability of the home team
+    scoring between 0 and 6 goals.
+
+    away_team_goals_probability: A list of seven floats indicating
+    (with values between 0.0 and 1.0) the probability of the away team
+    scoring between 0 and 6 goals.
+
+    final_score_probabilities:  A Pandas DataFrame with each row
+    containing the number of goals scored by the home team, the number
+    of goals scored by the away team and the probability of that final
+    score.  The table will be sorted with the most probable results
+    descending.
+
+    If there is not enough data to calculate the probabilities, the
+    dictionary returned by this function will be empty.
+
+
+
+
+* **Return type**
+
+    dict
 
 
 
@@ -413,76 +472,6 @@ goals scored by all teams is returned.
 * **Return type**
 
     int
-
-
-
-* **Raises**
-
-    **KeyError** – When a team name is provided that is not in the dataset.
-
-
-
-#### outcome_probability(home_team, away_team, show_plot=True)
-Return the probability of a home win, a draw or an away win.
-
-
-* **Parameters**
-
-    
-    * **home_team** (*str*) – The name of the home team.
-
-
-    * **away_team** (*str*) – The name of the away team.
-
-
-    * **show_plot** (*bool**, **optional*) – Should a plot be shown (default is true).
-
-
-
-* **Returns**
-
-    (home win probability, draw probability, away win probability).
-
-
-
-* **Return type**
-
-    tuple
-
-
-
-* **Raises**
-
-    **KeyError** – When a team name is provided that is not in the dataset.
-
-
-
-#### score_probability(home_team, away_team, show_plots=True)
-Return a dataframe of the score probability.
-
-
-* **Parameters**
-
-    
-    * **home_team** (*str*) – The name of the home team.
-
-
-    * **away_team** (*str*) – The name of the away team.
-
-
-    * **show_plots** (*bool**, **optional*) – Should the probability be plotted (default True).
-
-
-
-* **Returns**
-
-    The probability of the games score.
-
-
-
-* **Return type**
-
-    pandas.DataFrame
 
 
 
