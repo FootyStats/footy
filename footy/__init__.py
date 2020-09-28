@@ -6,6 +6,8 @@ from scipy.stats import poisson
 from sklearn.metrics import brier_score_loss
 
 # Set match outcome constants.
+from footy.MissingDataException import MissingDataException
+
 OUTCOME_HOME_WIN = [1, 0, 0]
 """List of int : The notation of a home win outcome."""
 OUTCOME_SCORE_DRAW = [0, 1, 0]
@@ -53,8 +55,8 @@ class Footy:
 
     Setting the number of average goals scored.
 
-    >>> widget.average_goals_scored_by_a_home_team(1.36)
-    >>> widget.average_goals_scored_by_an_away_team(1.06)
+    >>> widget.average_goals_scored_by_a_home_team = 1.36
+    >>> widget.average_goals_scored_by_an_away_team = 1.06
 
     Now get the prediction of game (will return None if not enough data is
     available).  For the full details of the response returned, see the
@@ -70,8 +72,8 @@ class Footy:
     def __init__(self):
         """Construct a Footy object."""
         self._data = {}
-        self._average_goals_scored_by_a_home_team = (-1)
-        self._average_goals_scored_by_an_away_team = (-1)
+        self._average_goals_scored_by_a_home_team = None
+        self._average_goals_scored_by_an_away_team = None
 
     def add_team(self,
                  team_name,
@@ -140,41 +142,21 @@ class Footy:
 
         return round(attack_strength, 2)
 
-    def average_goals_scored_by_a_home_team(self, goals=None):
-        """
-        Get or set the average goals scored by a home team.
-
-        Parameters
-        ----------
-        goals : float
-             The average number of goals scored by any team playing at home over the duration of the season.
-
-        Returns
-        -------
-        float
-             The average number of goals scored by any team playing at home over the duration of the season.
-        """
-        if goals is not None:
-            self._average_goals_scored_by_a_home_team = goals
+    @property
+    def average_goals_scored_by_a_home_team(self):
         return self._average_goals_scored_by_a_home_team
 
-    def average_goals_scored_by_an_away_team(self, goals=None):
-        """
-        Get or set the average goals scored by an away team.
+    @average_goals_scored_by_a_home_team.setter
+    def average_goals_scored_by_a_home_team(self, average_goals_scored_by_a_home_team):
+        self._average_goals_scored_by_a_home_team = average_goals_scored_by_a_home_team
 
-        Parameters
-        ----------
-        goals : float
-             The average number of goals scored by any team playing away over the duration of the season.
-
-        Returns
-        -------
-        float
-             The average number of goals scored by any team playing away over the duration of the season.
-        """
-        if goals is not None:
-            self._average_goals_scored_by_an_away_team = goals
+    @property
+    def average_goals_scored_by_an_away_team(self):
         return self._average_goals_scored_by_an_away_team
+
+    @average_goals_scored_by_an_away_team.setter
+    def average_goals_scored_by_an_away_team(self, average_goals_scored_by_an_away_team):
+        self._average_goals_scored_by_an_away_team = average_goals_scored_by_an_away_team
 
     def brier_score(self, y_true, y_prob):
         """
@@ -370,8 +352,15 @@ class Footy:
         if 0 in away_games:
             return None
 
-        home_expected_goals = self.average_goals_scored_by_a_home_team()
-        away_expected_goals = self.average_goals_scored_by_an_away_team()
+        # Check that average goals for home and away team has been set as this is mandatory.
+        if self.average_goals_scored_by_a_home_team is None:
+            raise MissingDataException("average_goals_scored_by_a_home_team is None")
+
+        if self.average_goals_scored_by_an_away_team is None:
+            raise MissingDataException("average_goals_scored_by_an_away_team is None")
+
+        home_expected_goals = self.average_goals_scored_by_a_home_team
+        away_expected_goals = self.average_goals_scored_by_an_away_team
         home_expected_goals *= self.attack_strength(home_team)
         home_expected_goals *= self.defence_factor(away_team)
         home_expected_goals = round(home_expected_goals, 2)
