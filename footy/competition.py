@@ -227,7 +227,7 @@ class Competition:
         teams = self._footy.get_teams()
 
         for match in matches:
-            if match['status'] != 'SCHEDULED':
+            if match['status'] == 'FINISHED':
                 continue
 
             utc_timestamp = match['utcDate']
