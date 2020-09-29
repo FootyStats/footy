@@ -9,6 +9,12 @@ class Team:
         self._away_games = away_games
         self._points = points
 
+    def __str__(self) -> str:
+        return '%s(%s)' % (
+            type(self).__name__,
+            ', '.join('%s=%s' % item for item in vars(self).items())
+        )
+
     @property
     def team_name(self):
         return self.__team_name

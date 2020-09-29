@@ -81,11 +81,12 @@ class Footy:
     @dispatch(str, int, int, int, int, int)
     def add_team(self, team_name, goals_for, goals_against, home_games, away_games, points):
         team = Team(team_name, goals_for, goals_against, home_games, away_games, points)
-        self.data[team_name] = team
+
+        self.data()[team_name] = team
 
     @dispatch(Team)
     def add_team(self, team):
-        self.data[team.team_name] = team
+        self.data()[team.team_name] = team
 
     def attack_strength(self, team_name):
         """

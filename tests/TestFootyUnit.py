@@ -4,6 +4,7 @@ import numpy as np
 from parameterized import parameterized
 
 from footy import Footy, MissingDataException
+from footy.domain.Team import Team
 
 
 class TestFootyUnit(unittest.TestCase):
@@ -34,18 +35,21 @@ class TestFootyUnit(unittest.TestCase):
                                'goal_difference': -14,
                                'points': 45}}
 
+        cls.EVERTON_STR_OBJ = 'Team(_Team__team_name=Everton, _goals_for=53, _goals_against=37, _home_games=19,' \
+                              ' _away_games=18, _points=60)'
+
     def add_team_to_footy(self, team_name, footy=None):
         # helper method to add team by name from constants
         if footy is None:
             footy = Footy()
 
-        footy.add_team(team_name,
+        footy.add_team(Team(team_name,
                        self.TEAMS[team_name]['goals_for'],
                        self.TEAMS[team_name]['goals_against'],
                        self.TEAMS[team_name]['home_games'],
                        self.TEAMS[team_name]['away_games'],
-                       self.TEAMS[team_name]['points']
-                       )
+                       self.TEAMS[team_name]['points']))
+
         return footy
 
     def footy_under_test_producer(self):
@@ -71,15 +75,40 @@ class TestFootyUnit(unittest.TestCase):
         footy.average_goals_scored_by_an_away_team = self.AVERAGE_GOALS_SCORED_BY_AN_AWAY_TEAM
         self.assertEqual(footy.average_goals_scored_by_an_away_team, self.AVERAGE_GOALS_SCORED_BY_AN_AWAY_TEAM)
 
-    def test_returns_team_when_added(self):
-        team = 'Everton'
+    def test_returns_team_when_added_by_team(self):
+        team_name = 'Everton'
+        footy = Footy()
 
-        footy = self.add_team_to_footy(team)
-        response_stats = footy.get_team(team)
+        footy.add_team(team_name,
+                       self.TEAMS[team_name]['goals_for'],
+                       self.TEAMS[team_name]['goals_against'],
+                       self.TEAMS[team_name]['home_games'],
+                       self.TEAMS[team_name]['away_games'],
+                       self.TEAMS[team_name]['points']
+                       )
+        response_team = footy.get_team(team_name)
         response_teams = footy.get_teams()
 
-        self.assertEqual(self.TEAMS[team], response_stats)
-        self.assertTrue(response_teams.__contains__(team))
+        self.assertEqual(self.EVERTON_STR_OBJ, str(response_team))
+        self.assertTrue(response_teams.__contains__(team_name))
+
+    def test_returns_team_when_added_by_data(self):
+        team_name = 'Everton'
+        footy = Footy()
+
+        team = Team(team_name,
+                    self.TEAMS[team_name]['goals_for'],
+                    self.TEAMS[team_name]['goals_against'],
+                    self.TEAMS[team_name]['home_games'],
+                    self.TEAMS[team_name]['away_games'],
+                    self.TEAMS[team_name]['points'])
+        footy.add_team(team)
+
+        response_team = footy.get_team(team_name)
+        response_teams = footy.get_teams()
+
+        self.assertEqual(self.EVERTON_STR_OBJ, str(response_team))
+        self.assertTrue(response_teams.__contains__(team_name))
 
     @parameterized.expand([
         ([1, 0, 0], [100.0, 0.0, 0.0], 0.0),
@@ -147,6 +176,7 @@ class TestFootyUnit(unittest.TestCase):
         self.assertEqual(int(final_score_probabilities[1]), away_team_goals, final_score_probabilities)
         self.assertAlmostEqual(round(final_score_probabilities[2], 0), final_score_likelihood,
                                delta=1.0, msg=final_score_probabilities)
+
 
 if __name__ == '__main__':
     unittest.main()

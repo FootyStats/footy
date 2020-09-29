@@ -47,5 +47,6 @@ class TestTeam(unittest.TestCase):
         team.goals_against += 10
         self.assertEqual(team.goal_difference, self.__GOAL_DIFFERENCE - 10)
 
+
 if __name__ == '__main__':
     unittest.main()
