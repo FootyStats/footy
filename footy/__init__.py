@@ -4,8 +4,10 @@ import pandas as pd
 
 from scipy.stats import poisson
 from sklearn.metrics import brier_score_loss
+from multipledispatch import dispatch
 
 # Set match outcome constants.
+from footy.domain.Team import Team
 from footy.exception.MissingDataException import MissingDataException
 
 OUTCOME_HOME_WIN = [1, 0, 0]
@@ -75,42 +77,15 @@ class Footy:
         self._average_goals_scored_by_a_home_team = None
         self._average_goals_scored_by_an_away_team = None
 
-    def add_team(self,
-                 team_name,
-                 goals_for,
-                 goals_against,
-                 home_games,
-                 away_games,
-                 points):
-        """
-        Add a team to the table.
+    # Overload add_team for backwards compatibility
+    @dispatch(str, int, int, int, int, int)
+    def add_team(self, team_name, goals_for, goals_against, home_games, away_games, points):
+        team = Team(team_name, goals_for, goals_against, home_games, away_games, points)
+        self.data[team_name] = team
 
-        Parameters
-        ----------
-        team_name : str
-            The name of the team to add.
-        goals_for : int
-            The number of goals scored by the team.
-        goals_against : int
-            The number of goals conceded by the team.
-        home_games : int
-            The number of home games played by the team.
-        away_games : int
-            The number of away games played by the team.
-        points : int
-            The number of points in the table that the team has.
-        """
-        data = self.data()
-        team_stats = {
-            'goals_for': goals_for,
-            'goals_against': goals_against,
-            'home_games': home_games,
-            'away_games': away_games,
-            'goal_difference': (goals_for - goals_against),
-            'points': points
-        }
-        data[team_name] = team_stats
-        self.data(data)
+    @dispatch(Team)
+    def add_team(self, team):
+        self.data[team.team_name] = team
 
     def attack_strength(self, team_name):
         """

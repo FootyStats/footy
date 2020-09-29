@@ -53,5 +53,6 @@ class Team:
     def points(self, points):
         self._points = points
 
+    @property
     def goal_difference(self):
         return self.goals_for - self.goals_against
