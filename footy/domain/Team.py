@@ -8,6 +8,8 @@ class Team:
         self._home_games = home_games
         self._away_games = away_games
         self._points = points
+        self._goal_difference = 0
+        self.recalculate_goal_difference()
 
     def __str__(self) -> str:
         return '%s(%s)' % (
@@ -62,3 +64,6 @@ class Team:
     @property
     def goal_difference(self):
         return self.goals_for - self.goals_against
+
+    def recalculate_goal_difference(self):
+        self._goal_difference = self.goals_for - self.goals_against

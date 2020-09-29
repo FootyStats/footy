@@ -203,7 +203,7 @@ class Footy:
         defence_factors = []
 
         for team_name in data.keys():
-            team_dict = data[team_name]
+            team_dict = data[team_name].__dict__
             attack_strength = self.attack_strength(team_name)
             attack_strengths.append(attack_strength)
             defence_factor = self.defence_factor(team_name)
@@ -225,8 +225,8 @@ class Footy:
         df['defence_factor'] = defence_factors
         df = df.sort_values(
             [
-                'points',
-                'goal_difference'
+                '_points',
+                '_goal_difference'
             ],
             ascending=[
                 False,
@@ -315,7 +315,7 @@ class Footy:
         # If the check fails, return None as we do not have enough data
         # to calculate probabilities.
         df = self.dataframe()
-        home_games = df['home_games'].values
+        home_games = df['_home_games'].values
 
         if 0 in home_games:
             return None
@@ -323,7 +323,7 @@ class Footy:
         # Check that all teams have played more than zero away games.
         # If the check fails, return None as we do not have enough data
         # to calculate probabilities.
-        away_games = df['away_games'].values
+        away_games = df['_away_games'].values
 
         if 0 in away_games:
             return None
@@ -477,13 +477,13 @@ class Footy:
         data = self.data()
 
         if team_name:
-            goals_conceded_by_team = data[team_name]['goals_against']
+            goals_conceded_by_team = data[team_name].goals_against
             return goals_conceded_by_team
         else:
             goals_conceded = 0
 
             for team_name in data.keys():
-                goals_conceded += data[team_name]['goals_against']
+                goals_conceded += data[team_name].goals_against
 
             return int(round(goals_conceded / len(data.keys())))
 
@@ -512,12 +512,12 @@ class Footy:
         data = self.data()
 
         if team_name:
-            goals_scored_by_team = data[team_name]['goals_for']
+            goals_scored_by_team = data[team_name].goals_for
             return goals_scored_by_team
         else:
             goals_for = 0
 
             for team_name in data.keys():
-                goals_for += data[team_name]['goals_for']
+                goals_for += data[team_name].goals_for
 
             return int(round(goals_for / len(data.keys())))

@@ -36,7 +36,7 @@ class TestFootyUnit(unittest.TestCase):
                                'points': 45}}
 
         cls.EVERTON_STR_OBJ = 'Team(_Team__team_name=Everton, _goals_for=53, _goals_against=37, _home_games=19,' \
-                              ' _away_games=18, _points=60)'
+                              ' _away_games=18, _points=60, _goal_difference=16)'
 
     def add_team_to_footy(self, team_name, footy=None):
         # helper method to add team by name from constants
