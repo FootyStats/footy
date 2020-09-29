@@ -7,13 +7,15 @@ class League:
         self._average_goals_scored_by_a_home_team = average_goals_scored_by_a_home_team
         self._average_goals_scored_by_an_away_team = average_goals_scored_by_an_away_team
 
+    # TODO: Add methods for add_team and get_team
+
     @property
     def league_name(self):
         return self.__league_name
 
     @property
     def teams(self):
-        return self.teams
+        return self._teams
 
     @teams.setter
     def teams(self, teams):
@@ -61,15 +63,10 @@ class League:
         """
 
         if team_name:
-            goals_conceded_by_team = self.teams[team_name].goals_against
+            goals_conceded_by_team = self._teams[team_name].goals_against
             return goals_conceded_by_team
         else:
-            goals_conceded = 0
-
-            for team_name in self.teams.keys():
-                goals_conceded += self.teams[team_name].goals_against
-
-            return int(round(goals_conceded / len(self.teams.keys())))
+            return int(round(sum(team.goals_against for team in self._teams.values()) / len(self._teams.keys())))
 
     def goals_scored(self, team_name=None):
         """
@@ -95,15 +92,10 @@ class League:
         """
 
         if team_name:
-            goals_scored_by_team = self.teams[team_name].goals_for
+            goals_scored_by_team = self._teams[team_name].goals_for
             return goals_scored_by_team
         else:
-            goals_for = 0
-
-            for team_name in self.teams.keys():
-                goals_for += self.teams[team_name].goals_for
-
-            return int(round(goals_for / len(self.teams.keys())))
+            return int(round(sum(team.goals_for for team in self._teams.values()) / len(self._teams.keys())))
 
     def defence_factor(self, team_name):
         """
