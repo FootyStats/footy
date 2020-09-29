@@ -148,10 +148,10 @@ class TestFootyUnit(unittest.TestCase):
 
     def test_fixture_returns_none_when_no_games_played(self):
         footy = Footy()
-        footy.add_team('Team A', 0, 0, 0, 0, 0)
-        footy.add_team('Team B', 0, 0, 0, 0, 0)
+        footy.add_team('domain A', 0, 0, 0, 0, 0)
+        footy.add_team('domain B', 0, 0, 0, 0, 0)
 
-        result = footy.fixture('Team A', 'Team B')
+        result = footy.fixture('domain A', 'domain B')
 
         self.assertIsNone(result)
 
