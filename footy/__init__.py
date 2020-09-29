@@ -6,7 +6,7 @@ from scipy.stats import poisson
 from sklearn.metrics import brier_score_loss
 
 # Set match outcome constants.
-from footy.MissingDataException import MissingDataException
+from footy.exception.MissingDataException import MissingDataException
 
 OUTCOME_HOME_WIN = [1, 0, 0]
 """List of int : The notation of a home win outcome."""
