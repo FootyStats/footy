@@ -1,3 +1,6 @@
+from footy import MissingDataException
+
+
 class League:
 
     def __init__(self, league_name, teams=None, average_goals_scored_by_a_home_team=0,
@@ -61,6 +64,8 @@ class League:
         KeyError
             When a team name is provided that is not in the dataset.
         """
+        if self._teams is None or len(self._teams) == 0:
+            raise MissingDataException("No teams have been configured for this league: " + self.__league_name)
 
         if team_name:
             goals_conceded_by_team = self._teams[team_name].goals_against
@@ -90,6 +95,8 @@ class League:
         KeyError
             When a team name is provided that is not in the dataset.
         """
+        if self._teams is None or len(self._teams) == 0:
+            raise MissingDataException("No teams have been configured for this league: " + self.__league_name)
 
         if team_name:
             goals_scored_by_team = self._teams[team_name].goals_for

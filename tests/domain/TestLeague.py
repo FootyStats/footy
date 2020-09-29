@@ -2,6 +2,7 @@ import unittest
 
 from footy.domain.League import League
 from footy.domain.Team import Team
+from footy import MissingDataException
 
 
 class TestLeague(unittest.TestCase):
@@ -62,6 +63,29 @@ class TestLeague(unittest.TestCase):
         expected = int(round(sum(team.goals_for for team in self.__TEAMS.values()) / len(self.__TEAMS.keys())))
 
         self.assertEqual(expected, result)
+
+    def test_goals_conceded_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.goals_conceded()
+            # Expected Exception not returned
+            self.assertTrue(False)
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    def test_goals_scored_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.goals_scored()
+            # Expected Exception not returned
+            self.assertTrue(False)
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    # TODO: test for goals scored and conceded when supplied team does not exist
+    # TODO: test attack and defence factor
 
 
 if __name__ == '__main__':
