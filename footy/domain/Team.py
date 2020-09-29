@@ -28,6 +28,7 @@ class Team:
     @goals_for.setter
     def goals_for(self, goals_for):
         self._goals_for = goals_for
+        self.recalculate_goal_difference()
 
     @property
     def goals_against(self):
@@ -36,6 +37,7 @@ class Team:
     @goals_against.setter
     def goals_against(self, goals_against):
         self._goals_against = goals_against
+        self.recalculate_goal_difference()
 
     @property
     def home_games(self):
