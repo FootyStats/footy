@@ -69,7 +69,7 @@ class TestLeague(unittest.TestCase):
         try:
             result = league.goals_conceded()
             # Expected Exception not returned
-            self.assertTrue(False)
+            self.assertTrue(False, "should have thrown an exception")
         except MissingDataException as e:
             # Expected exception returned
             self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
@@ -79,13 +79,60 @@ class TestLeague(unittest.TestCase):
         try:
             result = league.goals_scored()
             # Expected Exception not returned
-            self.assertTrue(False)
+            self.assertTrue(False, "should have thrown an exception")
         except MissingDataException as e:
             # Expected exception returned
             self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
 
-    # TODO: test for goals scored and conceded when supplied team does not exist
-    # TODO: test attack and defence factor
+    def test_goals_conceded_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.goals_conceded("invalid")
+        self.assertIsNone(result)
+
+    def test_goals_scored_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.goals_scored("invalid")
+        self.assertIsNone(result)
+
+    def test_attack_strength_returns_expected_value(self):
+        league = self.league_under_test_producer()
+        result = league.attack_strength('Arsenal')
+        self.assertEqual(1.28, result)
+
+    def test_attack_strength_returns_exception_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.attack_strength('Arsenal')
+            # Expected Exception not returned
+            self.assertTrue(False, "should have thrown an exception")
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    def test_attack_strength_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.attack_strength("invalid")
+        self.assertIsNone(result)
+
+    def test_defence_factor_returns_expected_value(self):
+        league = self.league_under_test_producer()
+        result = league.defence_factor('Arsenal')
+        self.assertEqual(0.82, result)
+
+    def test_defence_factor_returns_exception_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.defence_factor('Arsenal')
+            # Expected Exception not returned
+            self.assertTrue(False, "should have thrown an exception")
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    def test_defence_factor_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.defence_factor("invalid")
+        self.assertIsNone(result)
 
 
 if __name__ == '__main__':
