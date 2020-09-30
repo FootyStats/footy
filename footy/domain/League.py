@@ -43,9 +43,6 @@ class League:
         self._average_goals_scored_by_an_away_team = average_goals_scored_by_an_away_team
 
     def goals_conceded(self, team_name=None):
-        # TODO: Should this be an average? It looks like it's all goals for a single Team, but average for the League.
-        # It feels like it should be total for whole league, with an additional method for average goals scored by
-        # team and league
         """
         Get the number of goals conceded.
 
@@ -77,16 +74,13 @@ class League:
             except KeyError:
                 return None
         else:
-            return int(round(sum(team.goals_against for team in self._teams.values()) / len(self._teams.keys())))
+            return sum(team.goals_against for team in self._teams.values())
 
     def goals_scored(self, team_name=None):
-        # TODO: Should this be an average? It looks like it's all goals for a single Team, but average for the League.
-        # It feels like it should be total for whole league, with an additional method for average goals scored by
-        # team and league
         """
         Get the number of goals scored.
 
-        If team_name is provided, the number of goals scored by that team is returned.  If not, the average number of
+        If team_name is provided, the number of goals scored by that team is returned.  If not, the number of
         goals scored by all teams is returned.
 
         Parameters
@@ -114,7 +108,7 @@ class League:
             except KeyError:
                 return None
         else:
-            return int(round(sum(team.goals_for for team in self._teams.values()) / len(self._teams.keys())))
+            return sum(team.goals_for for team in self._teams.values())
 
     def defence_factor(self, team_name):
         """
@@ -136,15 +130,14 @@ class League:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        # TODO This is using total goals for the team and average for the league
         try:
-            team_average_goals_conceded = self.goals_conceded(team_name)
-            league_average_goals_conceded = self.goals_conceded()
+            team_goals_conceded = self.goals_conceded(team_name)
+            league_average_goals_conceded = self.average_goals_conceded()
 
-            if team_average_goals_conceded is None or league_average_goals_conceded is None:
+            if team_goals_conceded is None or league_average_goals_conceded is None:
                 return None
 
-            defence_factor = team_average_goals_conceded
+            defence_factor = team_goals_conceded
             defence_factor /= league_average_goals_conceded
         except ZeroDivisionError:
             return None
@@ -172,15 +165,43 @@ class League:
             When a team name is provided that is not in the dataset.
         """
         try:
-            team_average_goals_scored = self.goals_scored(team_name)
-            league_average_goals_scored = self.goals_scored()
+            team_goals_scored = self.goals_scored(team_name)
+            league_average_goals_scored = self.average_goals_scored()
 
-            if team_average_goals_scored is None or league_average_goals_scored is None:
+            if team_goals_scored is None or league_average_goals_scored is None:
                 return None
 
-            attack_strength = team_average_goals_scored
+            attack_strength = team_goals_scored
             attack_strength /= league_average_goals_scored
         except ZeroDivisionError:
             return None
 
         return round(attack_strength, 2)
+
+    def average_goals_conceded(self, team_name=None):
+        if self._teams is None or len(self._teams) == 0:
+            raise MissingDataException("No teams have been configured for this league: " + self.__league_name)
+
+        if team_name:
+            try:
+                team = self._teams[team_name]
+                goals_conceded_by_team = team.goals_against / (team.home_games + team.away_games)
+                return goals_conceded_by_team
+            except KeyError:
+                return None
+        else:
+            return int(round(sum(team.goals_against for team in self._teams.values()) / len(self._teams.keys())))
+
+    def average_goals_scored(self, team_name=None):
+        if self._teams is None or len(self._teams) == 0:
+            raise MissingDataException("No teams have been configured for this league: " + self.__league_name)
+
+        if team_name:
+            try:
+                team = self._teams[team_name]
+                goals_conceded_by_team = team.goals_for / (team.home_games + team.away_games)
+                return goals_conceded_by_team
+            except KeyError:
+                return None
+        else:
+            return int(round(sum(team.goals_for for team in self._teams.values()) / len(self._teams.keys())))

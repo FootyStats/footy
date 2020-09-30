@@ -46,7 +46,7 @@ class TestLeague(unittest.TestCase):
     def test_goals_conceded_for_league(self):
         league = self.league_under_test_producer()
         result = league.goals_conceded()
-        expected = int(round(sum(team.goals_against for team in self.__TEAMS.values()) / len(self.__TEAMS.keys())))
+        expected = sum(team.goals_against for team in self.__TEAMS.values())
 
         self.assertEqual(expected, result)
 
@@ -57,10 +57,10 @@ class TestLeague(unittest.TestCase):
 
         self.assertEqual(result, self.__TEAMS[team].goals_for)
 
-    def test_goals_conceded_goals_scored_for_league(self):
+    def test_goals_scored_for_league(self):
         league = self.league_under_test_producer()
         result = league.goals_scored()
-        expected = int(round(sum(team.goals_for for team in self.__TEAMS.values()) / len(self.__TEAMS.keys())))
+        expected = sum(team.goals_for for team in self.__TEAMS.values())
 
         self.assertEqual(expected, result)
 
@@ -132,6 +132,64 @@ class TestLeague(unittest.TestCase):
     def test_defence_factor_when_no_matching_team_returns_none(self):
         league = self.league_under_test_producer()
         result = league.defence_factor("invalid")
+        self.assertIsNone(result)
+
+    def test_average_goals_conceded_for_team(self):
+        team = 'Arsenal'
+        league = self.league_under_test_producer()
+        result = league.average_goals_conceded(team)
+
+        self.assertEqual(round(result, 2), 0.97)
+
+    def test_average_goals_conceded_for_league(self):
+        league = self.league_under_test_producer()
+        result = league.average_goals_conceded()
+        expected = int(round(sum(team.goals_against for team in self.__TEAMS.values()) / len(self.__TEAMS.keys())))
+
+        self.assertEqual(expected, result)
+
+    def test_average_goals_conceded_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.average_goals_conceded()
+            # Expected Exception not returned
+            self.assertTrue(False, "should have thrown an exception")
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    def test_average_goals_conceded_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.average_goals_conceded("invalid")
+        self.assertIsNone(result)
+
+    def test_average_goals_scored_for_team(self):
+        team = 'Arsenal'
+        league = self.league_under_test_producer()
+        result = league.average_goals_scored(team)
+
+        self.assertEqual(1.73, round(result, 2))
+
+    def test_average_goals_scored_for_league(self):
+        league = self.league_under_test_producer()
+        result = league.average_goals_scored()
+        expected = int(round(sum(team.goals_for for team in self.__TEAMS.values()) / len(self.__TEAMS.keys())))
+
+        self.assertEqual(expected, result)
+
+    def test_average_goals_scored_when_no_teams(self):
+        league = League("Test League")
+        try:
+            result = league.average_goals_scored()
+            # Expected Exception not returned
+            self.assertTrue(False, "should have thrown an exception")
+        except MissingDataException as e:
+            # Expected exception returned
+            self.assertTrue(str(e.args[0]).startswith('No teams have been configured for this league: Test League'))
+
+    def test_average_goals_scored_when_no_matching_team_returns_none(self):
+        league = self.league_under_test_producer()
+        result = league.average_goals_conceded("invalid")
         self.assertIsNone(result)
 
 
