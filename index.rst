@@ -14,9 +14,9 @@ Footy
    :members:
 .. automodule:: footy.domain.Result
    :members:
-.. automodule:: footy.domain.Fixture
-   :members:
 .. automodule:: footy.domain.Team
+   :members:
+.. automodule:: footy.domain.Fixture
    :members:
 .. automodule:: footy.engine.PredictionEngine
    :members:

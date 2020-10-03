@@ -1,6 +1,11 @@
+"""Competition - Data structure for a competition/league."""
+
+
 class Competition:
+    """Competition - Data structure for a competition/league."""
 
     def __init__(self):
+        """Construct a Competition object."""
         self._code = ''
         self._name = ''
         self._teams = []

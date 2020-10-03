@@ -508,3 +508,22 @@ The notation of a score draw outcome.
 * **Type**
 
     List of int
+
+
+Competition - Data structure for a competition/league.
+
+
+### class footy.domain.Competition.Competition()
+Competition - Data structure for a competition/league.
+
+Result - Data structure for a result.
+
+
+### class footy.domain.Result.Result()
+Result - Data structure for a result.
+
+Result - Data structure for a team.
+
+
+### class footy.domain.Team.Team()
+Result - Data structure for a team.

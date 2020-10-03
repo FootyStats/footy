@@ -1,6 +1,11 @@
+"""Result - Data structure for a team."""
+
+
 class Team:
+    """Result - Data structure for a team."""
 
     def __init__(self):
+        """Construct a Team object."""
         self.__team_name = ''
         self._goals_for = 0
         self._goals_against = 0
