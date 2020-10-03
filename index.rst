@@ -10,3 +10,15 @@ Footy
 =====
 .. automodule:: footy
    :members:
+.. automodule:: footy.domain.Competition
+   :members:
+.. automodule:: footy.domain.Result
+   :members:
+.. automodule:: footy.domain.Fixture
+   :members:
+.. automodule:: footy.domain.Team
+   :members:
+.. automodule:: footy.engine.PredictionEngine
+   :members:
+.. automodule:: footy.domain.UpdateEngine
+   :members:
