@@ -525,5 +525,116 @@ Result - Data structure for a result.
 Result - Data structure for a team.
 
 
-### class footy.domain.Team.Team()
+### class footy.domain.Team.Team(team_name, goals_for=0, goals_against=0, home_games=0, away_games=0, points=0)
 Result - Data structure for a team.
+
+
+#### property away_games()
+Getter method for property away_games.
+
+
+* **Returns**
+
+    The value of property away_games.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property goal_difference()
+Calculate and return the goal difference for the team.
+
+
+* **Returns**
+
+    goals_for - goals_against
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property goals_against()
+Getter method for property goals_against.
+
+
+* **Returns**
+
+    The value of property goals_against.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property goals_for()
+Getter method for property goals_for.
+
+
+* **Returns**
+
+    The value of property goals_for.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property home_games()
+Getter method for property home_games.
+
+
+* **Returns**
+
+    The value of property home_games.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property points()
+Getter method for property points.
+
+
+* **Returns**
+
+    The value of property points.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property team_name()
+Getter method for property team_name.
+
+
+* **Returns**
+
+    The value of property team_name.
+
+
+
+* **Return type**
+
+    str
