@@ -510,17 +510,23 @@ The notation of a score draw outcome.
     List of int
 
 
+# footy.domain.Competition
+
 Competition - Data structure for a competition/league.
 
 
 ### class footy.domain.Competition.Competition()
 Competition - Data structure for a competition/league.
 
+# footy.domain.Result
+
 Result - Data structure for a result.
 
 
 ### class footy.domain.Result.Result()
 Result - Data structure for a result.
+
+# footy.domain.Team
 
 Result - Data structure for a team.
 
@@ -638,3 +644,75 @@ Getter method for property team_name.
 * **Return type**
 
     str
+
+
+# footy.domain.Fixture
+
+Fixture - Data structure for a fixture.
+
+
+### class footy.domain.Fixture.Fixture()
+Fixture - Data structure for a fixture.
+
+# footy.engine.PredictionEngine
+
+Prediction Engine - Engine to predict the result of future fixtures.
+
+
+### class footy.engine.PredictionEngine.PredictionEngine(competition)
+Prediction Engine - Engine to predict the result of future fixtures.
+
+
+#### predict_results(competition)
+Generate the predictions for fixtures within a competition.
+
+
+* **Returns**
+
+    Enriched competition with most recent predictions.
+
+
+
+* **Return type**
+
+    Competition
+
+
+# footy.engine.UpdateEngine
+
+Prediction Engine - Update the data model with the most resent fixtures and results.
+
+
+### class footy.engine.UpdateEngine.UpdateEngine()
+Prediction Engine - Update the data model with the most resent fixtures and results.
+
+
+#### get_competition(code)
+Retrieve data for the supplied competition code.
+
+
+* **Returns**
+
+    A Competition object with the most recent fixtures and results for the supplied competition code.
+
+
+
+* **Return type**
+
+    Competition
+
+
+
+#### update_competition(competition)
+Retrieve data and enrich the supplied competition with the most recent fixtures and results.
+
+
+* **Returns**
+
+    A Competition object with the most recent fixtures and results for the supplied competition code.
+
+
+
+* **Return type**
+
+    Competition
