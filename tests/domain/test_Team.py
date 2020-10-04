@@ -1,6 +1,6 @@
 import unittest
 
-from footy.footy.domain.Team import Team
+from footy.domain.Team import Team
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,6 +1,6 @@
 """Prediction Engine - Update the data model with the most resent fixtures and results."""
 
-from footy.footy.domain import Competition
+from footy.domain import Competition
 
 
 class UpdateEngine:
