@@ -519,6 +519,16 @@ Competition - Data structure for a competition/league.
 Competition - Data structure for a competition/league.
 
 
+#### add_team(team)
+Add the provided team to the list of teams if an instance of that object isn’t already present.
+
+
+* **Parameters**
+
+    **team** (*Team*) – The Team to be added to Teams.
+
+
+
 #### property code()
 Getter method for property code.
 

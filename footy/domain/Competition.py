@@ -55,7 +55,7 @@ class Competition:
         str
             The value of property name.
         """
-        return self.name
+        return self._name
 
     @name.setter
     def name(self, name):
@@ -79,7 +79,7 @@ class Competition:
         list
             The value of property teams.
         """
-        return self.teams
+        return self._teams
 
     @teams.setter
     def teams(self, teams):
@@ -103,7 +103,7 @@ class Competition:
         str
             The value of property start_date.
         """
-        return self.start_date
+        return self._start_date
 
     @start_date.setter
     def start_date(self, start_date):
@@ -127,7 +127,7 @@ class Competition:
         str
             The value of property end_date.
         """
-        return self.end_date
+        return self._end_date
 
     @end_date.setter
     def end_date(self, end_date):
@@ -151,7 +151,7 @@ class Competition:
         str
             The value of property stage.
         """
-        return self.stage
+        return self._stage
 
     @stage.setter
     def stage(self, stage):
@@ -175,7 +175,7 @@ class Competition:
         list
             The value of property fixtures.
         """
-        return self.fixtures
+        return self._fixtures
 
     @fixtures.setter
     def fixtures(self, fixtures):
@@ -188,3 +188,16 @@ class Competition:
             The value you wish to set the fixtures property to.
         """
         self._fixtures = fixtures
+
+    def add_team(self, team):
+        """
+        Add the provided team to the list of teams if an instance of that object isn't already present.
+
+        Parameters
+        ----------
+        team : Team
+            The Team to be added to Teams.
+        """
+        #     TODO: Teams should be unique by name; throw an exception if a team with that name is already in the list.
+        if team not in self.teams:
+            self.teams.append(team)
