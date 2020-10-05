@@ -645,8 +645,56 @@ Getter method for property teams.
 Result - Data structure for a result.
 
 
-### class footy.domain.Result.Result()
+### class footy.domain.Result.Result(status='SCHEDULED', home_team_goals_scored=0, away_team_goals_scored=0)
 Result - Data structure for a result.
+
+
+#### property away_team_goals_scored()
+Getter method for property away_team_goals_scored.
+
+
+* **Returns**
+
+    The value of property away_team_goals_scored.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property home_team_goals_scored()
+Getter method for property home_team_goals_scored.
+
+
+* **Returns**
+
+    The value of property home_team_goals_scored.
+
+
+
+* **Return type**
+
+    int
+
+
+
+#### property status()
+Getter method for property status.
+
+
+* **Returns**
+
+    The value of property status.
+
+
+
+* **Return type**
+
+    str
+
 
 # footy.domain.Team
 
