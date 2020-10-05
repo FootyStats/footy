@@ -515,8 +515,120 @@ The notation of a score draw outcome.
 Competition - Data structure for a competition/league.
 
 
-### class footy.domain.Competition.Competition()
+### class footy.domain.Competition.Competition(code, name=None, teams=None, start_date=None, end_date=None, stage='unknown', fixtures=None)
 Competition - Data structure for a competition/league.
+
+
+#### property code()
+Getter method for property code.
+
+
+* **Returns**
+
+    The value of property code.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property end_date()
+Getter method for property end_date.
+
+
+* **Returns**
+
+    The value of property end_date.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property fixtures()
+Getter method for property fixtures.
+
+
+* **Returns**
+
+    The value of property fixtures.
+
+
+
+* **Return type**
+
+    list
+
+
+
+#### property name()
+Getter method for property name.
+
+
+* **Returns**
+
+    The value of property name.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property stage()
+Getter method for property stage.
+
+
+* **Returns**
+
+    The value of property stage.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property start_date()
+Getter method for property start_date.
+
+
+* **Returns**
+
+    The value of property start_date.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property teams()
+Getter method for property teams.
+
+
+* **Returns**
+
+    The value of property teams.
+
+
+
+* **Return type**
+
+    list
+
 
 # footy.domain.Result
 
