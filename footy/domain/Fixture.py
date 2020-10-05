@@ -1,7 +1,7 @@
 """Fixture - Data structure for a fixture."""
 
-from footy.footy.domain import Result
-from footy.footy.domain import Team
+from footy.domain import Result
+from footy.domain import Team
 
 
 class Fixture:
