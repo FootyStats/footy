@@ -821,8 +821,88 @@ Getter method for property team_name.
 Fixture - Data structure for a fixture.
 
 
-### class footy.domain.Fixture.Fixture()
+### class footy.domain.Fixture.Fixture(home_team, away_team, status='SCHEDULED', utc_start='', result=None)
 Fixture - Data structure for a fixture.
+
+
+#### property away_team()
+Getter method for property away_team.
+
+
+* **Returns**
+
+    The value of property away_team.
+
+
+
+* **Return type**
+
+    Team
+
+
+
+#### property home_team()
+Getter method for property home_team.
+
+
+* **Returns**
+
+    The value of property home_team.
+
+
+
+* **Return type**
+
+    Team
+
+
+
+#### property result()
+Getter method for property result.
+
+
+* **Returns**
+
+    The value of property result.
+
+
+
+* **Return type**
+
+    Result
+
+
+
+#### property status()
+Getter method for property status.
+
+
+* **Returns**
+
+    The value of property status.
+
+
+
+* **Return type**
+
+    str
+
+
+
+#### property utc_start()
+Getter method for property utc_start.
+
+
+* **Returns**
+
+    The value of property utc_start.
+
+
+
+* **Return type**
+
+    str
+
 
 # footy.engine.PredictionEngine
 
