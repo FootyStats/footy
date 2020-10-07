@@ -20,26 +20,26 @@ sensitivity).  Use the get_teams method to get a list of valid team names.
 ```python
 >>> import footy
 >>> widget = footy.Footy()
->>> widget.add_team('Arsenal', 64, 36, 18, 19, 69)
->>> widget.add_team('Aston Villa', 53, 48, 18, 19, 59)
->>> widget.add_team('Blackburn', 40, 60, 18, 19, 40)
->>> widget.add_team('Bolton', 41, 52, 19, 18, 41)
->>> widget.add_team('Chelsea', 65, 22, 19, 18, 80)
->>> widget.add_team('Everton', 53, 37, 19, 18, 60)
->>> widget.add_team('Fulham', 39, 32, 18, 19, 53)
->>> widget.add_team('Hull', 39, 63, 18, 19, 35)
->>> widget.add_team('Liverpool', 74, 26, 18, 19, 83)
->>> widget.add_team('Man City', 57, 50, 18, 19, 47)
->>> widget.add_team('Man United', 67, 24, 19, 18, 87)
->>> widget.add_team('Middlesbrough', 27, 55, 19, 18, 32)
->>> widget.add_team('Newcastle', 40, 58, 19, 18, 34)
->>> widget.add_team('Portsmouth', 38, 56, 19, 18, 41)
->>> widget.add_team('Stoke', 37, 51, 19, 18, 45)
->>> widget.add_team('Sunderland', 32, 51, 18, 19, 36)
->>> widget.add_team('Tottenham', 44, 42, 19, 18, 51)
->>> widget.add_team('West Brom', 36, 67, 19, 18, 31)
->>> widget.add_team('West Ham', 40, 44, 18, 19, 48)
->>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
+>>> widget.add_team(Team('Arsenal', 64, 36, 18, 19, 69))
+>>> widget.add_team(Team('Aston Villa', 53, 48, 18, 19, 59))
+>>> widget.add_team(Team('Blackburn', 40, 60, 18, 19, 40))
+>>> widget.add_team(Team('Bolton', 41, 52, 19, 18, 41))
+>>> widget.add_team(Team('Chelsea', 65, 22, 19, 18, 80))
+>>> widget.add_team(Team('Everton', 53, 37, 19, 18, 60))
+>>> widget.add_team(Team('Fulham', 39, 32, 18, 19, 53))
+>>> widget.add_team(Team('Hull', 39, 63, 18, 19, 35))
+>>> widget.add_team(Team('Liverpool', 74, 26, 18, 19, 83))
+>>> widget.add_team(Team('Man City', 57, 50, 18, 19, 47))
+>>> widget.add_team(Team('Man United', 67, 24, 19, 18, 87))
+>>> widget.add_team(Team('Middlesbrough', 27, 55, 19, 18, 32))
+>>> widget.add_team(Team('Newcastle', 40, 58, 19, 18, 34))
+>>> widget.add_team(Team('Portsmouth', 38, 56, 19, 18, 41))
+>>> widget.add_team(Team('Stoke', 37, 51, 19, 18, 45))
+>>> widget.add_team(Team('Sunderland', 32, 51, 18, 19, 36))
+>>> widget.add_team(Team('Tottenham', 44, 42, 19, 18, 51))
+>>> widget.add_team(Team('West Brom', 36, 67, 19, 18, 31))
+>>> widget.add_team(Team('West Ham', 40, 44, 18, 19, 48))
+>>> widget.add_team(Team('Wigan', 33, 45, 18, 19, 42))
 ```
 
 Get the data contained by the object as a Pandas dataframe (sorted by
@@ -61,49 +61,70 @@ available).  For the full details of the response returned, see the
 fixture method.
 
 ```python
->>> response = widget.fixture('Arsenal', 'Stoke')
+>>> response = widget.fixture(widget.get_team('Arsenal'), widget.get_team('Stoke'))
 ```
 
 Get a list of all the teams from the dataset.
 
 ```python
->>> widget.get_teams()
+>>> widget.get_team_names()
+['Arsenal',
+ 'Aston Villa',
+ 'Blackburn',
+ 'Bolton',
+ 'Chelsea',
+ 'Everton',
+ 'Fulham',
+ 'Hull',
+ 'Liverpool',
+ 'Man City',
+ 'Man United',
+ 'Middlesbrough',
+ 'Newcastle',
+ 'Portsmouth',
+ 'Stoke',
+ 'Sunderland',
+ 'Tottenham',
+ 'West Brom',
+ 'West Ham',
+ 'Wigan']
+```
+
+Get the data specific to Arsenal.
+
+```python
+>>> team = widget.get_team('Arsenal')
+```
+
+Get a Bried Score for a result.
+
+```python
+>>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
+0.0
 ```
 
 
-#### add_team(team_name, goals_for, goals_against, home_games, away_games, points)
+#### add_team(team)
 Add a team to the table.
 
 
 * **Parameters**
 
-    
-    * **team_name** (*str*) – The name of the team to add.
-
-
-    * **goals_for** (*int*) – The number of goals scored by the team.
-
-
-    * **goals_against** (*int*) – The number of goals conceded by the team.
-
-
-    * **home_games** (*int*) – The number of home games played by the team.
-
-
-    * **away_games** (*int*) – The number of away games played by the team.
-
-
-    * **points** (*int*) – The number of points in the table that the team has.
+    **team** (*footy.domain.Team.Team*) – The team to set or update (using the team name as a key) in Footy object.
 
 
 
-#### attack_strength(team_name)
+#### attack_strength(team)
 Get the attack strength of a team.
+
+The attack strength is calculated by dividing the number of goals scored by the team by the average goals
+scored by any team.  An attack strength higher than 1.0 indicates that the team scores more than the
+average number of goals by a team in the competition.
 
 
 * **Parameters**
 
-    **team_name** (*str*) – The name of the team to get the attack strength of.
+    **team** (*footy.domain.Team.Team*) – The team to get the attack strength of.
 
 
 
@@ -122,7 +143,7 @@ Get the attack strength of a team.
 
 * **Raises**
 
-    **KeyError** – When a team name is provided that is not in the dataset.
+    **KeyError** – When a team that is provided that is not in the dataset.
 
 
 
@@ -132,7 +153,7 @@ Get or set the average goals scored by a home team.
 
 * **Parameters**
 
-    **goals** (*float*) – The average number of goals scored by any team playing at home over the duration of the season.
+    **goals** (*float**, **optional*) – The average number of goals scored by any team playing at home over the duration of the season.
 
 
 
@@ -154,7 +175,7 @@ Get or set the average goals scored by an away team.
 
 * **Parameters**
 
-    **goals** (*float*) – The average number of goals scored by any team playing away over the duration of the season.
+    **goals** (*float**, **optional*) – The average number of goals scored by any team playing away over the duration of the season.
 
 
 
@@ -203,36 +224,6 @@ Return a Brier Score of the probability against the actuality.
 Brier, G.W. (1950): “Verification of Forecasts Expressed in Terms of Probability”, Monthly Weather Review,
 volume 79, number 1.
 
-### Examples
-
-```python
->>> import footy
->>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
-0.0
-```
-
-
-#### data(data=None)
-Get or set the object data.
-
-
-* **Parameters**
-
-    **data** (*dict**, **optional*) – A new dictionary to replace the objects data.
-
-
-
-* **Returns**
-
-    The object data.
-
-
-
-* **Return type**
-
-    dict
-
-
 
 #### dataframe()
 Return the object data as a Pandas dataframe.
@@ -252,13 +243,17 @@ The dataframe will be sorted on the number of points and goal difference.
 
 
 
-#### defence_factor(team_name)
+#### defence_factor(team)
 Get the defence factor for a team.
+
+The defence factor is calculated by dividing the number of goals that the team have conceded by the average
+number of goals conceded by all the teams in the competition.  A defence factor > 1.0 indicates that the
+team concedes more goals that of the average team.
 
 
 * **Parameters**
 
-    **team_name** (*str*) – The name of the team to get the defence factor for.
+    **team** (*footy.domain.Team.Team*) – The team to get the defence factor for.
 
 
 
@@ -277,7 +272,7 @@ Get the defence factor for a team.
 
 * **Raises**
 
-    **KeyError** – When a team name is provided that is not in the dataset.
+    **KeyError** – When the team provided is not in the dataset.
 
 
 
@@ -288,10 +283,10 @@ Calculate the probabilities of a fixture between two teams.
 * **Parameters**
 
     
-    * **home_team** (*str*) – The name of the home team.
+    * **home_team** (*footy.domain.Team.Team*) – The home team.
 
 
-    * **away_team** (*str*) – The name of the away team.
+    * **away_team** (*footy.domain.Team.Team*) – The away team.
 
 
 
@@ -354,28 +349,17 @@ Get the details of a specific team from the dataset.
 
 * **Returns**
 
-    The elements of the returned dictionary are goals_for (the number of goals scored), goals_against (the
-    number of goals conceded), home_games (number of games played at home), away_games (number of games played
-    away).
+    The team referred by the team name.
 
 
 
 * **Return type**
 
-    dict
+    footy.domain.Team.Team
 
 
-### Examples
 
-Get the data specific to Arsenal.
-
-```python
->>> widget.get_team('Arsenal')
-{'goals_for': 64, 'goals_against': 36, 'home_games': 18, 'away_games': 19}
-```
-
-
-#### get_teams()
+#### get_team_names()
 Get a list of the team names held in the dataset.
 
 
@@ -390,34 +374,6 @@ Get a list of the team names held in the dataset.
     List of str
 
 
-### Examples
-
-Get a list of all the teams from the dataset.
-
-```python
->>> widget.get_teams()
-['Arsenal',
- 'Aston Villa',
- 'Blackburn',
- 'Bolton',
- 'Chelsea',
- 'Everton',
- 'Fulham',
- 'Hull',
- 'Liverpool',
- 'Man City',
- 'Man United',
- 'Middlesbrough',
- 'Newcastle',
- 'Portsmouth',
- 'Stoke',
- 'Sunderland',
- 'Tottenham',
- 'West Brom',
- 'West Ham',
- 'Wigan']
-```
-
 
 #### goals_conceded(team_name=None)
 Get the number of goals conceded.
@@ -428,7 +384,7 @@ of goals conceded by all teams is returned.
 
 * **Parameters**
 
-    **team_name** (*str**, **optional*) – The name of the team to get the number of goals conceded.
+    **team_name** (*footy.domain.Team.Team**, **optional*) – The name of the team to get the number of goals conceded.
 
 
 

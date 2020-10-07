@@ -25,26 +25,26 @@ class Footy:
     --------
     >>> import footy
     >>> widget = footy.Footy()
-    >>> widget.add_team('Arsenal', 64, 36, 18, 19, 69)
-    >>> widget.add_team('Aston Villa', 53, 48, 18, 19, 59)
-    >>> widget.add_team('Blackburn', 40, 60, 18, 19, 40)
-    >>> widget.add_team('Bolton', 41, 52, 19, 18, 41)
-    >>> widget.add_team('Chelsea', 65, 22, 19, 18, 80)
-    >>> widget.add_team('Everton', 53, 37, 19, 18, 60)
-    >>> widget.add_team('Fulham', 39, 32, 18, 19, 53)
-    >>> widget.add_team('Hull', 39, 63, 18, 19, 35)
-    >>> widget.add_team('Liverpool', 74, 26, 18, 19, 83)
-    >>> widget.add_team('Man City', 57, 50, 18, 19, 47)
-    >>> widget.add_team('Man United', 67, 24, 19, 18, 87)
-    >>> widget.add_team('Middlesbrough', 27, 55, 19, 18, 32)
-    >>> widget.add_team('Newcastle', 40, 58, 19, 18, 34)
-    >>> widget.add_team('Portsmouth', 38, 56, 19, 18, 41)
-    >>> widget.add_team('Stoke', 37, 51, 19, 18, 45)
-    >>> widget.add_team('Sunderland', 32, 51, 18, 19, 36)
-    >>> widget.add_team('Tottenham', 44, 42, 19, 18, 51)
-    >>> widget.add_team('West Brom', 36, 67, 19, 18, 31)
-    >>> widget.add_team('West Ham', 40, 44, 18, 19, 48)
-    >>> widget.add_team('Wigan', 33, 45, 18, 19, 42)
+    >>> widget.add_team(Team('Arsenal', 64, 36, 18, 19, 69))
+    >>> widget.add_team(Team('Aston Villa', 53, 48, 18, 19, 59))
+    >>> widget.add_team(Team('Blackburn', 40, 60, 18, 19, 40))
+    >>> widget.add_team(Team('Bolton', 41, 52, 19, 18, 41))
+    >>> widget.add_team(Team('Chelsea', 65, 22, 19, 18, 80))
+    >>> widget.add_team(Team('Everton', 53, 37, 19, 18, 60))
+    >>> widget.add_team(Team('Fulham', 39, 32, 18, 19, 53))
+    >>> widget.add_team(Team('Hull', 39, 63, 18, 19, 35))
+    >>> widget.add_team(Team('Liverpool', 74, 26, 18, 19, 83))
+    >>> widget.add_team(Team('Man City', 57, 50, 18, 19, 47))
+    >>> widget.add_team(Team('Man United', 67, 24, 19, 18, 87))
+    >>> widget.add_team(Team('Middlesbrough', 27, 55, 19, 18, 32))
+    >>> widget.add_team(Team('Newcastle', 40, 58, 19, 18, 34))
+    >>> widget.add_team(Team('Portsmouth', 38, 56, 19, 18, 41))
+    >>> widget.add_team(Team('Stoke', 37, 51, 19, 18, 45))
+    >>> widget.add_team(Team('Sunderland', 32, 51, 18, 19, 36))
+    >>> widget.add_team(Team('Tottenham', 44, 42, 19, 18, 51))
+    >>> widget.add_team(Team('West Brom', 36, 67, 19, 18, 31))
+    >>> widget.add_team(Team('West Ham', 40, 44, 18, 19, 48))
+    >>> widget.add_team(Team('Wigan', 33, 45, 18, 19, 42))
 
     Get the data contained by the object as a Pandas dataframe (sorted by
     league position and goal difference).
@@ -60,11 +60,40 @@ class Footy:
     available).  For the full details of the response returned, see the
     `fixture` method.
 
-    >>> response = widget.fixture('Arsenal', 'Stoke')
+    >>> response = widget.fixture(widget.get_team('Arsenal'), widget.get_team('Stoke'))
 
     Get a list of all the teams from the dataset.
 
-    >>> widget.get_teams()
+    >>> widget.get_team_names()
+    ['Arsenal',
+     'Aston Villa',
+     'Blackburn',
+     'Bolton',
+     'Chelsea',
+     'Everton',
+     'Fulham',
+     'Hull',
+     'Liverpool',
+     'Man City',
+     'Man United',
+     'Middlesbrough',
+     'Newcastle',
+     'Portsmouth',
+     'Stoke',
+     'Sunderland',
+     'Tottenham',
+     'West Brom',
+     'West Ham',
+     'Wigan']
+
+    Get the data specific to Arsenal.
+
+    >>> team = widget.get_team('Arsenal')
+
+    Get a Bried Score for a result.
+
+    >>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
+    0.0
     """
 
     def __init__(self):
@@ -73,51 +102,29 @@ class Footy:
         self._average_goals_scored_by_a_home_team = (-1)
         self._average_goals_scored_by_an_away_team = (-1)
 
-    def add_team(self,
-                 team_name,
-                 goals_for,
-                 goals_against,
-                 home_games,
-                 away_games,
-                 points):
+    def add_team(self, team):
         """
         Add a team to the table.
 
         Parameters
         ----------
-        team_name : str
-            The name of the team to add.
-        goals_for : int
-            The number of goals scored by the team.
-        goals_against : int
-            The number of goals conceded by the team.
-        home_games : int
-            The number of home games played by the team.
-        away_games : int
-            The number of away games played by the team.
-        points : int
-            The number of points in the table that the team has.
+        team : footy.domain.Team.Team
+            The team to set or update (using the team name as a key) in Footy object.
         """
-        data = self.data()
-        team_stats = {
-            'goals_for': goals_for,
-            'goals_against': goals_against,
-            'home_games': home_games,
-            'away_games': away_games,
-            'goal_difference': (goals_for - goals_against),
-            'points': points
-        }
-        data[team_name] = team_stats
-        self.data(data)
+        self._data[team.team_name] = team
 
-    def attack_strength(self, team_name):
+    def attack_strength(self, team):
         """
         Get the attack strength of a team.
 
+        The attack strength is calculated by dividing the number of goals scored by the team by the average goals
+        scored by any team.  An attack strength higher than 1.0 indicates that the team scores more than the
+        average number of goals by a team in the competition.
+
         Parameters
         ----------
-        team_name : str
-            The name of the team to get the attack strength of.
+        team : footy.domain.Team.Team
+            The team to get the attack strength of.
 
         Returns
         -------
@@ -128,13 +135,11 @@ class Footy:
         Raises
         ------
         KeyError
-            When a team name is provided that is not in the dataset.
+            When a team that is provided that is not in the dataset.
         """
         try:
-            team_average_goals_scored = self.goals_scored(team_name)
             league_average_goals_scored = self.goals_scored()
-            attack_strength = team_average_goals_scored
-            attack_strength /= league_average_goals_scored
+            attack_strength = team.goals_for / league_average_goals_scored
         except ZeroDivisionError:
             return None
 
@@ -146,7 +151,7 @@ class Footy:
 
         Parameters
         ----------
-        goals : float
+        goals : float, optional
              The average number of goals scored by any team playing at home over the duration of the season.
 
         Returns
@@ -164,7 +169,7 @@ class Footy:
 
         Parameters
         ----------
-        goals : float
+        goals : float, optional
              The average number of goals scored by any team playing away over the duration of the season.
 
         Returns
@@ -199,34 +204,10 @@ class Footy:
         ----------
         Brier, G.W. (1950): "Verification of Forecasts Expressed in Terms of Probability", Monthly Weather Review,
         volume 79, number 1.
-
-        Examples
-        --------
-        >>> import footy
-        >>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
-        0.0
         """
         bs = brier_score_loss(y_true, y_prob)
         n = len(y_prob)
         return round(bs * n, 2)
-
-    def data(self, data=None):
-        """
-        Get or set the object data.
-
-        Parameters
-        ----------
-        data : dict, optional
-            A new dictionary to replace the objects data.
-
-        Returns
-        -------
-        dict
-            The object data.
-        """
-        if data is not None:
-            self._data = data
-        return self._data
 
     def dataframe(self):
         """
@@ -240,27 +221,36 @@ class Footy:
             The object data as a Pandas DataFrame.
         """
         a = []
-        data = self.data()
         attack_strengths = []
         defence_factors = []
+        team_names = self.get_team_names()
 
-        for team_name in data.keys():
-            team_dict = data[team_name]
-            attack_strength = self.attack_strength(team_name)
+        for team_name in team_names:
+            team = self.get_team(team_name)
+            attack_strength = self.attack_strength(team)
             attack_strengths.append(attack_strength)
-            defence_factor = self.defence_factor(team_name)
+            defence_factor = self.defence_factor(team)
             defence_factors.append(defence_factor)
-            team_list = [team_name]
-
-            for value in list(team_dict.values()):
-                team_list.append(value)
-
+            team_list = [
+                team_name,
+                team.goals_for,
+                team.goals_against,
+                team.home_games,
+                team.away_games,
+                team.goal_difference,
+                team.points
+            ]
             a.append(team_list)
 
-        columns = ['team_name']
-
-        for key in list(team_dict.keys()):
-            columns.append(key)
+        columns = [
+            'team_name',
+            'goals_for',
+            'goals_against',
+            'home_games',
+            'away_games',
+            'goal_difference',
+            'points'
+        ]
 
         df = pd.DataFrame(a, columns=columns)
         df['attack_strength'] = attack_strengths
@@ -268,24 +258,32 @@ class Footy:
         df = df.sort_values(
             [
                 'points',
-                'goal_difference'
+                'goal_difference',
+                'goals_for',
+                'goals_against'
             ],
             ascending=[
                 False,
-                False
+                False,
+                False,
+                True
             ]
         )
         df = df.reset_index(drop=True)
         return df
 
-    def defence_factor(self, team_name):
+    def defence_factor(self, team):
         """
         Get the defence factor for a team.
 
+        The defence factor is calculated by dividing the number of goals that the team have conceded by the average
+        number of goals conceded by all the teams in the competition.  A defence factor > 1.0 indicates that the
+        team concedes more goals that of the average team.
+
         Parameters
         ----------
-        team_name : str
-            The name of the team to get the defence factor for.
+        team : footy.domain.Team.Team
+            The team to get the defence factor for.
 
         Returns
         -------
@@ -296,13 +294,11 @@ class Footy:
         Raises
         ------
         KeyError
-            When a team name is provided that is not in the dataset.
+            When the team provided is not in the dataset.
         """
         try:
-            team_average_goals_conceded = self.goals_conceded(team_name)
             league_average_goals_conceded = self.goals_conceded()
-            defence_factor = team_average_goals_conceded
-            defence_factor /= league_average_goals_conceded
+            defence_factor = team.goals_against / league_average_goals_conceded
         except ZeroDivisionError:
             return None
 
@@ -314,10 +310,10 @@ class Footy:
 
         Parameters
         ----------
-        home_team : str
-            The name of the home team.
-        away_team : str
-            The name of the away team.
+        home_team : footy.domain.Team.Team
+            The home team.
+        away_team : footy.domain.Team.Team
+            The away team.
 
         Returns
         -------
@@ -435,22 +431,12 @@ class Footy:
 
         Returns
         -------
-        dict
-            The elements of the returned dictionary are goals_for (the number of goals scored), goals_against (the
-            number of goals conceded), home_games (number of games played at home), away_games (number of games played
-            away).
-
-        Examples
-        --------
-        Get the data specific to Arsenal.
-
-        >>> widget.get_team('Arsenal')
-        {'goals_for': 64, 'goals_against': 36, 'home_games': 18, 'away_games': 19}
+        footy.domain.Team.Team
+            The team referred by the team name.
         """
-        data = self.data()
-        return data[team_name]
+        return self._data[team_name]
 
-    def get_teams(self):
+    def get_team_names(self):
         """
         Get a list of the team names held in the dataset.
 
@@ -458,34 +444,9 @@ class Footy:
         -------
         List of str
             A list of the team names.
-
-        Examples
-        --------
-        Get a list of all the teams from the dataset.
-
-        >>> widget.get_teams()
-        ['Arsenal',
-         'Aston Villa',
-         'Blackburn',
-         'Bolton',
-         'Chelsea',
-         'Everton',
-         'Fulham',
-         'Hull',
-         'Liverpool',
-         'Man City',
-         'Man United',
-         'Middlesbrough',
-         'Newcastle',
-         'Portsmouth',
-         'Stoke',
-         'Sunderland',
-         'Tottenham',
-         'West Brom',
-         'West Ham',
-         'Wigan']
         """
-        return list(self.data().keys())
+        team_names = self._data.keys()
+        return sorted(team_names)
 
     def goals_conceded(self, team_name=None):
         """
@@ -496,7 +457,7 @@ class Footy:
 
         Parameters
         ----------
-        team_name : str, optional
+        team_name : footy.domain.Team.Team, optional
             The name of the team to get the number of goals conceded.
 
         Returns
@@ -509,18 +470,18 @@ class Footy:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        data = self.data()
-
         if team_name:
-            goals_conceded_by_team = data[team_name]['goals_against']
-            return goals_conceded_by_team
+            team = self.get_team(team_name)
+            return team.goals_against
         else:
             goals_conceded = 0
+            team_names = self.get_team_names()
 
-            for team_name in data.keys():
-                goals_conceded += data[team_name]['goals_against']
+            for team_name in team_names:
+                team = self.get_team(team_name)
+                goals_conceded += team.goals_against
 
-            return int(round(goals_conceded / len(data.keys())))
+            return int(round(goals_conceded / len(team_names)))
 
     def goals_scored(self, team_name=None):
         """
@@ -544,15 +505,14 @@ class Footy:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        data = self.data()
-
         if team_name:
-            goals_scored_by_team = data[team_name]['goals_for']
-            return goals_scored_by_team
+            return self.get_team(team_name).goals_for
         else:
             goals_for = 0
+            team_names = self.get_team_names()
 
-            for team_name in data.keys():
-                goals_for += data[team_name]['goals_for']
+            for team_name in team_names:
+                team = self.get_team(team_name)
+                goals_for += team.goals_for
 
-            return int(round(goals_for / len(data.keys())))
+            return int(round(goals_for / len(team_names)))
