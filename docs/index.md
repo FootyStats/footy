@@ -97,8 +97,11 @@ Get the data specific to Arsenal.
 ```
 
 Get a Bried Score for a result.
+
+```python
 >>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
 0.0
+```
 
 
 #### add_team(team)
