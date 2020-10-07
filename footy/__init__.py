@@ -89,7 +89,7 @@ class Footy:
     Get the data specific to Arsenal.
 
     >>> team = widget.get_team('Arsenal')
-    
+
     Get a Bried Score for a result.
     >>> footy.brier_score(np.array([1, 0, 0]), np.array([1.0, 0.0, 0.0]))
     0.0
