@@ -14,7 +14,7 @@ class Result:
         Parameters
         ----------
         status : str, optional
-            The status of the result of the fixture. SCHEDULED or FINISHED. Defaults to SCHEDULED
+            The status of the result of the result. SCHEDULED or FINISHED. Defaults to SCHEDULED
         home_team_goals_scored : int, optional
             The number of goals scored by the home team. Defaults to 0.
         away_team_goals_scored : int, optional
@@ -23,6 +23,27 @@ class Result:
         self._status = status  # TODO: Can we use an enum?
         self._home_team_goals_scored = home_team_goals_scored
         self._away_team_goals_scored = away_team_goals_scored
+
+    def __eq__(self, other):
+        """
+        Override the __eq__ method for the Result class to allow for object value comparison.
+
+        Parameters
+        ----------
+        other : Result
+            The result object to compare to.
+
+        Returns
+        -------
+        bool
+            True/False if the values in the two objects are equal.
+        """
+        return (
+                self.__class__ == other.__class__ and
+                self.status == other.status and
+                self.home_team_goals_scored == other.home_team_goals_scored and
+                self.away_team_goals_scored == other.away_team_goals_scored
+               )
 
     @property
     def status(self):
