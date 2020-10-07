@@ -14,7 +14,7 @@ class Result:
         Parameters
         ----------
         status : str, optional
-            The status of the result of the fixture. SCHEDULED or FINISHED. Defaults to SCHEDULED
+            The status of the result of the result. SCHEDULED or FINISHED. Defaults to SCHEDULED
         home_team_goals_scored : int, optional
             The number of goals scored by the home team. Defaults to 0.
         away_team_goals_scored : int, optional
