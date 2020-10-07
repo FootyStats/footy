@@ -21,6 +21,8 @@ class TestFootyClass(unittest.TestCase):
         Spiegelhalter, D. (2009). The professor’s Premiership probabilities. [online] BBC News. Available
         at: http://news.bbc.co.uk/1/hi/programmes/more_or_less/8062277.stm [Accessed 29 Aug. 2020].
         """
+
+    def footy_under_test_producer(self):
         footy = Footy()
 
         footy.add_team(Team('Arsenal', 64, 36, 18, 19, 69))
@@ -45,7 +47,8 @@ class TestFootyClass(unittest.TestCase):
         footy.add_team(Team('Wigan', 33, 45, 18, 19, 42))
         footy.average_goals_scored_by_a_home_team(1.36)
         footy.average_goals_scored_by_an_away_team(1.06)
-        cls.footy = footy
+
+        return footy
 
     @parameterized.expand([
         ([1, 0, 0], [100.0, 0.0, 0.0], 0.0),
@@ -56,7 +59,7 @@ class TestFootyClass(unittest.TestCase):
         ([0, 0, 1], [70.02, 18.43, 9.56], 1.34)
     ])
     def test_brier_score(self, y_true, y_prob, expected_answer):
-        footy = self.footy
+        footy = self.footy_under_test_producer()
         y_true = np.array(y_true) / 100.0
         y_prob = np.array(y_prob) / 100.0
         bs = footy.brier_score(y_true, y_prob)
@@ -218,7 +221,7 @@ class TestFootyClass(unittest.TestCase):
         final_score_likelihood : float
             The probability of the final score as stated.
         """
-        footy = self.footy
+        footy = self.footy_under_test_producer()
         response = footy.fixture(footy.get_team(home_team_name), footy.get_team(away_team_name))
         outcome_probabilities = response['outcome_probabilities']
 
