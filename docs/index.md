@@ -71,39 +71,27 @@ Get a list of all the teams from the dataset.
 ```
 
 
-#### add_team(team_name, goals_for, goals_against, home_games, away_games, points)
+#### add_team(team)
 Add a team to the table.
 
 
 * **Parameters**
 
-    
-    * **team_name** (*str*) – The name of the team to add.
-
-
-    * **goals_for** (*int*) – The number of goals scored by the team.
-
-
-    * **goals_against** (*int*) – The number of goals conceded by the team.
-
-
-    * **home_games** (*int*) – The number of home games played by the team.
-
-
-    * **away_games** (*int*) – The number of away games played by the team.
-
-
-    * **points** (*int*) – The number of points in the table that the team has.
+    **team** (*footy.domain.Team.Team*) – The team to set or update (using the team name as a key) in Footy object.
 
 
 
-#### attack_strength(team_name)
+#### attack_strength(team)
 Get the attack strength of a team.
+
+The attack strength is calculated by dividing the number of goals scored by the team by the average goals
+scored by any team.  An attack strength higher than 1.0 indicates that the team scores more than the
+average number of goals by a team in the competition.
 
 
 * **Parameters**
 
-    **team_name** (*str*) – The name of the team to get the attack strength of.
+    **team** (*footy.domain.Team.Team*) – The team to get the attack strength of.
 
 
 
@@ -122,7 +110,7 @@ Get the attack strength of a team.
 
 * **Raises**
 
-    **KeyError** – When a team name is provided that is not in the dataset.
+    **KeyError** – When a team that is provided that is not in the dataset.
 
 
 
@@ -132,7 +120,7 @@ Get or set the average goals scored by a home team.
 
 * **Parameters**
 
-    **goals** (*float*) – The average number of goals scored by any team playing at home over the duration of the season.
+    **goals** (*float**, **optional*) – The average number of goals scored by any team playing at home over the duration of the season.
 
 
 
@@ -154,7 +142,7 @@ Get or set the average goals scored by an away team.
 
 * **Parameters**
 
-    **goals** (*float*) – The average number of goals scored by any team playing away over the duration of the season.
+    **goals** (*float**, **optional*) – The average number of goals scored by any team playing away over the duration of the season.
 
 
 
@@ -212,28 +200,6 @@ volume 79, number 1.
 ```
 
 
-#### data(data=None)
-Get or set the object data.
-
-
-* **Parameters**
-
-    **data** (*dict**, **optional*) – A new dictionary to replace the objects data.
-
-
-
-* **Returns**
-
-    The object data.
-
-
-
-* **Return type**
-
-    dict
-
-
-
 #### dataframe()
 Return the object data as a Pandas dataframe.
 
@@ -252,13 +218,17 @@ The dataframe will be sorted on the number of points and goal difference.
 
 
 
-#### defence_factor(team_name)
+#### defence_factor(team)
 Get the defence factor for a team.
+
+The defence factor is calculated by dividing the number of goals that the team have conceded by the average
+number of goals conceded by all the teams in the competition.  A defence factor > 1.0 indicates that the
+team concedes more goals that of the average team.
 
 
 * **Parameters**
 
-    **team_name** (*str*) – The name of the team to get the defence factor for.
+    **team** (*footy.domain.Team.Team*) – The team to get the defence factor for.
 
 
 
@@ -277,7 +247,7 @@ Get the defence factor for a team.
 
 * **Raises**
 
-    **KeyError** – When a team name is provided that is not in the dataset.
+    **KeyError** – When the team provided is not in the dataset.
 
 
 
@@ -288,10 +258,10 @@ Calculate the probabilities of a fixture between two teams.
 * **Parameters**
 
     
-    * **home_team** (*str*) – The name of the home team.
+    * **home_team** (*footy.domain.Team.Team*) – The home team.
 
 
-    * **away_team** (*str*) – The name of the away team.
+    * **away_team** (*footy.domain.Team.Team*) – The away team.
 
 
 
@@ -354,15 +324,13 @@ Get the details of a specific team from the dataset.
 
 * **Returns**
 
-    The elements of the returned dictionary are goals_for (the number of goals scored), goals_against (the
-    number of goals conceded), home_games (number of games played at home), away_games (number of games played
-    away).
+    The team referred by the team name.
 
 
 
 * **Return type**
 
-    dict
+    footy.domain.Team.Team
 
 
 ### Examples
@@ -375,7 +343,7 @@ Get the data specific to Arsenal.
 ```
 
 
-#### get_teams()
+#### get_team_names()
 Get a list of the team names held in the dataset.
 
 
@@ -395,7 +363,7 @@ Get a list of the team names held in the dataset.
 Get a list of all the teams from the dataset.
 
 ```python
->>> widget.get_teams()
+>>> widget.get_team_names()
 ['Arsenal',
  'Aston Villa',
  'Blackburn',
@@ -428,7 +396,7 @@ of goals conceded by all teams is returned.
 
 * **Parameters**
 
-    **team_name** (*str**, **optional*) – The name of the team to get the number of goals conceded.
+    **team_name** (*footy.domain.Team.Team**, **optional*) – The name of the team to get the number of goals conceded.
 
 
 
