@@ -5,6 +5,8 @@ import pandas as pd
 from scipy.stats import poisson
 from sklearn.metrics import brier_score_loss
 
+from footy.domain.Fixture import Fixture
+
 # Set match outcome constants.
 OUTCOME_HOME_WIN = [1, 0, 0]
 """List of int : The notation of a home win outcome."""
@@ -317,37 +319,15 @@ class Footy:
 
         Returns
         -------
-        dict
-            If there is enough data for any probabilities to be calculated,
-            the dictionary will contain elements called:
-
-            outcome_probabilities: A list of three floats indicating (with
-            values between 0.0 and 1.0) the probability of a home win, a
-            score draw or an away win respectively.
-
-            home_team_goals_probability: A list of seven floats indicating
-            (with values between 0.0 and 1.0) the probability of the home team
-            scoring between 0 and 6 goals.
-
-            away_team_goals_probability: A list of seven floats indicating
-            (with values between 0.0 and 1.0) the probability of the away team
-            scoring between 0 and 6 goals.
-
-            final_score_probabilities:  A Pandas DataFrame with each row
-            containing the number of goals scored by the home team, the number
-            of goals scored by the away team and the probability of that final
-            score.  The table will be sorted with the most probable results
-            descending.
-
-            If there is not enough data to calculate the probabilities, the
-            dictionary returned by this function will be empty.
+        footy.domain.Fixture.Fixture
+            A fixture containing the predicted probabilities (if available).
 
         Raises
         ------
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        response = {}
+        response = Fixture(home_team, away_team)
 
         # Check that all teams have played more than zero home games.
         # If the check fails, return None as we do not have enough data
@@ -356,7 +336,7 @@ class Footy:
         home_games = df['home_games'].values
 
         if 0 in home_games:
-            return None
+            return response
 
         # Check that all teams have played more than zero away games.
         # If the check fails, return None as we do not have enough data
@@ -364,7 +344,7 @@ class Footy:
         away_games = df['away_games'].values
 
         if 0 in away_games:
-            return None
+            return response
 
         home_expected_goals = self.average_goals_scored_by_a_home_team()
         away_expected_goals = self.average_goals_scored_by_an_away_team()
@@ -396,7 +376,7 @@ class Footy:
         df = df[df.probability != 0]
         df = df.sort_values('probability', ascending=False)
         df = df.reset_index(drop=True)
-        response['final_score_probabilities'] = df
+        response.final_score_probabilities(df)
 
         df2 = df[df.home > df.away]
         home_win_probability = round(sum(df2.probability.values), 4)
@@ -405,14 +385,14 @@ class Footy:
         df2 = df[df.home < df.away]
         away_win_probability = round(sum(df2.probability.values), 4)
 
-        response['outcome_probabilities'] = [
+        response.outcome_probabilities([
             home_win_probability,
             draw_probability,
             away_win_probability
-        ]
+        ])
 
-        response['home_team_goals_probability'] = list(home_probability_mass)
-        response['away_team_goals_probability'] = list(away_probability_mass)
+        response.home_team_goals_probability(list(home_probability_mass))
+        response.away_team_goals_probability(list(away_probability_mass))
         return response
 
     def get_team(self, team_name):
