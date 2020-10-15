@@ -46,6 +46,15 @@ class MyTestCase(unittest.TestCase):
         team.goals_against += 10
         self.assertEqual((self.GOALS_FOR - self.GOALS_AGAINST) - 10, team.goal_difference)
 
+    def test_equality_true_when_fixture_object_same_values(self):
+        team_a = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST, self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
+        team_b = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST, self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
+        self.assertEqual(team_a, team_b)
+
+    def test_equality_false_when_fixture_object_different_values(self):
+        team_a = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST, self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
+        team_b = Team("team", 1, 2, 3, 4, 5)
+        self.assertNotEqual(team_a, team_b)
 
 if __name__ == '__main__':
     unittest.main()

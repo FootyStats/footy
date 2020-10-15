@@ -13,6 +13,30 @@ class Team:
         self._away_games = away_games
         self._points = points
 
+    def __eq__(self, other):
+        """
+            Override the __eq__ method for the Team class to allow for object value comparison.
+
+            Parameters
+            ----------
+            other : footy.domain.Team.Team
+                The team object to compare to.
+
+            Returns
+            -------
+            bool
+                True/False if the values in the two objects are equal.
+        """
+        return (
+                self.__class__ == other.__class__ and
+                self._team_name == other._team_name and
+                self._goals_for == other._goals_for and
+                self._goals_against == other._goals_against and
+                self._home_games == other._home_games and
+                self._away_games == other._away_games and
+                self._points == other._points
+        )
+
     @property
     def team_name(self):
         """
