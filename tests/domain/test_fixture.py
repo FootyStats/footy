@@ -30,6 +30,21 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual('', fixture.utc_start)
         self.assertEqual(Result(), fixture.result)
 
+    def test_equality_true_when_fixture_object_same_values(self):
+        fixture_a = Fixture(self.HOME_TEAM, self.AWAY_TEAM, self.STATUS, self.UTC_START, self.RESULT)
+        fixture_b = Fixture(self.HOME_TEAM, self.AWAY_TEAM, self.STATUS, self.UTC_START, self.RESULT)
+        self.assertEqual(fixture_a, fixture_b)
+
+    def test_equality_false_when_fixture_object_different_values(self):
+        fixture_a = Fixture(self.HOME_TEAM, self.AWAY_TEAM, self.STATUS, self.UTC_START, self.RESULT)
+        fixture_b = Fixture(self.HOME_TEAM, self.AWAY_TEAM)
+        self.assertNotEqual(fixture_a, fixture_b)
+
+    def test_equality_false_when_same_fixture_different_result(self):
+        fixture_a = Fixture(self.HOME_TEAM, self.AWAY_TEAM, self.STATUS, self.UTC_START, self.RESULT)
+        fixture_b = Fixture(self.HOME_TEAM, self.AWAY_TEAM, self.STATUS, self.UTC_START, Result('COMPLETE', 1, 2))
+        self.assertNotEqual(fixture_a, fixture_b)
+
 
 if __name__ == '__main__':
     unittest.main()

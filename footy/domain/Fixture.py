@@ -34,6 +34,29 @@ class Fixture:
         self._away_team_goals_probability = None
         self._final_score_probabilities = None
 
+    def __eq__(self, other):
+        """
+            Override the __eq__ method for the Fixture class to allow for object value comparison.
+
+            Parameters
+            ----------
+            other : footy.domain.Fixture.Fixture
+                The fixture object to compare to.
+
+            Returns
+            -------
+            bool
+                True/False if the values in the two objects are equal.
+        """
+        return (
+                self.__class__ == other.__class__ and
+                self.home_team == other.home_team and
+                self.away_team == other.away_team and
+                self._status == other.status and
+                self._utc_start == other.utc_start and
+                self._result == other.result
+        )
+
     @property
     def home_team(self):
         """

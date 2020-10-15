@@ -199,5 +199,19 @@ class Competition:
             The Team to be added to Teams.
         """
         #     TODO: Teams should be unique by name; throw an exception if a team with that name is already in the list.
-        if team not in self.teams:
-            self.teams.append(team)
+        if team not in self._teams:
+            self._teams.append(team)
+
+    def add_fixture(self, fixture):
+        """
+        Add the provided fixture to the list of fixtures if the fixture isn't already present.
+
+        Parameters
+        ----------
+        fixture : footy.domain.Fixture
+            The Team to be added to Teams.
+        """
+        # TODO: We need to decide if there can be more than one fixture for same teams. If so, we
+        #  need to decide what gives fixture it's uniqueness (e.g. teams + date)
+        if fixture not in self._fixtures:
+            self._fixtures.append(fixture)
