@@ -50,11 +50,11 @@ class Fixture:
         """
         return (
                 self.__class__ == other.__class__ and
-                self.home_team == other.home_team and
-                self.away_team == other.away_team and
-                self._status == other.status and
-                self._utc_start == other.utc_start and
-                self._result == other.result
+                self._home_team == other._home_team and
+                self._away_team == other._away_team and
+                self._status == other._status and
+                self._utc_start == other._utc_start and
+                self._result == other._result
         )
 
     @property
