@@ -458,7 +458,7 @@ Add the provided fixture to the list of fixtures if the fixture isn’t already 
 
 * **Parameters**
 
-    **fixture** (*footy.domain.Fixture*) – The Team to be added to Teams.
+    **fixture** (*footy.domain.Fixture.Fixture*) – The Team to be added to Teams.
 
 
 
