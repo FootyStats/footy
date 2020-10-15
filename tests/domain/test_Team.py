@@ -56,5 +56,6 @@ class MyTestCase(unittest.TestCase):
         team_b = Team("team", 1, 2, 3, 4, 5)
         self.assertNotEqual(team_a, team_b)
 
+
 if __name__ == '__main__':
     unittest.main()

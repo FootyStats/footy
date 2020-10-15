@@ -1,7 +1,6 @@
 """Prediction Engine - Engine to predict the result of future fixtures."""
 # calculate the results for fixtures
 from footy.domain import Competition
-from footy.domain.Fixture import Fixture
 
 
 class PredictionEngine:

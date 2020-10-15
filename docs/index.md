@@ -452,6 +452,16 @@ Competition - Data structure for a competition/league.
 Competition - Data structure for a competition/league.
 
 
+#### add_fixture(fixture)
+Add the provided fixture to the list of fixtures if the fixture isn’t already present.
+
+
+* **Parameters**
+
+    **fixture** (*footy.domain.Fixture*) – The Team to be added to Teams.
+
+
+
 #### add_team(team)
 Add the provided team to the list of teams if an instance of that object isn’t already present.
 

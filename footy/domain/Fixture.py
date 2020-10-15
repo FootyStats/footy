@@ -36,17 +36,17 @@ class Fixture:
 
     def __eq__(self, other):
         """
-            Override the __eq__ method for the Fixture class to allow for object value comparison.
+        Override the __eq__ method for the Fixture class to allow for object value comparison.
 
-            Parameters
-            ----------
-            other : footy.domain.Fixture.Fixture
-                The fixture object to compare to.
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
 
-            Returns
-            -------
-            bool
-                True/False if the values in the two objects are equal.
+        Returns
+        -------
+        bool
+            True/False if the values in the two objects are equal.
         """
         return (
                 self.__class__ == other.__class__ and
