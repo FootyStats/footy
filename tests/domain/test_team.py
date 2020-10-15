@@ -3,7 +3,7 @@ import unittest
 from footy.domain.Team import Team
 
 
-class MyTestCase(unittest.TestCase):
+class TestTeam(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

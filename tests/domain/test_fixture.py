@@ -5,7 +5,7 @@ from footy.domain.Result import Result
 from footy.domain.Team import Team
 
 
-class MyTestCase(unittest.TestCase):
+class TestFixture(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.HOME_TEAM = Team('Arsenal', 64, 36, 18, 19, 69)
