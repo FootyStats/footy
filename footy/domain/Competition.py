@@ -208,7 +208,7 @@ class Competition:
 
         Parameters
         ----------
-        fixture : footy.domain.Fixture
+        fixture : footy.domain.Fixture.Fixture
             The Team to be added to Teams.
         """
         # TODO: We need to decide if there can be more than one fixture for same teams. If so, we
