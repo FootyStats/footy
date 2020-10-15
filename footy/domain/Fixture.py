@@ -16,7 +16,7 @@ class Fixture:
         home_team : Team
             The home team playing in this fixture.
         away_team : Team
-            The home team playing in this fixture.
+            The away team playing in this fixture.
         status : str, optional
             The status of this fixture. Defaults to 'SCHEDULED'.
         utc_start : str, optional
@@ -29,6 +29,10 @@ class Fixture:
         self._status = status
         self._utc_start = utc_start
         self._result = result or Result()
+        self._outcome_probabilities = None
+        self._home_team_goals_probability = None
+        self._away_team_goals_probability = None
+        self._final_score_probabilities = None
 
     @property
     def home_team(self):
@@ -149,3 +153,89 @@ class Fixture:
             The value you wish to set the result property to.
         """
         self._result = result
+
+    def outcome_probabilities(self, outcome_probabilities=None):
+        """
+        Get or set the outcome_probabilities of the fixture.
+
+        Parameters
+        ----------
+        outcome_probabilities: list of float
+            A list of three floats indicating (with values between 0.0 and 1.0) the probability of a home win, a score
+            draw or an away win respectively.
+
+        Returns
+        -------
+        list of float
+            A list of three floats indicating (with values between 0.0 and 1.0) the probability of a home win, a score
+            draw or an away win respectively.  If not enough data is available to calculate the probabilities the
+            will return None.
+        """
+        if outcome_probabilities is not None:
+            self._outcome_probabilities = outcome_probabilities
+        return self._outcome_probabilities
+
+    def home_team_goals_probability(self, home_team_goals_probability=None):
+        """
+        Get or set the home_team_goals_probability of the fixture.
+
+        Parameters
+        ----------
+        home_team_goals_probability: list of float
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+            goals being scored by the home team.
+
+        Returns
+        -------
+        list of float
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+            goals being scored by the home team.  If there is not enough data to calculate the probabilities, this
+            will return None.
+        """
+        if home_team_goals_probability is not None:
+            self._home_team_goals_probability = home_team_goals_probability
+        return self._home_team_goals_probability
+
+    def away_team_goals_probability(self, away_team_goals_probability=None):
+        """
+        Get or set the away_team_goals_probability of the fixture.
+
+        Parameters
+        ----------
+        away_team_goals_probability: list of float
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+            goals being scored by the away team.
+
+        Returns
+        -------
+        list of float
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+            goals being scored by the away team.  If there is not enough data to calculate the probabilities, this
+            will return None.
+        """
+        if away_team_goals_probability is not None:
+            self._away_team_goals_probability = away_team_goals_probability
+        return self._away_team_goals_probability
+
+    def final_score_probabilities(self, final_score_probabilities=None):
+        """
+        Get or set the final_score_probabilities of the fixture.
+
+        Parameters
+        ----------
+        final_score_probabilities: DataFrame
+            A Pandas DataFrame with each row containing the number of goals scored by the home team, the number of
+            goals scored by the away team and the probability of that final score. The table will be sorted with the
+            most probable results descending.
+
+        Returns
+        -------
+        DataFrame
+            A Pandas DataFrame with each row containing the number of goals scored by the home team, the number of
+            goals scored by the away team and the probability of that final score. The table will be sorted with the
+            most probable results descending.  If there is not enough data to calculate the probabilities, this
+            will return None.
+        """
+        if final_score_probabilities is not None:
+            self._final_score_probabilities = final_score_probabilities
+        return self._final_score_probabilities

@@ -87,7 +87,7 @@ class TestFootyClass(unittest.TestCase):
         # No games played, so we don't expect any probability data to
         # be available.
         response = footy_obj.fixture(team_a, team_b)
-        self.assertIsNone(response)
+        self.assertIsNone(response.outcome_probabilities())
 
         # Team D beats A 2 - 0 away.
         footy_obj.add_team(Team('Team A', 0, 2, 1, 0, 0))
@@ -110,7 +110,7 @@ class TestFootyClass(unittest.TestCase):
         # B and A have not played away.  Therefore still expecting not
         # to have enough data to track probabilities.
         response = footy_obj.fixture(footy_obj.get_team('Team A'), footy_obj.get_team('Team B'))
-        self.assertIsNone(response)
+        self.assertIsNone(response.outcome_probabilities())
 
         # Team D hosts B and beats them 2 - 0.
         goals_for = footy_obj.get_team('Team B').goals_for + 0
@@ -178,8 +178,8 @@ class TestFootyClass(unittest.TestCase):
         # Now we do have enough data to predict fixtures.  In this case we
         # expect Team D to beat A at home.
         response = footy_obj.fixture(footy_obj.get_team('Team D'), footy_obj.get_team('Team A'))
-        self.assertIsNotNone(response)
-        outcome_probabilities = response['outcome_probabilities']
+        self.assertIsNotNone(response.outcome_probabilities())
+        outcome_probabilities = response.outcome_probabilities()
         self.assertGreater(outcome_probabilities[0], outcome_probabilities[1])
         self.assertGreater(outcome_probabilities[0], outcome_probabilities[2])
 
@@ -223,7 +223,7 @@ class TestFootyClass(unittest.TestCase):
         """
         footy = self.footy_under_test_producer()
         response = footy.fixture(footy.get_team(home_team_name), footy.get_team(away_team_name))
-        outcome_probabilities = response['outcome_probabilities']
+        outcome_probabilities = response.outcome_probabilities()
 
         # We allow some wriggle room for the values calculated.  This is
         # because the maximum number of goals we test up to is six.  However,
@@ -244,7 +244,7 @@ class TestFootyClass(unittest.TestCase):
                 delta=delta
             )
 
-        final_score_probabilities = response['final_score_probabilities']
+        final_score_probabilities = response.final_score_probabilities()
         final_score_probabilities = final_score_probabilities.values.tolist()
         most_likely_final_score = final_score_probabilities[0]
         self.assertEqual(most_likely_final_score[0],

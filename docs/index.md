@@ -292,36 +292,13 @@ Calculate the probabilities of a fixture between two teams.
 
 * **Returns**
 
-    If there is enough data for any probabilities to be calculated,
-    the dictionary will contain elements called:
-
-    outcome_probabilities: A list of three floats indicating (with
-    values between 0.0 and 1.0) the probability of a home win, a
-    score draw or an away win respectively.
-
-    home_team_goals_probability: A list of seven floats indicating
-    (with values between 0.0 and 1.0) the probability of the home team
-    scoring between 0 and 6 goals.
-
-    away_team_goals_probability: A list of seven floats indicating
-    (with values between 0.0 and 1.0) the probability of the away team
-    scoring between 0 and 6 goals.
-
-    final_score_probabilities:  A Pandas DataFrame with each row
-    containing the number of goals scored by the home team, the number
-    of goals scored by the away team and the probability of that final
-    score.  The table will be sorted with the most probable results
-    descending.
-
-    If there is not enough data to calculate the probabilities, the
-    dictionary returned by this function will be empty.
-
+    A fixture containing the predicted probabilities (if available).
 
 
 
 * **Return type**
 
-    dict
+    footy.domain.Fixture.Fixture
 
 
 
@@ -797,6 +774,58 @@ Getter method for property away_team.
 
 
 
+#### away_team_goals_probability(away_team_goals_probability=None)
+Get or set the away_team_goals_probability of the fixture.
+
+
+* **Parameters**
+
+    **away_team_goals_probability** (*list of float*) – A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+    goals being scored by the away team.
+
+
+
+* **Returns**
+
+    A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+    goals being scored by the away team.  If there is not enough data to calculate the probabilities, this
+    will return None.
+
+
+
+* **Return type**
+
+    list of float
+
+
+
+#### final_score_probabilities(final_score_probabilities=None)
+Get or set the final_score_probabilities of the fixture.
+
+
+* **Parameters**
+
+    **final_score_probabilities** (*DataFrame*) – A Pandas DataFrame with each row containing the number of goals scored by the home team, the number of
+    goals scored by the away team and the probability of that final score. The table will be sorted with the
+    most probable results descending.
+
+
+
+* **Returns**
+
+    A Pandas DataFrame with each row containing the number of goals scored by the home team, the number of
+    goals scored by the away team and the probability of that final score. The table will be sorted with the
+    most probable results descending.  If there is not enough data to calculate the probabilities, this
+    will return None.
+
+
+
+* **Return type**
+
+    DataFrame
+
+
+
 #### property home_team()
 Getter method for property home_team.
 
@@ -810,6 +839,56 @@ Getter method for property home_team.
 * **Return type**
 
     Team
+
+
+
+#### home_team_goals_probability(home_team_goals_probability=None)
+Get or set the home_team_goals_probability of the fixture.
+
+
+* **Parameters**
+
+    **home_team_goals_probability** (*list of float*) – A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+    goals being scored by the home team.
+
+
+
+* **Returns**
+
+    A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+    goals being scored by the home team.  If there is not enough data to calculate the probabilities, this
+    will return None.
+
+
+
+* **Return type**
+
+    list of float
+
+
+
+#### outcome_probabilities(outcome_probabilities=None)
+Get or set the outcome_probabilities of the fixture.
+
+
+* **Parameters**
+
+    **outcome_probabilities** (*list of float*) – A list of three floats indicating (with values between 0.0 and 1.0) the probability of a home win, a score
+    draw or an away win respectively.
+
+
+
+* **Returns**
+
+    A list of three floats indicating (with values between 0.0 and 1.0) the probability of a home win, a score
+    draw or an away win respectively.  If not enough data is available to calculate the probabilities the
+    will return None.
+
+
+
+* **Return type**
+
+    list of float
 
 
 
