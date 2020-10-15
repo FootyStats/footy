@@ -22,18 +22,3 @@ class PredictionEngine:
             Enriched competition with most recent predictions.
         """
         return Competition
-
-    def predict_fixture_results(self, fixture):
-        """
-        Generate the predictions for the given fixture.
-
-        Parameters
-        ----------
-        fixture : footy.domain.Fixture.Fixture
-            The fixture to predict the results of
-        Return
-        -------
-        footy.domain.Fixture.Fixture
-            Enriched Fixture with most recent predictions.
-        """
-        return Fixture
