@@ -3,7 +3,7 @@ import unittest
 from footy.domain.Result import Result
 
 
-class MyTestCase(unittest.TestCase):
+class TestResult(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.STATUS = 'COMPLETE'
