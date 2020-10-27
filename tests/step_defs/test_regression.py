@@ -75,20 +75,13 @@ def the_away_team_is_away_team(test_data, away_team):
     )
 
     outcome_probabilities = response.outcome_probabilities()
+    test_data['outcome_probabilities'] = outcome_probabilities
 
-    # We allow some wriggle room for the values calculated.  This is
-    # because the maximum number of goals we test up to is six.  However,
-    # the sum of all the probabilities for the Arsenal v Stoke games
-    # is actually 98.01 (not a perfect 100.0).  Therefore we subtract the
-    # sum from 1.0 and use the result as a variance to compare against.
-    probabilities_sum = outcome_probabilities[0]
-    probabilities_sum += outcome_probabilities[1]
-    probabilities_sum += outcome_probabilities[2]
-    delta = abs(1.0 - probabilities_sum)
-    test_data['home_team_win_probability'] = outcome_probabilities[0]
-    test_data['score_draw_probability'] = outcome_probabilities[1]
-    test_data['away_team_win_probability'] = outcome_probabilities[2]
-    test_data['delta'] = delta
+    # Set a delta for allowing variance due to some of the crazy rounding
+    # used in the article itself.
+    test_data['outcome_delta'] = 2.53
+    final_score_probabilities = response.final_score_probabilities()
+    test_data['final_score_probabilities'] = final_score_probabilities
 
 
 @when('the home team is <home_team>')
@@ -98,36 +91,67 @@ def the_home_team_is_home_team(test_data, home_team):
 
 
 @then('expect a score draw probability to be <score_draw_probability>')
-def expect_a_score_draw_probability_to_be_score_draw_probability():
+def expect_a_score_draw_probability_to_be_score_draw_probability(test_data, score_draw_probability):
     """expect a score draw probability to be <score_draw_probability>."""
-    raise NotImplementedError
+    calculated_probability = test_data['outcome_probabilities'][1]
+    delta = test_data['outcome_delta']
+    low_value = score_draw_probability - delta
+    high_value = score_draw_probability + delta
+    assert calculated_probability >= low_value
+    assert calculated_probability <= high_value
 
 
 @then('expect an away team probability to be <away_team_win_probability>')
-def expect_an_away_team_probability_to_be_away_team_win_probability():
+def expect_an_away_team_probability_to_be_away_team_win_probability(test_data, away_team_win_probability):
     """expect an away team probability to be <away_team_win_probability>."""
-    raise NotImplementedError
+    calculated_probability = test_data['outcome_probabilities'][2]
+    delta = test_data['outcome_delta']
+    low_value = away_team_win_probability - delta
+    high_value = away_team_win_probability + delta
+    assert calculated_probability >= low_value
+    assert calculated_probability <= high_value
 
 
 @then('expect the home team win probability to be <home_team_win_probability>')
 def expect_the_home_team_win_probability_to_be_home_team_win_probability(test_data, home_team_win_probability):
     """expect the home team win probability to be <home_team_win_probability>."""
-    raise NotImplementedError
+    calculated_probability = test_data['outcome_probabilities'][0]
+    delta = test_data['outcome_delta']
+    low_value = home_team_win_probability - delta
+    high_value = home_team_win_probability + delta
+    assert calculated_probability >= low_value
+    assert calculated_probability <= high_value
 
 
 @then('expect the predicted final score probability to be <final_score_probability>')
-def expect_the_predicted_final_score_probability_to_be_final_score_probability():
+def expect_the_predicted_final_score_probability_to_be_final_score_probability(test_data,
+                                                                               final_score_probability):
     """expect the predicted final score probability to be <final_score_probability>."""
-    raise NotImplementedError
+    final_score_probabilities = test_data['final_score_probabilities']
+    most_likely_final_score = final_score_probabilities.values.tolist()[0]
+    most_likely_final_score_probability = int(most_likely_final_score[2])
+    delta = 1.0
+    low_value = final_score_probability - delta
+    high_value = final_score_probability + delta
+    assert most_likely_final_score_probability >= low_value
+    assert most_likely_final_score_probability <= high_value
 
 
 @then('expect the predicted goals to be scored by the away team to be <expected_away_team_goals>')
-def expect_the_predicted_goals_to_be_scored_by_the_away_team_to_be_expected_away_team_goals():
+def expect_the_predicted_goals_to_be_scored_by_the_away_team_to_be_expected_away_team_goals(test_data,
+                                                                                            expected_away_team_goals):
     """expect the predicted goals to be scored by the away team to be <expected_away_team_goals>."""
-    raise NotImplementedError
+    final_score_probabilities = test_data['final_score_probabilities']
+    most_likely_final_score = final_score_probabilities.values.tolist()[0]
+    predicted_goals = int(most_likely_final_score[1])
+    assert predicted_goals == expected_away_team_goals
 
 
 @then('expect the predicted goals to be scored by the home team to be <expected_home_team_goals>')
-def expect_the_predicted_goals_to_be_scored_by_the_home_team_to_be_expected_home_team_goals():
+def expect_the_predicted_goals_to_be_scored_by_the_home_team_to_be_expected_home_team_goals(test_data,
+                                                                                            expected_home_team_goals):
     """expect the predicted goals to be scored by the home team to be <expected_home_team_goals>."""
-    raise NotImplementedError
+    final_score_probabilities = test_data['final_score_probabilities']
+    most_likely_final_score = final_score_probabilities.values.tolist()[0]
+    predicted_goals = int(most_likely_final_score[0])
+    assert predicted_goals == expected_home_team_goals
