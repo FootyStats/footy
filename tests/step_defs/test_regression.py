@@ -1,6 +1,8 @@
 # coding=utf-8
 """Regression Tests for BBC Article Basis feature tests."""
 
+import warnings
+
 from footy import Footy
 from footy.domain.Team import Team
 
@@ -23,7 +25,8 @@ from pytest_bdd import (
         away_team_win_probability=float,
         expected_home_team_goals=int,
         expected_away_team_goals=int,
-        final_score_probability=float
+        final_score_probability=float,
+        delta=float
     )
 )
 def test_last_day_of_the_epl_2009_season():
@@ -63,8 +66,18 @@ def the_last_day_of_the_epl_2009():
     }
 
 
+@when('delta is <delta>')
+def delta_is_delta(test_data, delta):
+    """delta is <delta>"""
+    #  TODO: Reduce size of deltas to <= 1.0.
+    if delta > 1.0:
+        warnings.warn(f'delta {delta} is > 1.0')
+
+    test_data['outcome_delta'] = delta
+
+
 @when('the away team is <away_team>')
-def the_away_team_is_away_team(test_data, away_team):
+def the_away_team_is_away_team(test_data, away_team, delta):
     """the away team is <away_team>."""
     test_data['away_team_name'] = away_team
     footy = test_data['footy']
@@ -76,10 +89,6 @@ def the_away_team_is_away_team(test_data, away_team):
 
     outcome_probabilities = response.outcome_probabilities()
     test_data['outcome_probabilities'] = outcome_probabilities
-
-    # Set a delta for allowing variance due to some of the crazy rounding
-    # used in the article itself.
-    test_data['outcome_delta'] = 2.53
     final_score_probabilities = response.final_score_probabilities()
     test_data['final_score_probabilities'] = final_score_probabilities
 
