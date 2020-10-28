@@ -13,22 +13,20 @@ from pytest_bdd import (
     when,
 )
 
-
-@scenario(
-    '../features/regression.feature',
-    'Last Day of the EPL 2009 Season',
-    example_converters=dict(
-        home_team=str,
-        away_team=str,
-        home_team_win_probability=float,
-        score_draw_probability=float,
-        away_team_win_probability=float,
-        expected_home_team_goals=int,
-        expected_away_team_goals=int,
-        final_score_probability=float,
-        delta=float
-    )
+CONVERTERS = dict(
+    home_team=str,
+    away_team=str,
+    home_team_win_probability=float,
+    score_draw_probability=float,
+    away_team_win_probability=float,
+    expected_home_team_goals=int,
+    expected_away_team_goals=int,
+    final_score_probability=float,
+    delta=float
 )
+
+
+@scenario('../features/regression.feature', 'Last Day of the EPL 2009 Season', example_converters=CONVERTERS)
 def test_last_day_of_the_epl_2009_season():
     """Last Day of the EPL 2009 Season."""
 
