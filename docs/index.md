@@ -638,8 +638,14 @@ Result - Data structure for a team.
 Result - Data structure for a team.
 
 
-#### property away_games()
-Getter method for property away_games.
+#### away_games(away_games=None)
+Getter/setter method for property away_games.
+
+
+* **Parameters**
+
+    **away_games** (*int**, **optional*) – The value you wish to set the away_games property to.
+
 
 
 * **Returns**
@@ -654,7 +660,7 @@ Getter method for property away_games.
 
 
 
-#### property goal_difference()
+#### goal_difference()
 Calculate and return the goal difference for the team.
 
 
@@ -670,8 +676,14 @@ Calculate and return the goal difference for the team.
 
 
 
-#### property goals_against()
-Getter method for property goals_against.
+#### goals_against(goals_against=None)
+Getter/setter method for property goals_against.
+
+
+* **Parameters**
+
+    **goals_against** (*int**, **optional*) – The value to set the property to.
+
 
 
 * **Returns**
@@ -686,8 +698,14 @@ Getter method for property goals_against.
 
 
 
-#### property goals_for()
-Getter method for property goals_for.
+#### goals_for(goals_for=None)
+Getter/setter for property goals_for.
+
+
+* **Parameters**
+
+    **goals_for** (*int**, **optional*) – Set the value of property goals_for.
+
 
 
 * **Returns**
@@ -702,8 +720,80 @@ Getter method for property goals_for.
 
 
 
-#### property home_games()
-Getter method for property home_games.
+#### historic_attack_strength(attack_strength=None)
+Append attack strength (if provided) if not, return the list.
+
+
+* **Parameters**
+
+    **attack_strength** (*float**, **optional*) – The attack strength to be appended to the historic attack strengths.
+
+
+
+* **Returns**
+
+    A list of the historic attack strengths.
+
+
+
+* **Return type**
+
+    list of floats
+
+
+
+#### historic_briers_score(briers_score=None)
+Append to the Briers Score list for outcomes.
+
+
+* **Parameters**
+
+    **briers_score** (*float*) – 
+
+
+
+* **Returns**
+
+    List of the historic outcome Briers scores.
+
+
+
+* **Return type**
+
+    list of float
+
+
+
+#### historic_defence_factor(defence_factor=None)
+Append defence factor (if provided) and provide historic figures.
+
+
+* **Parameters**
+
+    **defence_factor** (*float**, **optional*) – The defence factor to be appended to the list.
+
+
+
+* **Returns**
+
+    The historic defence factors for this team.
+
+
+
+* **Return type**
+
+    list of float
+
+
+
+#### home_games(home_games=None)
+Setter/getter method for property home_games.
+
+
+* **Parameters**
+
+    **home_games** (*int**, **optional*) – The value you wish to set the home_games property to.
+
 
 
 * **Returns**
@@ -718,8 +808,30 @@ Getter method for property home_games.
 
 
 
-#### property points()
-Getter method for property points.
+#### outcomes_briers_scores()
+Get the outcomes Briers Scores.
+
+
+* **Returns**
+
+    The Briers Scores from the outcomes.
+
+
+
+* **Return type**
+
+    list of float
+
+
+
+#### points(points=None)
+Getter/setter method for property points.
+
+
+* **Parameters**
+
+    **points** (*int**, **optional*) – The value you wish to set the points property to.
+
 
 
 * **Returns**
@@ -734,7 +846,7 @@ Getter method for property points.
 
 
 
-#### property team_name()
+#### team_name()
 Getter method for property team_name.
 
 

@@ -1,4 +1,7 @@
-all: lint test sphinx
+all: lint test sphinx build
+
+build:
+	jupyter-nbconvert --execute --no-input --to pdf Footy.ipynb
 
 lint:
 	yamllint -s .

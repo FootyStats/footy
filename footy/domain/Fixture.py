@@ -181,14 +181,14 @@ class Fixture:
 
         Parameters
         ----------
-        home_team_goals_probability: list of float
-            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+        home_team_goals_probability: float
+            A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
             goals being scored by the home team.
 
         Returns
         -------
-        list of float
-            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+        float
+            A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
             goals being scored by the home team.  If there is not enough data to calculate the probabilities, this
             will return None.
         """

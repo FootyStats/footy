@@ -113,31 +113,31 @@ class TestFootyClass(unittest.TestCase):
         self.assertIsNone(response.outcome_probabilities())
 
         # Team D hosts B and beats them 2 - 0.
-        goals_for = footy_obj.get_team('Team B').goals_for + 0
-        goals_against = footy_obj.get_team('Team B').goals_against + 2
+        goals_for = footy_obj.get_team('Team B').goals_for()
+        goals_against = footy_obj.get_team('Team B').goals_against() + 2
         home_games = 1
         away_games = 1
         points = 1 + 0
         footy_obj.add_team(Team('Team B', goals_for, goals_against, home_games,
                            away_games, points))
 
-        goals_for = footy_obj.get_team('Team D').goals_for + 2
-        goals_against = footy_obj.get_team('Team D').goals_against + 0
+        goals_for = footy_obj.get_team('Team D').goals_for() + 2
+        goals_against = footy_obj.get_team('Team D').goals_against() + 0
         points = 3 + 3
         footy_obj.add_team(Team('Team D', goals_for, goals_against, home_games,
                            away_games, points))
 
         # Team C hosts Team A and beats them 1 - 0.
-        goals_for = footy_obj.get_team('Team A').goals_for + 0
-        goals_against = footy_obj.get_team('Team B').goals_against + 1
+        goals_for = footy_obj.get_team('Team A').goals_for() + 0
+        goals_against = footy_obj.get_team('Team B').goals_against() + 1
         home_games = 1
         away_games = 1
         points = 0 + 0
         footy_obj.add_team(Team('Team A', goals_for, goals_against, home_games,
                            away_games, points))
 
-        goals_for = footy_obj.get_team('Team C').goals_for + 1
-        goals_against = footy_obj.get_team('Team D').goals_against + 0
+        goals_for = footy_obj.get_team('Team C').goals_for() + 1
+        goals_against = footy_obj.get_team('Team D').goals_against() + 0
         points = 1 + 3
         footy_obj.add_team(Team('Team C', goals_for, goals_against, home_games,
                            away_games, points))
@@ -152,10 +152,10 @@ class TestFootyClass(unittest.TestCase):
         # A    0  4  -4   0 LL
 
         # Let's confirm the goal differences.
-        self.assertEqual(footy_obj.get_team('Team A').goal_difference, -4)
-        self.assertEqual(footy_obj.get_team('Team B').goal_difference, -2)
-        self.assertEqual(footy_obj.get_team('Team C').goal_difference, 2)
-        self.assertEqual(footy_obj.get_team('Team D').goal_difference, 4)
+        self.assertEqual(footy_obj.get_team('Team A').goal_difference(), -4)
+        self.assertEqual(footy_obj.get_team('Team B').goal_difference(), -2)
+        self.assertEqual(footy_obj.get_team('Team C').goal_difference(), 2)
+        self.assertEqual(footy_obj.get_team('Team D').goal_difference(), 4)
 
         # Now let's calculate and set the averages.
         games_played_by_home_teams = 2
@@ -184,7 +184,7 @@ class TestFootyClass(unittest.TestCase):
         self.assertGreater(outcome_probabilities[0], outcome_probabilities[2])
 
     @parameterized.expand([
-        ('Arsenal', 'Stoke', [72.0, 19.0, 10.0], 2, 0, 14),
+        ('Arsenal', 'Stoke', [0.72, 0.19, 0.10], 2, 0, 14),
         ('Aston Villa', 'Newcastle', [62.0, 21.0, 17.0], 1, 0, 10),
         ('Blackburn', 'West Brom', [54.0, 23.0, 23.0], 1, 1, 10),
         # Article says 19% probability we calculated 17%.
@@ -230,9 +230,7 @@ class TestFootyClass(unittest.TestCase):
         # the sum of all the probabilities for the Arsenal v Stoke games
         # is actually 98.01 (not a perfect 100.0).  Therefore we subtract the
         # sum from 1.0 and use the result as a variance to compare against.
-        probabilities_sum = outcome_probabilities[0]
-        probabilities_sum += outcome_probabilities[1]
-        probabilities_sum += outcome_probabilities[2]
+        probabilities_sum = sum(outcome_probabilities)
         delta = abs(1.0 - probabilities_sum)
 
         for i in [0, 1, 2]:
