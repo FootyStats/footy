@@ -34,6 +34,29 @@ class Fixture:
         self._away_team_goals_probability = None
         self._final_score_probabilities = None
 
+    def __eq__(self, other):
+        """
+        Override the __eq__ method for the Fixture class to allow for object value comparison.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+        Returns
+        -------
+        bool
+            True/False if the values in the two objects are equal.
+        """
+        return (
+                self.__class__ == other.__class__ and
+                self._home_team == other._home_team and
+                self._away_team == other._away_team and
+                self._status == other._status and
+                self._utc_start == other._utc_start and
+                self._result == other._result
+        )
+
     @property
     def home_team(self):
         """
@@ -183,12 +206,15 @@ class Fixture:
         ----------
         home_team_goals_probability: float
             A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
+        home_team_goals_probability: list of float
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
             goals being scored by the home team.
 
         Returns
         -------
         float
             A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
+            A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
             goals being scored by the home team.  If there is not enough data to calculate the probabilities, this
             will return None.
         """

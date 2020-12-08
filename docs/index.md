@@ -452,6 +452,16 @@ Competition - Data structure for a competition/league.
 Competition - Data structure for a competition/league.
 
 
+#### add_fixture(fixture)
+Add the provided fixture to the list of fixtures if the fixture isn’t already present.
+
+
+* **Parameters**
+
+    **fixture** (*footy.domain.Fixture.Fixture*) – The Team to be added to Teams.
+
+
+
 #### add_team(team)
 Add the provided team to the list of teams if an instance of that object isn’t already present.
 
@@ -808,22 +818,6 @@ Setter/getter method for property home_games.
 
 
 
-#### outcomes_briers_scores()
-Get the outcomes Briers Scores.
-
-
-* **Returns**
-
-    The Briers Scores from the outcomes.
-
-
-
-* **Return type**
-
-    list of float
-
-
-
 #### points(points=None)
 Getter/setter method for property points.
 
@@ -960,13 +954,18 @@ Get or set the home_team_goals_probability of the fixture.
 
 * **Parameters**
 
-    **home_team_goals_probability** (*list of float*) – A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
+    
+    * **home_team_goals_probability** (*list of float*) – A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
+
+
+    * **home_team_goals_probability** – A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
     goals being scored by the home team.
 
 
 
 * **Returns**
 
+    A float indicating (with values between 0.0 and 1.0) the probability of between zero and six
     A list of floats indicating (with values between 0.0 and 1.0) the probability of between zero and six
     goals being scored by the home team.  If there is not enough data to calculate the probabilities, this
     will return None.
@@ -975,7 +974,7 @@ Get or set the home_team_goals_probability of the fixture.
 
 * **Return type**
 
-    list of float
+    float
 
 
 

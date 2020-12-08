@@ -30,7 +30,7 @@ class Result:
 
         Parameters
         ----------
-        other : Result
+        other : footy.domain.Result.Result
             The result object to compare to.
 
         Returns
@@ -40,9 +40,9 @@ class Result:
         """
         return (
                 self.__class__ == other.__class__ and
-                self.status == other.status and
-                self.home_team_goals_scored == other.home_team_goals_scored and
-                self.away_team_goals_scored == other.away_team_goals_scored
+                self._status == other._status and
+                self._home_team_goals_scored == other._home_team_goals_scored and
+                self._away_team_goals_scored == other._away_team_goals_scored
                )
 
     @property

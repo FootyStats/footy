@@ -351,18 +351,18 @@ class Footy:
         home_expected_goals *= self.attack_strength(home_team)
         home_expected_goals *= self.defence_factor(away_team)
         home_expected_goals = round(home_expected_goals, 2)
-        goals = [0, 1, 2, 3, 4, 5]
+        goals = [0, 1, 2, 3, 4, 5, 6]
         probability_mass = poisson.pmf(goals, home_expected_goals)
-        probability_mass = np.append(probability_mass,
-                                     [1.0 - probability_mass.sum()])
-        home_probability_mass = np.round(probability_mass, 2)
+        # probability_mass = np.append(probability_mass,
+        #                              1.0 - sum(probability_mass))
+        home_probability_mass = np.round(probability_mass, 4)
         away_expected_goals *= self.attack_strength(away_team)
         away_expected_goals *= self.defence_factor(home_team)
         away_expected_goals = round(away_expected_goals, 2)
         probability_mass = poisson.pmf(goals, away_expected_goals)
-        probability_mass = np.append(probability_mass,
-                                     [1.0 - probability_mass.sum()])
-        away_probability_mass = np.round(probability_mass, 2)
+        # probability_mass = np.append(probability_mass,
+        #                              1.0 - sum(probability_mass))
+        away_probability_mass = np.round(probability_mass, 4)
 
         probabilities = []
 
@@ -370,7 +370,7 @@ class Footy:
             for away_team_goal in range(len(goals)):
                 probability = home_probability_mass[home_team_goal]
                 probability *= away_probability_mass[away_team_goal]
-                probability = round(probability, 2)
+                probability = round(probability, 4)
                 probabilities.append([home_team_goal, away_team_goal,
                                       probability])
 
@@ -383,11 +383,11 @@ class Footy:
         response.final_score_probabilities(df)
 
         df2 = df[df.home > df.away]
-        home_win_probability = round(sum(df2.probability.values), 2)
+        home_win_probability = round(sum(df2.probability.values), 4)
         df2 = df[df.home == df.away]
-        draw_probability = round(sum(df2.probability.values), 2)
+        draw_probability = round(sum(df2.probability.values), 4)
         df2 = df[df.home < df.away]
-        away_win_probability = round(sum(df2.probability.values), 2)
+        away_win_probability = round(sum(df2.probability.values), 4)
 
         response.outcome_probabilities([
             home_win_probability,
