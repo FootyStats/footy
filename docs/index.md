@@ -987,6 +987,22 @@ Get or set the home_team_goals_probability of the fixture.
 
 
 
+#### largest_odds()
+Return the largest of the outcome probabilities.
+
+
+* **Returns**
+
+    The largest probability from a home wine, draw or away win.
+
+
+
+* **Return type**
+
+    float
+
+
+
 #### outcome_probabilities(outcome_probabilities=None)
 Get or set the outcome_probabilities of the fixture.
 

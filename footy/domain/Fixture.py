@@ -54,8 +54,98 @@ class Fixture:
                 self._away_team == other._away_team and
                 self._status == other._status and
                 self._utc_start == other._utc_start and
-                self._result == other._result
+                self._result == other._result and
+                self.largest_odds() == other.largest_odds()
         )
+
+    def __ne__(self, other):
+        """
+        Not equal to.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+        Returns
+        -------
+        bool
+            True if not equal to other.
+        """
+        return (
+                self.__class__ != other.__class__ or
+                self._home_team != other._home_team or
+                self._away_team != other._away_team or
+                self._status != other._status or
+                self._utc_start != other._utc_start or
+                self._result != other._result or
+                self.largest_odds() != other.largest_odds()
+        )
+
+    def __ge__(self, other):
+        """
+        Greater than or equal to other.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+
+        Returns
+        -------
+        bool
+            True if >= to other.
+        """
+        return self.largest_odds() >= other.largest_odds()
+
+    def __gt__(self, other):
+        """
+        Override the "greater than" method.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+        Returns
+        -------
+        bool
+            True if other has greater odds.
+        """
+        return self.largest_odds() > other.largest_odds()
+
+    def __le__(self, other):
+        """
+        Override the __le__ method for the Fixture class to allow for object value comparison.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+        Returns
+        -------
+        bool
+            True if self <= other.
+        """
+        return self.largest_odds() <= other.largest_odds()
+
+    def __lt__(self, other):
+        """
+        Override the __lt__ method for the Fixture class to allow for object value comparison.
+
+        Parameters
+        ----------
+        other : footy.domain.Fixture.Fixture
+            The fixture object to compare to.
+
+        Returns
+        -------
+        bool
+            True if the other object is larger than the current object, false otherwise.
+        """
+        return self.largest_odds() < other.largest_odds()
 
     @property
     def home_team(self):
@@ -265,3 +355,21 @@ class Fixture:
         if final_score_probabilities is not None:
             self._final_score_probabilities = final_score_probabilities
         return self._final_score_probabilities
+
+    def largest_odds(self):
+        """
+        Return the largest of the outcome probabilities.
+
+        Returns
+        -------
+        float
+            The largest probability from a home wine, draw or away win.
+        """
+        probabilities = self.outcome_probabilities()
+
+        if not probabilities:
+            return None
+
+        response = max(probabilities[0], probabilities[1])
+        response = max(response, probabilities[2])
+        return response
