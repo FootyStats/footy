@@ -13,4 +13,3 @@ sphinx:
 
 test:
 	PYTHONPATH=.:.. pytest --cov=footy --verbose
-	coverage report

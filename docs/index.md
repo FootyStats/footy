@@ -276,7 +276,7 @@ team concedes more goals that of the average team.
 
 
 
-#### fixture(home_team, away_team)
+#### fixture(home_team, away_team, utc_start=None)
 Calculate the probabilities of a fixture between two teams.
 
 
@@ -287,6 +287,9 @@ Calculate the probabilities of a fixture between two teams.
 
 
     * **away_team** (*footy.domain.Team.Team*) – The away team.
+
+
+    * **utc_start** (*str*) – The UTC timestamp of the when the fixture starts.
 
 
 
@@ -448,7 +451,7 @@ The notation of a score draw outcome.
 Competition - Data structure for a competition/league.
 
 
-### class footy.domain.Competition.Competition(code, name=None, teams=None, start_date=None, end_date=None, stage='unknown', fixtures=None)
+### class footy.domain.Competition.Competition(code=None, name=None, teams=None, start_date=None, end_date=None, stage='unknown', fixtures=None)
 Competition - Data structure for a competition/league.
 
 
@@ -472,8 +475,14 @@ Add the provided team to the list of teams if an instance of that object isn’t
 
 
 
-#### property code()
-Getter method for property code.
+#### code(code=None)
+Get or set the competition code.
+
+
+* **Parameters**
+
+    **code** (*str**, **optional*) – 
+
 
 
 * **Returns**

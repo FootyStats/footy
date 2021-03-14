@@ -306,7 +306,7 @@ class Footy:
 
         return round(defence_factor, 2)
 
-    def fixture(self, home_team, away_team):
+    def fixture(self, home_team, away_team, utc_start=None):
         """
         Calculate the probabilities of a fixture between two teams.
 
@@ -316,6 +316,8 @@ class Footy:
             The home team.
         away_team : footy.domain.Team.Team
             The away team.
+        utc_start : str
+            The UTC timestamp of the when the fixture starts.
 
         Returns
         -------
@@ -327,7 +329,7 @@ class Footy:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        response = Fixture(home_team, away_team)
+        response = Fixture(home_team, away_team, utc_start=utc_start)
 
         # Check that all teams have played more than zero home games.
         # If the check fails, return None as we do not have enough data

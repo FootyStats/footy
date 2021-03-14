@@ -20,11 +20,11 @@ class TestCompetition(unittest.TestCase):
                            '2020-09-25T15:00:00Z', '2021-02-13T21:30:00Z', 'Group', [])
 
     def test_competition_initializes_with_expected_values(self):
-        competition = Competition(self.EXPECTED_COMPETITION.code, self.EXPECTED_COMPETITION.name,
+        competition = Competition(self.EXPECTED_COMPETITION.code(), self.EXPECTED_COMPETITION.name,
                                   self.EXPECTED_COMPETITION.teams, self.EXPECTED_COMPETITION.start_date,
                                   self.EXPECTED_COMPETITION.end_date, self.EXPECTED_COMPETITION.stage,
                                   self.EXPECTED_COMPETITION.fixtures)
-        self.assertEqual(self.EXPECTED_COMPETITION.code, competition.code)
+        self.assertEqual(self.EXPECTED_COMPETITION.code(), competition.code())
         self.assertEqual(self.EXPECTED_COMPETITION.name, competition.name)
         self.assertEqual(self.EXPECTED_COMPETITION.teams, competition.teams)
         self.assertEqual(self.EXPECTED_COMPETITION.start_date, competition.start_date)
