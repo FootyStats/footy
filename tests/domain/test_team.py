@@ -18,33 +18,33 @@ class TestTeam(unittest.TestCase):
         team = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST,
                     self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
 
-        self.assertEqual(self.TEAM_NAME, team.team_name)
-        self.assertEqual(self.GOALS_FOR, team.goals_for)
-        self.assertEqual(self.GOALS_AGAINST, team.goals_against)
-        self.assertEqual(self.HOME_GAMES, team.home_games)
-        self.assertEqual(self.AWAY_GAMES, team.away_games)
-        self.assertEqual(self.POINTS, team.points)
+        self.assertEqual(self.TEAM_NAME, team.team_name())
+        self.assertEqual(self.GOALS_FOR, team.goals_for())
+        self.assertEqual(self.GOALS_AGAINST, team.goals_against())
+        self.assertEqual(self.HOME_GAMES, team.home_games())
+        self.assertEqual(self.AWAY_GAMES, team.away_games())
+        self.assertEqual(self.POINTS, team.points())
 
     def test_goal_difference_calculates_correctly(self):
         team = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST,
                     self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
-        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference)
+        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference())
 
     def test_goal_difference_updates_when_goals_for_change(self):
         team = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST,
                     self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
-        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference)
+        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference())
 
-        team.goals_for += 10
-        self.assertEqual((self.GOALS_FOR - self.GOALS_AGAINST) + 10, team.goal_difference)
+        team.goals_for(team.goals_for() + 10)
+        self.assertEqual((self.GOALS_FOR - self.GOALS_AGAINST) + 10, team.goal_difference())
 
     def test_goal_difference_updates_when_goals_against_change(self):
         team = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST,
                     self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)
-        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference)
+        self.assertEqual(self.GOALS_FOR - self.GOALS_AGAINST, team.goal_difference())
 
-        team.goals_against += 10
-        self.assertEqual((self.GOALS_FOR - self.GOALS_AGAINST) - 10, team.goal_difference)
+        team.goals_against(team.goals_against() + 10)
+        self.assertEqual((self.GOALS_FOR - self.GOALS_AGAINST) - 10, team.goal_difference())
 
     def test_equality_true_when_fixture_object_same_values(self):
         team_a = Team(self.TEAM_NAME, self.GOALS_FOR, self.GOALS_AGAINST, self.HOME_GAMES, self.AWAY_GAMES, self.POINTS)

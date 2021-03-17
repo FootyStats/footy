@@ -1,0 +1,48 @@
+---
+# Configuration file for footy based apps.
+
+competitions:
+  BL1:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/german-bundesliga/table"
+    competition_name: "Bundesliga"
+    country: DE
+
+  BSA:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/brazilian-league/table"
+    competition_name: "Série A"
+    country: BR
+
+  DED:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/dutch-eredivisie/table"
+    competition_name: "Eredivisie"
+    country: NE
+
+  ELC:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/championship/table"
+    competition_name: "Championship"
+    country: UK
+
+  FL1:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/french-ligue-one/table"
+    competition_name: "Ligue 1"
+    country: FR
+
+  PD:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/spanish-la-liga/table"
+    competition_name: "Primera Division"
+    country: ES
+
+  PL:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/premier-league/table"
+    competition_name: "Premier League"
+    country: UK
+
+  PPL:
+    bbc_table_site: "https://www.bbc.com/sport/football/portuguese-primeira-liga/table"
+    competition_name: "Primeira Liga"
+    country: PT
+
+  SA:
+    bbc_table_site: "https://www.bbc.co.uk/sport/football/italian-serie-a/table"
+    competition_name: "Serie A"
+    country: IT

@@ -43,6 +43,6 @@ def y_prob_is_y_prob(test_data, y_prob):
 def expect_briers_score_to_be_briers_score(test_data, briers_score):
     """expect briers score to be <briers_score>."""
     footy = Footy()
-    y_prob = np.array(test_data['y_prob']) / 100.0
-    y_true = np.array(test_data['y_true']) / 100.0
+    y_prob = np.array(test_data['y_prob'])
+    y_true = np.array(test_data['y_true'])
     assert briers_score == footy.brier_score(y_true, y_prob)

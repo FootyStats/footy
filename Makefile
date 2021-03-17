@@ -1,4 +1,7 @@
-all: lint test sphinx
+all: lint test sphinx build
+
+build:
+	jupyter-nbconvert --execute --no-input --to pdf Footy.ipynb
 
 lint:
 	yamllint -s .
@@ -9,5 +12,4 @@ sphinx:
 	sphinx-build -b markdown . docs
 
 test:
-	PYTHONPATH=.. coverage run -m pytest -v --durations=3 tests
-	coverage report
+	PYTHONPATH=.:.. pytest --cov=footy --verbose

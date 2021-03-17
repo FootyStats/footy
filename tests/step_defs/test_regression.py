@@ -1,10 +1,5 @@
 # coding=utf-8
-"""Regression Tests for BBC Article Basis feature tests."""
-
-import warnings
-
-from footy import Footy
-from footy.domain.Team import Team
+"""Last Day of the EPL 2009 Season feature tests."""
 
 from pytest_bdd import (
     given,
@@ -13,25 +8,46 @@ from pytest_bdd import (
     when,
 )
 
-CONVERTERS = dict(
-    home_team=str,
-    away_team=str,
-    home_team_win_probability=float,
-    score_draw_probability=float,
-    away_team_win_probability=float,
-    expected_home_team_goals=int,
-    expected_away_team_goals=int,
-    final_score_probability=float,
-    delta=float
-)
+from footy import Footy
+from footy.domain.Team import Team
 
 
-@scenario('../features/regression.feature', 'Last Day of the EPL 2009 Season', example_converters=CONVERTERS)
-def test_last_day_of_the_epl_2009_season():
-    """Last Day of the EPL 2009 Season."""
+@scenario('../features/regression.feature',
+          'Attack Strength Defence Factor',
+          example_converters=dict(
+              team_name=str,
+              attack_strength=float,
+              defence_factor=float
+          ))
+def test_attack_strength_defence_factor():
+    """Attack Strength Defence Factor."""
 
 
-@given('the last day of the EPL 2009', target_fixture='test_data')
+@scenario('../features/regression.feature',
+          'Expected Goals Home Team',
+          example_converters=dict(
+              home_team=str,
+              away_team=str,
+              team_name=str,
+              expected_goals=float,
+              predicted_goals=str
+          ))
+def test_expected_goals_home_team():
+    """Expected Goals Home Team."""
+
+
+@scenario('../features/regression.feature',
+          'Expected Outcomes',
+          example_converters=dict(
+              home_team=str,
+              away_team=str,
+              prediction=str
+          ))
+def test_expected_outcomes():
+    """Expected Outcomes."""
+
+
+@given('the last day of the EPL 2009', target_fixture='last_day_of_the_season')
 def the_last_day_of_the_epl_2009():
     """the last day of the EPL 2009."""
     footy = Footy()
@@ -64,101 +80,108 @@ def the_last_day_of_the_epl_2009():
     }
 
 
-@when('delta is <delta>')
-def delta_is_delta(test_data, delta):
-    """delta is <delta>"""
-    #  TODO: Reduce size of deltas to <= 1.0.
-    if delta > 1.0:
-        warnings.warn(f'delta {delta} is > 1.0')
-
-    test_data['outcome_delta'] = delta
-
-
-@when('the away team is <away_team>')
-def the_away_team_is_away_team(test_data, away_team, delta):
-    """the away team is <away_team>."""
-    test_data['away_team_name'] = away_team
-    footy = test_data['footy']
-
-    response = footy.fixture(
-        footy.get_team(test_data['home_team_name']),
-        footy.get_team(test_data['away_team_name'])
-    )
-
-    outcome_probabilities = response.outcome_probabilities()
-    test_data['outcome_probabilities'] = outcome_probabilities
-    final_score_probabilities = response.final_score_probabilities()
-    test_data['final_score_probabilities'] = final_score_probabilities
+@when('the away_team is <away_team>')
+def the_away_team_is_away_team(last_day_of_the_season, away_team):
+    """the away_team is <away_team>."""
+    footy = last_day_of_the_season['footy']
+    last_day_of_the_season['away_team'] = footy.get_team(away_team)
 
 
 @when('the home team is <home_team>')
-def the_home_team_is_home_team(test_data, home_team):
-    """then home team is <home_team>."""
-    test_data['home_team_name'] = home_team
+def the_home_team_is_home_team(last_day_of_the_season, home_team):
+    """the home team is <home_team>."""
+    footy = last_day_of_the_season['footy']
+    last_day_of_the_season['home_team'] = footy.get_team(home_team)
 
 
-@then('expect a score draw probability to be <score_draw_probability>')
-def expect_a_score_draw_probability_to_be_score_draw_probability(test_data, score_draw_probability):
-    """expect a score draw probability to be <score_draw_probability>."""
-    calculated_probability = test_data['outcome_probabilities'][1]
-    delta = test_data['outcome_delta']
-    low_value = score_draw_probability - delta
-    high_value = score_draw_probability + delta
-    assert calculated_probability >= low_value
-    assert calculated_probability <= high_value
+@when('the team name is <team_name>')
+def the_team_name_is_team_name(last_day_of_the_season, team_name):
+    """the team name is <team_name>."""
+    footy = last_day_of_the_season['footy']
+    last_day_of_the_season['team'] = footy.get_team(team_name)
 
 
-@then('expect an away team probability to be <away_team_win_probability>')
-def expect_an_away_team_probability_to_be_away_team_win_probability(test_data, away_team_win_probability):
-    """expect an away team probability to be <away_team_win_probability>."""
-    calculated_probability = test_data['outcome_probabilities'][2]
-    delta = test_data['outcome_delta']
-    low_value = away_team_win_probability - delta
-    high_value = away_team_win_probability + delta
-    assert calculated_probability >= low_value
-    assert calculated_probability <= high_value
+@then('attack strength is <attack_strength>')
+def attack_strength_is_attack_strength(last_day_of_the_season, attack_strength):
+    """attack strength is <attack_strength>."""
+    footy = last_day_of_the_season['footy']
+    team = last_day_of_the_season['team']
+    assert footy.attack_strength(team) == attack_strength, 'Incorrect attack strength.'
 
 
-@then('expect the home team win probability to be <home_team_win_probability>')
-def expect_the_home_team_win_probability_to_be_home_team_win_probability(test_data, home_team_win_probability):
-    """expect the home team win probability to be <home_team_win_probability>."""
-    calculated_probability = test_data['outcome_probabilities'][0]
-    delta = test_data['outcome_delta']
-    low_value = home_team_win_probability - delta
-    high_value = home_team_win_probability + delta
-    assert calculated_probability >= low_value
-    assert calculated_probability <= high_value
+@then('defence factor is <defence_factor>')
+def defence_factor_is_defence_factor(last_day_of_the_season, defence_factor):
+    """defence factor is <defence_factor>."""
+    footy = last_day_of_the_season['footy']
+    team = last_day_of_the_season['team']
+    assert footy.defence_factor(team) == defence_factor, 'Incorrect defence factor.'
 
 
-@then('expect the predicted final score probability to be <final_score_probability>')
-def expect_the_predicted_final_score_probability_to_be_final_score_probability(test_data,
-                                                                               final_score_probability):
-    """expect the predicted final score probability to be <final_score_probability>."""
-    final_score_probabilities = test_data['final_score_probabilities']
-    most_likely_final_score = final_score_probabilities.values.tolist()[0]
-    most_likely_final_score_probability = int(most_likely_final_score[2])
-    delta = 1.0
-    low_value = final_score_probability - delta
-    high_value = final_score_probability + delta
-    assert most_likely_final_score_probability >= low_value
-    assert most_likely_final_score_probability <= high_value
+@then('expected goals is <expected_goals>')
+def expected_goals_is_expected_goals(last_day_of_the_season, expected_goals):
+    """expected goals is <expected_goals>."""
+    footy = last_day_of_the_season['footy']
+    team = last_day_of_the_season['team']
+    away_team = last_day_of_the_season['away_team']
+    home_team = last_day_of_the_season['home_team']
+
+    if team.team_name() == away_team.team_name():
+        calculated_goals = footy.average_goals_scored_by_an_away_team()
+        calculated_goals *= footy.attack_strength(away_team)
+        calculated_goals *= footy.defence_factor(home_team)
+    else:
+        calculated_goals = footy.average_goals_scored_by_a_home_team()
+        calculated_goals *= footy.attack_strength(home_team)
+        calculated_goals *= footy.defence_factor(away_team)
+
+    calculated_goals = round(calculated_goals, 2)
+    assert calculated_goals == expected_goals, 'Incorrect expected goals.'
 
 
-@then('expect the predicted goals to be scored by the away team to be <expected_away_team_goals>')
-def expect_the_predicted_goals_to_be_scored_by_the_away_team_to_be_expected_away_team_goals(test_data,
-                                                                                            expected_away_team_goals):
-    """expect the predicted goals to be scored by the away team to be <expected_away_team_goals>."""
-    final_score_probabilities = test_data['final_score_probabilities']
-    most_likely_final_score = final_score_probabilities.values.tolist()[0]
-    predicted_goals = int(most_likely_final_score[1])
-    assert predicted_goals == expected_away_team_goals
+@then('predicted goals is <predicted_goals>')
+def predicted_goals_is_predicted_goals(last_day_of_the_season, predicted_goals):
+    """predicted goals is <predicted_goals>."""
+    footy = last_day_of_the_season['footy']
+    away_team = last_day_of_the_season['away_team']
+    home_team = last_day_of_the_season['home_team']
+    team = last_day_of_the_season['team']
+    fixture = footy.fixture(home_team, away_team)
+
+    if team.team_name() == away_team.team_name():
+        calculated_goals = fixture.away_team_goals_probability()
+    else:
+        calculated_goals = fixture.home_team_goals_probability()
+
+    calculated_goals = [round(elem, 2) for elem in calculated_goals]
+    calculated_goals = calculated_goals[0:len(predicted_goals)]
+    predicted_goals = predicted_goals.split(',')
+    predicted_goals = [float(elem) for elem in predicted_goals]
+    calculated_goals = calculated_goals[0:len(predicted_goals)]
+    assert calculated_goals == predicted_goals
 
 
-@then('expect the predicted goals to be scored by the home team to be <expected_home_team_goals>')
-def expect_the_predicted_goals_to_be_scored_by_the_home_team_to_be_expected_home_team_goals(test_data,
-                                                                                            expected_home_team_goals):
-    """expect the predicted goals to be scored by the home team to be <expected_home_team_goals>."""
-    final_score_probabilities = test_data['final_score_probabilities']
-    most_likely_final_score = final_score_probabilities.values.tolist()[0]
-    predicted_goals = int(most_likely_final_score[0])
-    assert predicted_goals == expected_home_team_goals
+@then('expect the prediction to match <prediction>')
+def expect_the_prediction_to_match_prediction(last_day_of_the_season, prediction):
+    """expect the prediction to match <prediction>."""
+    away_team = last_day_of_the_season['away_team']
+    footy = last_day_of_the_season['footy']
+    home_team = last_day_of_the_season['home_team']
+    prediction = prediction.split(',')
+    prediction = [float(elem) for elem in prediction]
+    fixture = footy.fixture(home_team, away_team)
+    outcome_probabilities = fixture.outcome_probabilities()
+    outcome_probabilities = [round(elem, 2) for elem in outcome_probabilities]
+
+    labels = [
+        'home win',
+        'score draw',
+        'away win'
+    ]
+
+    for i in range(3):
+        # Allow tolerance of 2% for rounding errors.
+        min = outcome_probabilities[i] - 0.02
+        max = outcome_probabilities[i] + 0.02
+        message = f'Outcome prediction ({labels[i]})'
+        message += f' {outcome_probabilities[i]} != {prediction[i]}'
+        assert min <= prediction[i] <= max, message

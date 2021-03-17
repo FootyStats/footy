@@ -12,6 +12,9 @@ class Team:
         self._home_games = home_games
         self._away_games = away_games
         self._points = points
+        self._historic_briers_scores = []
+        self._historic_attack_strength = []
+        self._historic_defence_factor = []
 
     def __eq__(self, other):
         """
@@ -37,7 +40,6 @@ class Team:
                 self._points == other._points
         )
 
-    @property
     def team_name(self):
         """
         Getter method for property team_name.
@@ -49,127 +51,152 @@ class Team:
         """
         return self._team_name
 
-    @property
-    def goals_for(self):
+    def goals_for(self, goals_for=None):
         """
-        Getter method for property goals_for.
+        Getter/setter for property goals_for.
+
+        Parameters
+        ----------
+        goals_for : int, optional
+            Set the value of property goals_for.
 
         Returns
         -------
         int
             The value of property goals_for.
         """
+        if goals_for is not None:
+            self._goals_for = goals_for
+
         return self._goals_for
 
-    @goals_for.setter
-    def goals_for(self, goals_for):
+    def goals_against(self, goals_against=None):
         """
-        Getter method for property goals_for.
+        Getter/setter method for property goals_against.
 
         Parameters
         ----------
-        goals_for : int
-            The value you wish to set the goals_for property to.
-        """
-        self._goals_for = goals_for
-
-    @property
-    def goals_against(self):
-        """
-        Getter method for property goals_against.
+        goals_against : int, optional
+            The value to set the property to.
 
         Returns
         -------
         int
             The value of property goals_against.
         """
+        if goals_against is not None:
+            self._goals_against = goals_against
         return self._goals_against
 
-    @goals_against.setter
-    def goals_against(self, goals_against):
+    def historic_attack_strength(self, attack_strength=None):
         """
-        Setter method for property goals_against.
+        Append attack strength (if provided) if not, return the list.
 
         Parameters
         ----------
-        goals_against : int
-            The value you wish to set the goals_against property to.
-        """
-        self._goals_against = goals_against
+        attack_strength : float, optional
+            The attack strength to be appended to the historic attack strengths.
 
-    @property
-    def home_games(self):
+        Returns
+        -------
+        list of floats
+            A list of the historic attack strengths.
         """
-        Getter method for property home_games.
+        if attack_strength is not None:
+            self._historic_attack_strength.append(attack_strength)
+
+        return self._historic_attack_strength
+
+    def historic_briers_score(self, briers_score=None):
+        """
+        Append to the Briers Score list for outcomes.
+
+        Parameters
+        ----------
+        briers_score : float
+
+        Returns
+        -------
+        list of float
+            List of the historic outcome Briers scores.
+        """
+        if briers_score is not None:
+            self._historic_briers_scores.append(briers_score)
+        return self._historic_briers_scores
+
+    def historic_defence_factor(self, defence_factor=None):
+        """
+        Append defence factor (if provided) and provide historic figures.
+
+        Parameters
+        ----------
+        defence_factor : float, optional
+            The defence factor to be appended to the list.
+
+        Returns
+        -------
+        list of float
+            The historic defence factors for this team.
+        """
+        if defence_factor is not None:
+            self._historic_defence_factor.append(defence_factor)
+
+        return self._historic_defence_factor
+
+    def home_games(self, home_games=None):
+        """
+        Setter/getter method for property home_games.
+
+        Parameters
+        ----------
+        home_games : int, optional
+            The value you wish to set the home_games property to.
 
         Returns
         -------
         int
             The value of property home_games.
         """
+        if home_games is not None:
+            self._home_games = home_games
         return self._home_games
 
-    @home_games.setter
-    def home_games(self, home_games):
+    def away_games(self, away_games=None):
         """
-        Setter method for property home_games.
+        Getter/setter method for property away_games.
 
         Parameters
         ----------
-        home_games : int
-            The value you wish to set the home_games property to.
-        """
-        self._home_games = home_games
-
-    @property
-    def away_games(self):
-        """
-        Getter method for property away_games.
+        away_games : int, optional
+            The value you wish to set the away_games property to.
 
         Returns
         -------
         int
             The value of property away_games.
         """
+        if away_games is not None:
+            self._away_games = away_games
         return self._away_games
 
-    @away_games.setter
-    def away_games(self, away_games):
+    def points(self, points=None):
         """
-        Setter method for property away_games.
+        Getter/setter method for property points.
 
         Parameters
         ----------
-        away_games : int
-            The value you wish to set the away_games property to.
-        """
-        self._away_games = away_games
-
-    @property
-    def points(self):
-        """
-        Getter method for property points.
+        points : int, optional
+            The value you wish to set the points property to.
 
         Returns
         -------
         int
             The value of property points.
         """
+        if points is not None:
+            self._points = points
         return self._points
 
-    @points.setter
-    def points(self, points):
-        """
-        Setter method for property points.
-
-        Parameters
-        ----------
-        points : int
-            The value you wish to set the points property to.
-        """
-        self._points = points
-
-    @property
     def goal_difference(self):
         """
         Calculate and return the goal difference for the team.

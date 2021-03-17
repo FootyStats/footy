@@ -113,7 +113,7 @@ class Footy:
         team : footy.domain.Team.Team
             The team to set or update (using the team name as a key) in Footy object.
         """
-        self._data[team.team_name] = team
+        self._data[team.team_name()] = team
 
     def attack_strength(self, team):
         """
@@ -141,7 +141,7 @@ class Footy:
         """
         try:
             league_average_goals_scored = self.goals_scored()
-            attack_strength = team.goals_for / league_average_goals_scored
+            attack_strength = team.goals_for() / league_average_goals_scored
         except ZeroDivisionError:
             return None
 
@@ -235,12 +235,12 @@ class Footy:
             defence_factors.append(defence_factor)
             team_list = [
                 team_name,
-                team.goals_for,
-                team.goals_against,
-                team.home_games,
-                team.away_games,
-                team.goal_difference,
-                team.points
+                team.goals_for(),
+                team.goals_against(),
+                team.home_games(),
+                team.away_games(),
+                team.goal_difference(),
+                team.points()
             ]
             a.append(team_list)
 
@@ -300,13 +300,13 @@ class Footy:
         """
         try:
             league_average_goals_conceded = self.goals_conceded()
-            defence_factor = team.goals_against / league_average_goals_conceded
+            defence_factor = team.goals_against() / league_average_goals_conceded
         except ZeroDivisionError:
             return None
 
         return round(defence_factor, 2)
 
-    def fixture(self, home_team, away_team):
+    def fixture(self, home_team, away_team, utc_start=None):
         """
         Calculate the probabilities of a fixture between two teams.
 
@@ -316,6 +316,8 @@ class Footy:
             The home team.
         away_team : footy.domain.Team.Team
             The away team.
+        utc_start : str
+            The UTC timestamp of the when the fixture starts.
 
         Returns
         -------
@@ -327,7 +329,7 @@ class Footy:
         KeyError
             When a team name is provided that is not in the dataset.
         """
-        response = Fixture(home_team, away_team)
+        response = Fixture(home_team, away_team, utc_start=utc_start)
 
         # Check that all teams have played more than zero home games.
         # If the check fails, return None as we do not have enough data
@@ -353,12 +355,16 @@ class Footy:
         home_expected_goals = round(home_expected_goals, 2)
         goals = [0, 1, 2, 3, 4, 5, 6]
         probability_mass = poisson.pmf(goals, home_expected_goals)
-        home_probability_mass = np.round(probability_mass, 2)
+        # probability_mass = np.append(probability_mass,
+        #                              1.0 - sum(probability_mass))
+        home_probability_mass = np.round(probability_mass, 4)
         away_expected_goals *= self.attack_strength(away_team)
         away_expected_goals *= self.defence_factor(home_team)
         away_expected_goals = round(away_expected_goals, 2)
         probability_mass = poisson.pmf(goals, away_expected_goals)
-        away_probability_mass = np.round(probability_mass, 2)
+        # probability_mass = np.append(probability_mass,
+        #                              1.0 - sum(probability_mass))
+        away_probability_mass = np.round(probability_mass, 4)
 
         probabilities = []
 
@@ -366,7 +372,7 @@ class Footy:
             for away_team_goal in range(len(goals)):
                 probability = home_probability_mass[home_team_goal]
                 probability *= away_probability_mass[away_team_goal]
-                probability = round(probability * 100.0, 2)
+                probability = round(probability, 4)
                 probabilities.append([home_team_goal, away_team_goal,
                                       probability])
 
@@ -459,7 +465,7 @@ class Footy:
 
             for team_name in team_names:
                 team = self.get_team(team_name)
-                goals_conceded += team.goals_against
+                goals_conceded += team.goals_against()
 
             return int(round(goals_conceded / len(team_names)))
 
@@ -486,13 +492,13 @@ class Footy:
             When a team name is provided that is not in the dataset.
         """
         if team_name:
-            return self.get_team(team_name).goals_for
+            return self.get_team(team_name).goals_for()
         else:
             goals_for = 0
             team_names = self.get_team_names()
 
             for team_name in team_names:
                 team = self.get_team(team_name)
-                goals_for += team.goals_for
+                goals_for += team.goals_for()
 
             return int(round(goals_for / len(team_names)))

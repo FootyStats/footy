@@ -4,13 +4,14 @@
 class Competition:
     """Competition - Data structure for a competition/league."""
 
-    def __init__(self, code, name=None, teams=None, start_date=None, end_date=None, stage='unknown', fixtures=None):
+    def __init__(self, code=None, name=None, teams=None, start_date=None, end_date=None, stage='unknown',
+                 fixtures=None):
         """
         Construct a Competition object.
 
         Parameters
         ----------
-        code : str
+        code : str, optional
             The code for the competition.
         name : str, optional
             The name of the competition.
@@ -33,16 +34,21 @@ class Competition:
         self._stage = stage
         self._fixtures = fixtures or []
 
-    @property
-    def code(self):
+    def code(self, code=None):
         """
-        Getter method for property code.
+        Get or set the competition code.
+
+        Parameters
+        ----------
+        code: str, optional
 
         Returns
         -------
         str
             The value of property code.
         """
+        if code is not None:
+            self._code = code
         return self._code
 
     @property
