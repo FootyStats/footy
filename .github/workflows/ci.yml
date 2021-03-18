@@ -32,7 +32,9 @@ jobs:
           python-version: 3.8
 
       - name: Requirements
-        run: pip install -r requirements.txt
+        run: |
+          apt-get install -y pandoc
+          pip install -r requirements.txt
 
       - name: Lint
         run: make lint
@@ -44,3 +46,9 @@ jobs:
         run: make build
         env:
           FOOTBALL_DATA_API: ${{ secrets.FOOTBALL_DATA_API }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: footy-artefact
+          path: Footy.pdf
+
