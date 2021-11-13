@@ -9,7 +9,7 @@ competitions:
 
   BSA:
     bbc_table_site: "https://www.bbc.co.uk/sport/football/brazilian-league/table"
-    competition_name: "Série A"
+    competition_name: "Campeonato Brasileiro Série A"
     country: BR
 
   DED:
